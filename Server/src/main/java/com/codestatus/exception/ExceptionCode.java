@@ -3,6 +3,7 @@ package com.codestatus.exception;
 public enum ExceptionCode {
     INVALID_INPUT_VALUE(400, "유효성 검증에 실패했습니다."),
     USER_NOT_FOUND(404, "유저를 찾을 수 없습니다."),
+    USER_IS_DELETED(400, "탈퇴한 유저입니다."),
     USER_EXISTS_EMAIL(409, "사용중인 이메일 입니다."),
     USER_EXISTS_NICKNAME(409, "사용중인 닉네임 입니다."),
     USER_EXISTS_PHONENUM(409, "사용중인 번호 입니다."),
