@@ -11,6 +11,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${G_CLIENT_ID}
+            clientSecret: ${G_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
 logging:
   level:
     org:
@@ -22,9 +32,9 @@ server:
     encoding:
       force-response: true
 
-#mail:
-#  address:
-#    admin:
+mail:
+  address:
+    admin: admin@admin.com # 환경변수로 바꿔줘야됨
 
 jwt:
   key: ${JWT_SECRET_KEY}
