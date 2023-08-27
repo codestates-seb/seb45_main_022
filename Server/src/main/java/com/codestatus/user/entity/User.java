@@ -1,6 +1,8 @@
 package com.codestatus.user.entity;
 
 import com.codestatus.audit.Auditable;
+import com.codestatus.status.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "users")
+@Entity(name = "user")
 public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +29,21 @@ public class User extends Auditable {
     @Column(nullable = false, unique = true)
     private String nickName;
 
+    // 프로필 이미지 추가해야 함
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus status = UserStatus.USER_ACTIVE;
+    private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Status> statuses = new ArrayList<>();
+
+    // 피드 매핑해야 함
+    // 코멘트 매핑해야 함
 
     public User(String email) {
         this.email = email;
@@ -44,9 +55,9 @@ public class User extends Auditable {
         USER_BANNED("정지된 유저");
 
         @Getter
-        private String status;
-        UserStatus(String status) {
-            this.status = status;
+        private String userStatus;
+        UserStatus(String userStatus) {
+            this.userStatus = userStatus;
         }
     }
 }

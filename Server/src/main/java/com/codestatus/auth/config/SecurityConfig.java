@@ -66,8 +66,19 @@ public class SecurityConfig {
                 })
                 .and()
                     .authorizeHttpRequests(authorize -> authorize // 요청에 대한 권한 설정
-                        .antMatchers(HttpMethod.POST,"/users/signup").permitAll() // 회원가입은 누구나 가능
-                        .antMatchers(HttpMethod.PATCH,"/users/**").hasRole("USER") // 회원정보 수정은 USER 권한 필요
+                            // user 권한 부여
+                        .antMatchers(HttpMethod.POST,"/user/signup").permitAll() // 회원가입은 누구나 가능
+                        .antMatchers(HttpMethod.POST, "/user/mypage/**").hasRole("USER") // mypage 는 USER 권한 필요
+                        .antMatchers(HttpMethod.GET,"/user/mypage/**").hasRole("USER") // mypage 는 USER 권한 필요
+                        .antMatchers(HttpMethod.PATCH,"/user/mypage/edit/**").hasRole("USER") // mypage 는 USER 권한 필요
+
+
+
+                            // feed 권한 부여
+
+
+
+                            // comment 권한 부여
 
                         .antMatchers(HttpMethod.POST,"/logout").hasRole("USER") // logout 은 USER 권한 필요
                         .anyRequest().permitAll() // 나머지 요청은 누구나 가능

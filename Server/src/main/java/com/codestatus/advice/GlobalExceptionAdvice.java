@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
     // 유효성 검증에 실패 했을때 처리하는 메소드
@@ -51,6 +53,13 @@ public class GlobalExceptionAdvice {
         String errorMessage = "PathVariable 의 타입이 틀립니다.";
         // 필요한 pathVariable 타입을 표시하기
         errorMessage += " 필요한 타입: " + ex.getRequiredType().getSimpleName();
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
+    }
+
+    // Controller 에 있는 PathVariable의 min/max 범위를 벗어날때 처리하는 메서드
+    @ExceptionHandler
+    public ErrorResponse handleMethodArgument(ConstraintViolationException e) {
+        String errorMessage = e.getMessage();
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
     }
 }
