@@ -4,8 +4,8 @@ import com.codestatus.auth.dto.PrincipalDto;
 import com.codestatus.auth.utils.CustomAuthorityUtils;
 import com.codestatus.exception.BusinessLogicException;
 import com.codestatus.exception.ExceptionCode;
-import com.codestatus.status.Stat;
-import com.codestatus.status.Status;
+import com.codestatus.status.entity.Stat;
+import com.codestatus.status.entity.Status;
 import com.codestatus.status.repository.StatRepository;
 import com.codestatus.status.repository.StatusRepository;
 import com.codestatus.user.entity.User;
@@ -44,11 +44,11 @@ public class UserService {
         user.setRoles(roles);
         repository.save(user);
 
-        Stat strStat = createStat("힘");
-        Stat dexStat = createStat("민첩");
-        Stat intStat = createStat("지능");
-        Stat charmStat = createStat("매력");
-        Stat vitalityStat = createStat("생활력");
+        Stat strStat = findStat(1L);
+        Stat dexStat = findStat(2L);
+        Stat intStat = findStat(3L);
+        Stat charmStat = findStat(4L);
+        Stat vitalityStat = findStat(5L);
 
         Status strStatus = createStatus(user, strStat, 1, 0);
         Status dexStatus = createStatus(user, dexStat, 1, 0);
@@ -188,11 +188,10 @@ public class UserService {
         });
     }
 
-    // stat 생성
-    private Stat createStat(String statName) {
-        Stat stat = new Stat();
-        stat.setStatName(statName);
-        return statRepository.save(stat);
+    // stat 조회
+    private Stat findStat(Long statId) {
+        Optional<Stat> existingStat = statRepository.findById(statId);
+        return existingStat.orElseThrow(() -> new RuntimeException("Stat with ID " + statId + " not found")); // Handle this exception appropriately
     }
 
     // status 생성

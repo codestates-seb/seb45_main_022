@@ -1,4 +1,4 @@
-package com.codestatus.status;
+package com.codestatus.status.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -19,8 +19,4 @@ public class Stat {
     private Long statId;
 
     private String statName;
-
-    @OneToMany(mappedBy = "stat", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Status> statusList = new ArrayList<>();
 }

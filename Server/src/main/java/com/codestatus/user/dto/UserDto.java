@@ -1,7 +1,5 @@
 package com.codestatus.user.dto;
 
-import com.codestatus.status.Status;
-import com.codestatus.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.codestatus.status;
+package com.codestatus.status.entity;
 
 import com.codestatus.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,9 +22,8 @@ public class Status {
     @JsonIgnore
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "stat_id")
-    @JsonIgnore
     private Stat stat;
 
     private int statLevel;

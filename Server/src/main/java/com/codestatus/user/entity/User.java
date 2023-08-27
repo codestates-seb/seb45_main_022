@@ -1,7 +1,7 @@
 package com.codestatus.user.entity;
 
 import com.codestatus.audit.Auditable;
-import com.codestatus.status.Status;
+import com.codestatus.status.entity.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

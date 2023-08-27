@@ -1,7 +1,6 @@
 package com.codestatus.user.controller;
 
-import com.codestatus.status.Stat;
-import com.codestatus.status.Status;
+import com.codestatus.status.entity.Status;
 import com.codestatus.user.dto.StatusResponse;
 import com.codestatus.user.dto.UserDto;
 import com.codestatus.user.entity.User;
@@ -15,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
 
 @Validated
 @RestController
