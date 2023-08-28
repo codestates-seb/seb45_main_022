@@ -16,7 +16,7 @@ public class Ranking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rankingId;
     @Column
-    private int rank;
+    private int ranks;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
