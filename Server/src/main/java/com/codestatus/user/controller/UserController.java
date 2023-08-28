@@ -65,4 +65,11 @@ public class UserController {
         service.checkAttendance(chosenStat);
         return ResponseEntity.status(HttpStatus.OK).body("attendance check success");
     }
+
+    // 유저 탈퇴
+    @DeleteMapping("/mypage/delete")
+    public ResponseEntity deleteUser() {
+        service.deleteUser();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

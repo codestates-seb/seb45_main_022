@@ -10,7 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "likes")
 @NoArgsConstructor
 @Getter
 @Setter

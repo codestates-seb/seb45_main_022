@@ -1,7 +1,6 @@
 package com.codestatus.feed.controller;
 
 
-import com.codestatus.feed.mapper.FeedMapper;
 import com.codestatus.feed.service.FeedService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +13,8 @@ public class FeedController {
 
     private final FeedService feedService;
 
-    private final FeedMapper feedMapper;
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper) {
+    public FeedController(FeedService feedService) {
         this.feedService = feedService;
-        this.feedMapper = feedMapper;
     }
 }
