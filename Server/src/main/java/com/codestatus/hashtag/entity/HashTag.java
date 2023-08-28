@@ -25,11 +25,8 @@ public class HashTag {
     @Column
     private boolean deleted = false;
 
-    @ManyToMany(mappedBy = "feeds")
-    private List<Feed> feeds = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "hashTag")
-//    private List<FeedHashTag> feedHashTags = new ArrayList<>();
+    @OneToMany(mappedBy = "hashTag")
+    private List<FeedHashTag> feedHashTags = new ArrayList<>();
 
 
 }
