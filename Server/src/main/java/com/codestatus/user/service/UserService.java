@@ -137,6 +137,13 @@ public class UserService {
         }
     }
 
+    public void deleteUser() {
+        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
+        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
+        repository.save(findUser);
+    }
+
     // 가입된 유저인지 조회
     public User findVerifiedUser(Long userId) {
         Optional<User> OptionalUser =
@@ -198,7 +205,6 @@ public class UserService {
         }
         repository.saveAll(users);
     }
-
 
     // 로그인한 유저의 id를 가져옴(헤더의 토큰에 포함된 유저의 id)
     public Long getLoginUserId() {
