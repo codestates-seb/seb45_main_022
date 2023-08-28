@@ -190,7 +190,7 @@ public class UserService {
      */
 
     // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 변경(매일 자정마다 실행)
-    @Scheduled(initialDelay = 300000,fixedRate = 300000) // cron = "0 0 0 * * ?", zone = "Asia/Seoul" <- 매일 자정마다 실행
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // cron = "0 0 0 * * ?", zone = "Asia/Seoul" <- 매일 자정마다 실행
     public void updateAttendance() {
         List<User> users = repository.findAllByUserStatusAndAttendance(User.UserStatus.USER_ACTIVE, true);
         for (User user : users) {
