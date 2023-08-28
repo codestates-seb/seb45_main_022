@@ -41,7 +41,8 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user")
     private List<Ranking> rankings = new ArrayList<>();
 
-    // 프로필 이미지 추가해야 함
+    @Column(nullable = false)
+    private boolean attendance = false;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
