@@ -59,19 +59,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("password patch success"); // 비밀번호 수정 성공 메시지 반환
     }
 
-    // 출석체크 컨트롤러 response 1안
+    // 출석체크 컨트롤러
     @PostMapping("/mypage/attendance/{chosenStat}")
     public ResponseEntity checkAttendance(@PathVariable @Min(0) @Max(4) int chosenStat) {
-        User changeStat = service.checkAttendance(chosenStat);
-        UserDto.Response response = userMapper.userToUserResponse(changeStat);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    // 출석체크 컨트롤러 response 2안
-    @PostMapping("/mypage/attendance2/{chosenStat}")
-    public ResponseEntity checkAttendance2(@PathVariable @Min(0) @Max(4) int chosenStat) {
-        Status changeStat = service.checkAttendance2(chosenStat);
-        StatusResponse response = userMapper.statusToStatusResponse(changeStat);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        service.checkAttendance(chosenStat);
+        return ResponseEntity.status(HttpStatus.OK).body("attendance check success");
     }
 }
