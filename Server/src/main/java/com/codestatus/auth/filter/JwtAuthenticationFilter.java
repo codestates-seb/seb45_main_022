@@ -45,15 +45,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throw new RuntimeException(e);
         }
 
-        Optional<User> optionalMember = userRepository.findByEmail(loginDto.getEmail());
-
-        User findMember = optionalMember.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-
-        if (findMember.getStatus() == User.UserStatus.USER_DELETE) {
-            throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
-        }
-
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
@@ -77,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json");
         response.getWriter().write(jsonResponse);
 
-        Cookie cookie = new Cookie("Refresh", responseTokenString);
+        Cookie cookie = new Cookie("Refresh", refreshToken);
         response.addCookie(cookie);
 
     }
