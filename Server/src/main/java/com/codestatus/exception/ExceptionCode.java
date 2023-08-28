@@ -12,7 +12,12 @@ public enum ExceptionCode {
     USER_EXISTS_PHONENUM(409, "사용중인 번호 입니다."),
     NOT_RESOURCE_OWNER(400, "리소스의 소유자가 아닙니다."),
     BOARD_NOT_FOUND(404, "피드를 찾을 수 없습니다."),
-    BOARD_NOT_EDITABLE(400, "피드를 수정할 수 없습니다.");
+    BOARD_NOT_EDITABLE(400, "피드를 수정할 수 없습니다."),
+    IMAGE_URL_ERROR(404, "이미지 URL을 찾을 수 없습니다." ),
+    FILE_NOT_FOUND(404, "파일을 찾을 수 없습니다."),
+    INVALID_FILE_TYPE(400, "이미지 파일만 업로드 가능합니다."),
+    FILE_TOO_LARGE(400, "파일 크기는 5MB를 넘을 수 없습니다.");
+
 //    NOT_IMPLEMENTATION(501, "해당 기능은 구현되지 않았습니다.");
 
     private final int status;

@@ -59,18 +59,11 @@ public class UserMapper {
                 .id(user.getUserId())
                 .email(user.getEmail())
                 .nickName(user.getNickName())
+                .profileImage(user.getProfileImage())
+                .attendance(user.isAttendance())
                 .statuses(statusResponses)
                 .createDate(String.valueOf(user.getCreatedAt()))
                 .modifiedDate(String.valueOf(user.getModifiedAt()))
                 .build();
-    }
-
-    // 출석체크 2안 response
-    public StatusResponse statusToStatusResponse(Status status) {
-        StatusResponse statusResponse = new StatusResponse();
-        statusResponse.setStatName(status.getStat().getStatName());
-        statusResponse.setStatLevel(status.getStatLevel());
-        statusResponse.setStatExp(status.getStatExp());
-        return statusResponse;
     }
 }

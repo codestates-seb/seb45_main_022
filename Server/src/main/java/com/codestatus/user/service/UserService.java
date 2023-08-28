@@ -2,6 +2,7 @@ package com.codestatus.user.service;
 
 import com.codestatus.auth.dto.PrincipalDto;
 import com.codestatus.auth.utils.CustomAuthorityUtils;
+import com.codestatus.aws.FileStorageService;
 import com.codestatus.exception.BusinessLogicException;
 import com.codestatus.exception.ExceptionCode;
 import com.codestatus.status.entity.Stat;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,13 +29,15 @@ public class UserService {
     private final StatusRepository statusRepository;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService;
 
-    public UserService(UserRepository repository, StatRepository statRepository, StatusRepository statusRepository, CustomAuthorityUtils customAuthorityUtils, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, StatRepository statRepository, StatusRepository statusRepository, CustomAuthorityUtils customAuthorityUtils, PasswordEncoder passwordEncoder, FileStorageService fileStorageService) {
         this.repository = repository;
         this.statRepository = statRepository;
         this.statusRepository = statusRepository;
         this.customAuthorityUtils = customAuthorityUtils;
         this.passwordEncoder = passwordEncoder;
+        this.fileStorageService = fileStorageService;
     }
 
     // 유저 생성
@@ -43,6 +47,15 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<String> roles = customAuthorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
+
+        List<String> defaultImage = Arrays.asList(
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image3.png",
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image4.png");
+        int random = (int)(Math.random() * defaultImage.size());
+
+        user.setProfileImage(defaultImage.get(random));
         repository.save(user);
 
         Stat strStat = findStat(1L);
@@ -137,10 +150,23 @@ public class UserService {
         }
     }
 
+    // 유저 탈퇴
     public void deleteUser() {
         Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
         User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        if (findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 이미 탈퇴 상태라면 예외 발생
+            throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
+        }
         findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
+        repository.save(findUser);
+    }
+
+    // 프로필 이미지 업로드
+    public void uploadProfileImage(MultipartFile imageFile) {
+        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
+        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        String fileUrl = fileStorageService.storeFile(imageFile);
+        findUser.setProfileImage(fileUrl);
         repository.save(findUser);
     }
 

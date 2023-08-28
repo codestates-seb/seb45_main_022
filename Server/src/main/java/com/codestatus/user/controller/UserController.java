@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -64,6 +65,13 @@ public class UserController {
     public ResponseEntity checkAttendance(@PathVariable @Min(0) @Max(4) int chosenStat) {
         service.checkAttendance(chosenStat);
         return ResponseEntity.status(HttpStatus.OK).body("attendance check success");
+    }
+
+    // 프로필 이미지 업로드
+    @PostMapping("/mypage/edit/image")
+    public ResponseEntity uploadProfileImage(@RequestParam("imageFile") MultipartFile imageFile) {
+        service.uploadProfileImage(imageFile);
+        return ResponseEntity.status(HttpStatus.OK).body("profile image upload success");
     }
 
     // 유저 탈퇴

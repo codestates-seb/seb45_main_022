@@ -44,6 +44,9 @@ public class User extends Auditable {
     @Column(nullable = false)
     private boolean attendance = false;
 
+    @Column(nullable = false)
+    private String profileImage;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;

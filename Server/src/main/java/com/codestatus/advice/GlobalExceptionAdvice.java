@@ -1,6 +1,7 @@
 package com.codestatus.advice;
 
 import com.codestatus.exception.BusinessLogicException;
+import com.codestatus.exception.ExceptionCode;
 import com.codestatus.response.ErrorResponse;
 import com.codestatus.response.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -55,5 +57,13 @@ public class GlobalExceptionAdvice {
     public ErrorResponse exception(Exception e){
         log.error("# server error", e);
         return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(
+            MaxUploadSizeExceededException e) {
+
+        ErrorResponse response = ErrorResponse.of(ExceptionCode.FILE_TOO_LARGE);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
