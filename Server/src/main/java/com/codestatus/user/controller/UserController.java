@@ -1,7 +1,5 @@
 package com.codestatus.user.controller;
 
-import com.codestatus.status.entity.Status;
-import com.codestatus.user.dto.StatusResponse;
 import com.codestatus.user.dto.UserDto;
 import com.codestatus.user.entity.User;
 import com.codestatus.user.mapper.UserMapper;

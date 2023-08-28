@@ -165,9 +165,9 @@ public class UserService {
     public void uploadProfileImage(MultipartFile imageFile) {
         Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
         User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
-        String fileUrl = fileStorageService.storeFile(imageFile);
-        findUser.setProfileImage(fileUrl);
-        repository.save(findUser);
+        String fileUrl = fileStorageService.storeFile(imageFile); // 파일 업로드
+        findUser.setProfileImage(fileUrl); // 유저 프로필 이미지 경로 저장
+        repository.save(findUser); // 유저 저장
     }
 
     // 가입된 유저인지 조회
