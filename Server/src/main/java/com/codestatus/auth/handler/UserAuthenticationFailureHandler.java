@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class MemberAuthenticationFailureHandler implements AuthenticationFailureHandler { // 인증 실패시 호출되는 핸들러
+public class UserAuthenticationFailureHandler implements AuthenticationFailureHandler { // 인증 실패시 호출되는 핸들러
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response,

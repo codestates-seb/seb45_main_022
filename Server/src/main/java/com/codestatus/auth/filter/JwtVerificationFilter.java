@@ -2,10 +2,13 @@ package com.codestatus.auth.filter;
 
 import com.codestatus.auth.dto.PrincipalDto;
 import com.codestatus.auth.jwt.JwtTokenizer;
+import com.codestatus.auth.userdetails.UsersDetailService;
 import com.codestatus.auth.utils.CustomAuthorityUtils;
-import io.jsonwebtoken.Claims;
+import com.codestatus.auth.utils.JwtResponseUtil;
+import com.codestatus.user.entity.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,23 +28,34 @@ import java.util.Map;
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final UsersDetailService userService;
+    private final JwtResponseUtil jwtResponseUtil;
 
-    public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, UsersDetailService userService, JwtResponseUtil jwtResponseUtil) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.userService = userService;
+        this.jwtResponseUtil = jwtResponseUtil;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            Map<String, Object> claims = verifyJWS(request);
+            Map<String, Object> claims = verifyAccessJWS(request);
             setAuthenticationToContext(claims);
 
         } catch (SignatureException e) {
             request.setAttribute("exception", e);
         } catch (ExpiredJwtException e) {
-            request.setAttribute("exception", e);
+            try {
+                String email = verifyRefreshJWS(request);
+                User user = userService.loadUserByEmail(email);
+                jwtResponseUtil.setAccessToken(user, response);
+                request.setAttribute("exception", new JwtException("Access token has expired"));
+            } catch (ExpiredJwtException refreshEx) {
+                request.setAttribute("exception", new JwtException("Refresh token has expired"));
+            }
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
@@ -53,17 +68,20 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return authorization == null || !authorization.startsWith("Bearer");
     }
 
-    private Map<String, Object> verifyJWS(HttpServletRequest request) {
-
+    private Map<String, Object> verifyAccessJWS(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ","");
+        return jwtTokenizer.getClaimsFromJws(jws).getBody();
+    }
 
-        String key = jwtTokenizer.getSecretKey();
-        String encodedKey = jwtTokenizer.encodeBase64SecretKey(key);
-
-        Jws<Claims> claimsJws = jwtTokenizer.getClaimsFromJws(jws,encodedKey);
-        Map<String, Object> claims = claimsJws.getBody();
-
-        return claims;
+    private String verifyRefreshJWS(HttpServletRequest request) {
+        String jws = "";
+        for(Cookie cookie:request.getCookies()) {
+            if(cookie.getName().equals("Refresh")){
+                jws = cookie.getValue();
+                break;
+            }
+        }
+        return jwtTokenizer.getClaimsFromJws(jws).getBody().getSubject();
     }
 
     private void setAuthenticationToContext(Map<String, Object> claims) {

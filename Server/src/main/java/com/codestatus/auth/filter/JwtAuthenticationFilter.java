@@ -2,10 +2,8 @@ package com.codestatus.auth.filter;
 
 import com.codestatus.auth.dto.LoginDto;
 import com.codestatus.auth.jwt.JwtTokenizer;
-import com.codestatus.exception.BusinessLogicException;
-import com.codestatus.exception.ExceptionCode;
+import com.codestatus.auth.utils.JwtResponseUtil;
 import com.codestatus.user.entity.User;
-import com.codestatus.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,20 +22,19 @@ import java.util.*;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenizer jwtTokenizer;
-    private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
+    private final JwtResponseUtil jwtResponseUtil;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, UserRepository userRepository) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper, JwtResponseUtil jwtResponseUtil) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenizer = jwtTokenizer;
-        this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
+        this.jwtResponseUtil = jwtResponseUtil;
     }
 
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
         LoginDto loginDto;
         try {
             loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
@@ -57,53 +54,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(user);
-        String refreshToken = delegateRefreshToken(user);
-
-        String responseTokenString = "Bearer " + accessToken;
-//         response.setHeader("Authorization", responseTokenString );
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(Collections.singletonMap("token", responseTokenString));
-
-        response.setContentType("application/json");
-        response.getWriter().write(jsonResponse);
-
-        Cookie cookie = new Cookie("Refresh", refreshToken);
-        response.addCookie(cookie);
-
-    }
-
-    private String delegateAccessToken(User user){
-
-        Map<String, Object> claims = new HashMap<>();
-
-        claims.put("username", user.getEmail());
-        claims.put("id", user.getUserId());
-        claims.put("roles", user.getRoles());
-
-        String subject = user.getEmail();
-
-        int expirationMinutes = jwtTokenizer.getAccessTokenExpirationMinutes();
-        Date expiration = jwtTokenizer.getTokenExpiration(expirationMinutes);
-
-        String plainKey = jwtTokenizer.getSecretKey();
-        String base64EncodedKey = jwtTokenizer.encodeBase64SecretKey(plainKey);
-
-        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedKey);
-
-        return accessToken;
-    }
-
-    String delegateRefreshToken(User user){
-
-        String subject = user.getEmail();
-        int expirationMinutes = jwtTokenizer.getRefreshTokenExpirationMinutes();
-        Date expiration = jwtTokenizer.getTokenExpiration(expirationMinutes);
-
-        String plainKey = jwtTokenizer.getSecretKey();
-        String base64EncodedKey = jwtTokenizer.encodeBase64SecretKey(plainKey);
-
-        String refreshToken = jwtTokenizer.generateRefreshToken(subject,expiration,base64EncodedKey);
-        return refreshToken;
+        jwtResponseUtil.setAccessToken(user, response);
+        jwtResponseUtil.setRefreshToken(user, response);
     }
 }

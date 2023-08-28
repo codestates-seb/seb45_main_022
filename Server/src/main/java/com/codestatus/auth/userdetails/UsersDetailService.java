@@ -28,7 +28,10 @@ public class UsersDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("No sign-up information found for email"));
         return new CustomUserDetails(user);
     }
-
+    public User loadUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No sign-up information found for email"));
+    }
     public class CustomUserDetails extends User implements UserDetails {
 
         CustomUserDetails(User user) {

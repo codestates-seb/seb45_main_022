@@ -1,5 +1,6 @@
 package com.codestatus.auth.jwt;
 
+import com.codestatus.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
@@ -12,9 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -33,48 +36,39 @@ public class JwtTokenizer {
     private int refreshTokenExpirationMinutes;
 
     //Generate Access Token
-    public String generateAccessToken (Map<String,Object> claims, String subject, Date expirateDate, String encodedBase64SecretKey) {
-
-        Key key = getKeyFromEncodedBase64SecretKey(encodedBase64SecretKey);
-
-        String accessToken = Jwts.builder()
-                .setSubject(subject)
+    public String generateAccessToken (User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getUserId());
+        claims.put("email", user.getEmail());
+        claims.put("roles", user.getRoles());
+        return Jwts.builder()
+                .setSubject(user.getEmail())
                 .setClaims(claims)
-                .setExpiration(expirateDate)
+                .setExpiration(getTokenExpiration(accessTokenExpirationMinutes))
                 .setIssuedAt(Calendar.getInstance().getTime())
-                .signWith(key)
+                .signWith(getKey())
                 .compact();
-
-        return accessToken;
     }
 
     //Generate Refresh Token
-    public String generateRefreshToken (String subject, Date expirateDate, String encodedBase64SecretKey) {
-        Key key = getKeyFromEncodedBase64SecretKey(encodedBase64SecretKey);
-        String refreshToken = Jwts.builder()
-                .setSubject(subject)
-                .setExpiration(expirateDate)
+    public String generateRefreshToken (User user) {
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .setExpiration(getTokenExpiration(refreshTokenExpirationMinutes))
                 .setIssuedAt(Calendar.getInstance().getTime())
-                .signWith(key)
+                .signWith(getKey())
                 .compact();
 
-        return refreshToken;
     }
 
-    //base 64 encoding
-    public String encodeBase64SecretKey(String secretKey){
-        return Encoders.BASE64.encode(secretKey.getBytes(Charset.defaultCharset()));
-    }
-
-    public Key getKeyFromEncodedBase64SecretKey(String encodedBase64SecretKey) {
-        byte [] byteKey = Decoders.BASE64.decode(encodedBase64SecretKey);
-        Key key = Keys.hmacShaKeyFor(byteKey);
-        return key;
+    //Get key from secretKey
+    public Key getKey() {
+        byte [] byteKey = secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(byteKey);
     }
 
     public void verificateJWTSignature (String jwtWithSignature, String encodedBase64SecretKey) {
-        Key key = getKeyFromEncodedBase64SecretKey(encodedBase64SecretKey);
-        JwtParser parser = Jwts.parserBuilder().setSigningKey(key).build();
+        JwtParser parser = Jwts.parserBuilder().setSigningKey(getKey()).build();
         parser.parseClaimsJws(jwtWithSignature);
     }
 
@@ -82,15 +76,12 @@ public class JwtTokenizer {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, minutes);
 
-        Date expiration = calendar.getTime();
-        return expiration;
+        return calendar.getTime();
     }
 
-    public Jws<Claims> getClaimsFromJws(String jws, String encodedBase64SecretKey) {
-
-        Key key = getKeyFromEncodedBase64SecretKey(encodedBase64SecretKey);
-        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws);
-
-        return claims;
+    public Jws<Claims> getClaimsFromJws(String jws) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build().parseClaimsJws(jws);
     }
 }

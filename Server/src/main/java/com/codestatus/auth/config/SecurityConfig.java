@@ -4,9 +4,10 @@ import com.codestatus.auth.filter.JwtAuthenticationFilter;
 import com.codestatus.auth.filter.JwtVerificationFilter;
 import com.codestatus.auth.handler.*;
 import com.codestatus.auth.jwt.JwtTokenizer;
+import com.codestatus.auth.userdetails.UsersDetailService;
 import com.codestatus.auth.utils.CustomAuthorityUtils;
-import com.codestatus.user.repository.UserRepository;
-import com.codestatus.user.service.UserService;
+import com.codestatus.auth.utils.JwtResponseUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,15 +28,15 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final UserService userService;
-    private final UserRepository userRepository;
+    private final UsersDetailService userService;
+    private final JwtResponseUtil jwtResponseUtil;
     private String s3 = ""; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
 
-    public SecurityConfig(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, UserService userService, UserRepository userRepository) {
+    public SecurityConfig(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, UsersDetailService userService, JwtResponseUtil jwtResponseUtil) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.userService = userService;
-        this.userRepository = userRepository;
+        this.jwtResponseUtil = jwtResponseUtil;
     }
 
     @Bean
@@ -52,8 +53,8 @@ public class SecurityConfig {
                 .formLogin().disable() // form login 비활성화
                 .httpBasic().disable() // http basic 비활성화
                 .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) // 인증 실패 핸들러
-                .accessDeniedHandler(new MemberAccessDeniedHandler()) // 인가 실패 핸들러
+                .authenticationEntryPoint(new UserAuthenticationEntryPoint()) // 인증 실패 핸들러
+                .accessDeniedHandler(new UserAccessDeniedHandler()) // 인가 실패 핸들러
                 .and()
                 .apply(new CustomFilterConfigurer()) // 커스텀 필터 적용
                 .and()
@@ -84,7 +85,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // 나머지 요청은 누구나 가능
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, userService)));
+                        .successHandler(new OAuth2UserSuccessHandler(jwtTokenizer, userService)));
                 return http.build();
     }
 
@@ -113,13 +114,13 @@ public class SecurityConfig {
         public void configure(HttpSecurity builder)  {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, userRepository);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, new ObjectMapper(), jwtResponseUtil);
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
-            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, userService, jwtResponseUtil);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
