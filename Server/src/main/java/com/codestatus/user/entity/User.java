@@ -1,6 +1,9 @@
 package com.codestatus.user.entity;
 
 import com.codestatus.audit.Auditable;
+import com.codestatus.feed.entity.Feed;
+import com.codestatus.like.entity.Like;
+import com.codestatus.ranking.entity.Ranking;
 import com.codestatus.status.entity.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -28,6 +31,15 @@ public class User extends Auditable {
 
     @Column(nullable = false, unique = true)
     private String nickName;
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Feed> feeds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Ranking> rankings = new ArrayList<>();
 
     // 프로필 이미지 추가해야 함
 
