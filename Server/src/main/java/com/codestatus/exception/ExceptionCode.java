@@ -5,6 +5,7 @@ public enum ExceptionCode {
     USER_NOT_FOUND(404, "유저를 찾을 수 없습니다."),
     USER_IS_DELETED(400, "탈퇴한 유저입니다."),
     USER_IS_BANNED(400, "이용이 정지된 유저입니다."),
+    USER_ALREADY_CHECKED_ATTENDANCE(400, "오늘은 출석체크를 하셨습니다."),
     USER_SAME_PASSWORD(400, "현재 비밀번호와 같은 비밀번호는 사용할 수 없습니다."),
     USER_EXISTS_EMAIL(409, "사용중인 이메일 입니다."),
     USER_EXISTS_NICKNAME(409, "사용중인 닉네임 입니다."),

@@ -36,10 +36,8 @@ public class Feed extends Auditable {
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "hashTags")
-    private List<HashTag> hashTags = new ArrayList<>();
-//    @OneToMany(mappedBy = "feed")
-//    private List<FeedHashTag> feedHashTags = new ArrayList<>();
+    @OneToMany(mappedBy = "feed")
+    private List<FeedHashTag> feedHashTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed")
     private List<Comment> comments = new ArrayList<>();
