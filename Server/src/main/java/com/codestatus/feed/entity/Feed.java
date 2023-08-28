@@ -1,7 +1,6 @@
 package com.codestatus.feed.entity;
 
 import com.codestatus.audit.Auditable;
-import com.codestatus.category.entity.Category;
 import com.codestatus.comment.entity.Comment;
 import com.codestatus.hashtag.entity.HashTag;
 import com.codestatus.user.entity.User;
