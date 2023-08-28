@@ -1,7 +1,7 @@
-package com.codestatus.status.entity;
+package com.codestatus.category.entity;
 
-import com.codestatus.category.entity.Category;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.codestatus.feed.entity.Feed;
+import com.codestatus.status.entity.Stat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,13 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class Stat {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long statId;
+    private long categoryId;
 
-    private String statName;
+    @Column
+    private String category;
+
 }

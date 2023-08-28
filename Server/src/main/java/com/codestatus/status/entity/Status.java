@@ -26,6 +26,9 @@ public class Status {
     @JoinColumn(name = "stat_id")
     private Stat stat;
 
+    @Column(nullable = false)
     private int statLevel;
+
+    @Column(nullable = false)
     private int statExp;
 }
