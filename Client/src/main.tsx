@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <TitlePage />,
   },
   {
-    path: '/map',
+    path: '/map/:statusCode',
     element: <MapPage />,
   },
   {
