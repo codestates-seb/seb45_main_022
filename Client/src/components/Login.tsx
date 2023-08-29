@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import ModalFrame from './common/ModalFrame';
+import kakaoLoginBar from '../assets/common/kakao-login.png';
+import googleLoginBar from '../assets/common/google-login.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,22 +13,33 @@ const Login = () => {
   // 이메일 포멧
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  // 최소 8 자, 하나의 소문자, 하나의 숫자
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$/;
+  // 최소 6자, 영문 + 숮자
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 
-  const validateUserInput = () => {
+  const validateEmail = () => {
     if (!emailRegEx.test(email)) {
-      setEmailErr(!emailErr);
+      setEmailErr(true);
+      console.log('email failure');
+    } else {
+      setEmailErr(false);
+      console.log('email success');
     }
+  };
+
+  const validatePass = () => {
     if (!passwordRegex.test(password)) {
-      setPasswordErr(!passwordErr);
+      setPasswordErr(true);
+      console.log('password failure');
+    } else {
+      setPasswordErr(false);
+      console.log('password success');
     }
   };
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    validateUserInput();
+    validateEmail();
+    validatePass();
   };
 
   return (
@@ -34,18 +47,13 @@ const Login = () => {
       <ModalFrame height={500} width={650}>
         <form
           onSubmit={handleLogin}
-          className="flex flex-col items-center justify-center"
+          className="flex flex-col items-center justify-center w-[500px] h-[380px] p-5"
         >
           <input
             placeholder="Email"
             type="text"
             className="border-solid border-2 border-000 p-2 rounded-lg my-2"
-            onChange={(e) => {
-              setEmail(e.target.value);
-              {
-                emailErr ? setEmailErr(true) : setEmailErr(false);
-              }
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
 
@@ -72,16 +80,16 @@ const Login = () => {
             Login
           </button>
 
-          <div className="flex items-center justify-center my-2">
+          <div className="flex items-center justify-around my-4 w-full h-10">
             <img
-              src="../assets/common/kakao-login.png"
+              src={kakaoLoginBar}
               alt="kakao login"
-              className="w-[30%]"
+              className="w-[180px] h-[45px]  hover:cursor-grabbing "
             />
             <img
-              src="../assets/common/google-login.png"
+              src={googleLoginBar}
               alt="google login"
-              className="w-[30%]"
+              className="w-[180px] h-[45px]  hover:cursor-grabbing "
             />
           </div>
           <div className="text-[10px] flex items-center justify-evenly w-full">
