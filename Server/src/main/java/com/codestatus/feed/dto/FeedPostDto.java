@@ -1,8 +1,6 @@
 package com.codestatus.feed.dto;
 
 
-import com.codestatus.feed.entity.Category;
-import com.codestatus.hashtag.entity.HashTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,11 +15,5 @@ public class FeedPostDto {
 
     @NotBlank
     private String body;
-
-    @NotBlank
-    private Category category;
-
-    private HashTag hashTag;
-
 
 }

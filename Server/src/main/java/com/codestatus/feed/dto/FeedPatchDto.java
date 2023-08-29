@@ -9,5 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FeedPatchDto {
 
+    private long id;
+
     private String body;
 }

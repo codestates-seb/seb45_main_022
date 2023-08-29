@@ -31,8 +31,8 @@ public class FeedsResponseDto {
 
 //    private String feedImages;
 
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
 }

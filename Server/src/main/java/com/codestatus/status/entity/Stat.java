@@ -1,6 +1,6 @@
 package com.codestatus.status.entity;
 
-import com.codestatus.feed.entity.Category;
+import com.codestatus.category.entity.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

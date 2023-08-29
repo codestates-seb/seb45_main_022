@@ -8,6 +8,7 @@ import com.codestatus.feed.entity.Feed;
 import com.codestatus.feed.mapper.FeedMapper;
 import com.codestatus.feed.repository.FeedRepository;
 import com.codestatus.user.entity.User;
+import com.codestatus.user.mapper.UserMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,16 +29,19 @@ public class FeedService {
 
     private final FeedMapper feedMapper;
 
+    private final UserMapper userMapper;
+
     private final CommentRepository commentRepository;
 
-    public FeedService(FeedRepository feedRepository, FeedMapper feedMapper, CommentRepository commentRepository) {
+    public FeedService(FeedRepository feedRepository, FeedMapper feedMapper, UserMapper userMapper, CommentRepository commentRepository) {
         this.feedRepository = feedRepository;
         this.feedMapper = feedMapper;
+        this.userMapper = userMapper;
         this.commentRepository = commentRepository;
     }
 
     public Feed createFeed(Feed feed, long id) {
-        User user = feedMapper.mapToUser(id);
+        User user = userMapper.userIdToUser(id);
         feed.setUser(user);
 
         return feedRepository.save(feed);

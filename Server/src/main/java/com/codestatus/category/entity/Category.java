@@ -1,4 +1,4 @@
-package com.codestatus.feed.entity;
+package com.codestatus.category.entity;
 
 import com.codestatus.feed.entity.Feed;
 import com.codestatus.status.entity.Stat;

@@ -35,8 +35,8 @@ public class FeedResponseDto {
 
     private List<CommentResponseDto> comments;
 
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
 }

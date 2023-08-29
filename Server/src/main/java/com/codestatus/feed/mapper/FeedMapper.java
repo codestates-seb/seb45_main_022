@@ -42,8 +42,8 @@ public interface FeedMapper {
                                 .createDate(comment.getCreatedAt())
                                 .build())
                         .collect(Collectors.toList()))
-                .created_at(feed.getCreatedAt())
-                .modified_at(feed.getModifiedAt())
+                .createdAt(feed.getCreatedAt())
+                .modifiedAt(feed.getModifiedAt())
                 .build();
     }
 
@@ -64,7 +64,7 @@ public interface FeedMapper {
                                 .collect(Collectors.toList()))
                         .likeCount(feed.getLikes().size())
                         .commentCount(feed.getComments().size())
-                        .created_at(feed.getCreatedAt())
+                        .createdAt(feed.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
 

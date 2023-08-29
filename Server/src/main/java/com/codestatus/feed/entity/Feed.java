@@ -1,8 +1,8 @@
 package com.codestatus.feed.entity;
 
 import com.codestatus.audit.Auditable;
+import com.codestatus.category.entity.Category;
 import com.codestatus.comment.entity.Comment;
-import com.codestatus.hashtag.entity.HashTag;
 import com.codestatus.image.entity.Image;
 import com.codestatus.like.entity.Like;
 import com.codestatus.user.entity.User;
@@ -33,7 +33,7 @@ public class Feed extends Auditable {
     @JoinColumn(name = "category_id", updatable = false)
     private Category category;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
