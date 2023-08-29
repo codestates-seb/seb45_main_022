@@ -1,10 +1,10 @@
-import Login from '../components/user/Login';
+// import Login from '../components/user/Login';
 
 const TitlePage = () => {
   return (
     <div>
       <h1 className="text-4xl">STAT & US</h1>
-      <Login />
+      {/* <Login /> */}
     </div>
   );
 };
