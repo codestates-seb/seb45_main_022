@@ -1,19 +1,41 @@
+import { useState } from 'react';
 import ModalFrame from './common/ModalFrame';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setEmail('');
+    setPassword('');
+  };
+
   return (
     <div className="flex justify-center items-center">
       <ModalFrame height={450} width={600}>
-        <form className="flex flex-col items-center justify-center">
+        <form
+          onSubmit={handleLogin}
+          className="flex flex-col items-center justify-center"
+        >
           <input
             placeholder="Email"
             type="email"
-            className="border-solid border-2 border-000 p-2 rounded-lg my-2 "
+            className="border-solid border-2 border-000 p-2 rounded-lg my-2"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            onFocus={(e) => console.log('onFocus')}
+            onBlur={(e) => console.log('onBlur')}
           />
           <input
             placeholder="Password"
             type="password"
             className="border-solid border-2 border-000 p-2 rounded-lg my-2"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            onFocus={(e) => console.log('onFocus')}
+            onBlur={(e) => console.log('onBlur')}
           />
           <button className="w-full h-[40px] bg-black text-white rounded-lg my-2 hover:cursor-grabbing">
             Login
