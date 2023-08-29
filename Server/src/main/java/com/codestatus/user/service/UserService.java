@@ -232,6 +232,7 @@ public class UserService {
 
         return id;
     }
+
     public void levelUpCheck(Long userId, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
         User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         int currentLevel = findUser.getStatuses().get(chooseStat).getStatLevel(); // 현재 레벨
