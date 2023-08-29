@@ -19,6 +19,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long categoryId;
 
+    @ManyToOne
+    @JoinColumn(name = "stat", updatable = false)
+    private Stat stat;
+
     @Column
     private String category;
 

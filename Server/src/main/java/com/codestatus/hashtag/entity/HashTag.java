@@ -23,6 +23,9 @@ public class HashTag {
     private int count;
 
     @Column
+    private String body;
+
+    @Column
     private boolean deleted = false;
 
     @OneToMany(mappedBy = "hashTag")
