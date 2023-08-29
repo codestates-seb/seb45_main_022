@@ -3,6 +3,7 @@ package com.codestatus.feed.entity;
 import com.codestatus.audit.Auditable;
 import com.codestatus.comment.entity.Comment;
 import com.codestatus.hashtag.entity.HashTag;
+import com.codestatus.image.entity.Image;
 import com.codestatus.like.entity.Like;
 import com.codestatus.user.entity.User;
 import lombok.Getter;
@@ -38,6 +39,9 @@ public class Feed extends Auditable {
 
     @OneToMany(mappedBy = "feed")
     private List<FeedHashTag> feedHashTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feed")
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed")
     private List<Comment> comments = new ArrayList<>();

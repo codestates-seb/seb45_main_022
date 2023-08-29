@@ -1,10 +1,7 @@
 package com.codestatus.feed.dto;
 
 import com.codestatus.comment.dto.CommentResponseDto;
-import com.codestatus.comment.entity.Comment;
-import com.codestatus.feed.entity.FeedHashTag;
 import com.codestatus.hashtag.dto.HashtagResponseDto;
-import com.codestatus.like.entity.Like;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +12,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class FeedResponseDto {
-
+public class FeedsResponseDto {
     private long feedId;
 
     private String nickName;
@@ -31,9 +27,9 @@ public class FeedResponseDto {
 
     private int likeCount;
 
-//    private String feedImages;
+    private int commentCount;
 
-    private List<CommentResponseDto> comments;
+//    private String feedImages;
 
     private LocalDateTime created_at;
 

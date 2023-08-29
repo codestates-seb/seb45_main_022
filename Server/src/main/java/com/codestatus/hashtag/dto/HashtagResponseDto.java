@@ -18,4 +18,5 @@ public class HashtagResponseDto {
     private String body;
 
     private List<FeedHashTag> feedHashTags;
+
 }

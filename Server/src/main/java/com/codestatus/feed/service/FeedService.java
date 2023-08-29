@@ -58,18 +58,18 @@ public class FeedService {
         Pageable pageable = PageRequest.of(page, size, sort);
         return feedRepository.findByBodyAndDeleted(text, deleted, pageable);
     }
-    @Transactional(readOnly = true)
-    public Page<Feed> findFeedByUserAndDeleted(String text, boolean deleted, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByUserAndDeleted(text, deleted, pageable);
-    }
-    @Transactional(readOnly = true)
-    public Page<Feed> findFeedByHashTagAndDeleted(String text, boolean deleted, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByHashTagAndDeleted(text, deleted, pageable);
-    }
+//    @Transactional(readOnly = true)
+//    public Page<Feed> findFeedByUserAndDeleted(String text, boolean deleted, int page, int size) {
+//        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//        return feedRepository.findByUserAndDeleted(text, deleted, pageable);
+//    }
+//    @Transactional(readOnly = true)
+//    public Page<Feed> findFeedByHashTagAndDeleted(String text, boolean deleted, int page, int size) {
+//        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//        return feedRepository.findByHashTagAndDeleted(text, deleted, pageable);
+//    }
 
     @Transactional(readOnly = true)
     public Feed findFeed(long feedId){
