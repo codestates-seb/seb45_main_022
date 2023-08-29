@@ -8,10 +8,10 @@ const Login = () => {
   const [passwordErr, setPasswordErr] = useState(false);
   //   const [userAlert, setUserAlert] = useState(false);
 
-  // email format
+  // 이메일 포멧
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  // 최소 8 자, 하나 이상의 대문자, 하나의 소문자, 하나의 숫자 및 하나의 특수 문자
+  // 최소 8 자, 하나의 소문자, 하나의 숫자
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$/;
 
@@ -47,8 +47,6 @@ const Login = () => {
               }
             }}
             value={email}
-            onFocus={(e) => console.log('onFocus')}
-            onBlur={(e) => console.log('onBlur')}
           />
 
           {emailErr && (
@@ -63,8 +61,6 @@ const Login = () => {
             className="border-solid border-2 border-000 p-2 rounded-lg my-2"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            onFocus={(e) => console.log('onFocus')}
-            onBlur={(e) => console.log('onBlur')}
           />
           {passwordErr && (
             <p className="text-[10px] my-2 text-red-500">
