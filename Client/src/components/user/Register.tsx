@@ -1,7 +1,8 @@
 import ModalFrame from '../common/ModalFrame';
-import Button from '../common/Button';
+// import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
+import glasses from '../../assets/icons/pixel-glasses.png';
 import { useState } from 'react';
 
 const Register = () => {
@@ -11,7 +12,8 @@ const Register = () => {
   const [emailErr, setEmailErr] = useState<boolean>(false);
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [nicknameErr, setNicknameErr] = useState<boolean>(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  //   const [color, setColor] = useState<boolean>('')
 
   // 이메일 포멧
   const emailRegEx =
@@ -20,6 +22,7 @@ const Register = () => {
   const passwordRegex =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
 
+  //한글 또는 영어, 2-6길이
   const nicknameRegex = /^[가-힣a-zA-Z]{2,6}$/;
 
   const validateEmail = () => {
@@ -63,12 +66,18 @@ const Register = () => {
     validateNickname();
   };
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center ">
       <ModalFrame height={550} width={700}>
         <form
           onSubmit={handleRegister}
-          className="flex flex-col items-center justify-center w-[550px] h-[450px] p-5"
+          className="flex flex-col items-center justify-center w-[550px] h-[450px] p-5 relative"
         >
+          <img
+            src={glasses}
+            alt="pixel glasses"
+            width={300}
+            className="absolute top-[-105px]  left-[150px] z-99 fill-gray-100"
+          />
           <h1 className="my-2 text-xl">Register</h1>
           <div className="flex items-center  ">
             <input
