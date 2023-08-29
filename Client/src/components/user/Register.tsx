@@ -1,7 +1,7 @@
 import ModalFrame from '../common/ModalFrame';
 
 const Register = () => {
-  return <ModalFrame>Hello</ModalFrame>;
+  return <ModalFrame>hello</ModalFrame>;
 };
 
 export default Register;
