@@ -30,6 +30,7 @@ public class LikeService {
     public void feedLikeOrDisLike(long feedId, long userId){
         userService.findVerifiedUser(userId);
         // feed 유효성 검사 feed 수정 시 구현 예정
+        // 자추 불가 기능 feed service 구현 시 추가 예정
         Optional<Like> optionalLike = likeRepository.findLikeByFeed_FeedIdAndUser_UserId(feedId, userId);
         Like like;
         if (optionalLike.isPresent()) {
