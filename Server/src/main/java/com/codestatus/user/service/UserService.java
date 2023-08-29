@@ -10,6 +10,7 @@ import com.codestatus.status.entity.Status;
 import com.codestatus.status.repository.StatRepository;
 import com.codestatus.status.repository.StatusRepository;
 import com.codestatus.user.entity.User;
+import com.codestatus.user.repository.ExpTableRepository;
 import com.codestatus.user.repository.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
@@ -30,14 +31,16 @@ public class UserService {
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
+    private final ExpTableRepository expTableRepository;
 
-    public UserService(UserRepository repository, StatRepository statRepository, StatusRepository statusRepository, CustomAuthorityUtils customAuthorityUtils, PasswordEncoder passwordEncoder, FileStorageService fileStorageService) {
+    public UserService(UserRepository repository, StatRepository statRepository, StatusRepository statusRepository, CustomAuthorityUtils customAuthorityUtils, PasswordEncoder passwordEncoder, FileStorageService fileStorageService, ExpTableRepository expTableRepository) {
         this.repository = repository;
         this.statRepository = statRepository;
         this.statusRepository = statusRepository;
         this.customAuthorityUtils = customAuthorityUtils;
         this.passwordEncoder = passwordEncoder;
         this.fileStorageService = fileStorageService;
+        this.expTableRepository = expTableRepository;
     }
 
     // 유저 생성
@@ -117,11 +120,16 @@ public class UserService {
         Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
         User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
+        int expGain = 10; // 출석체크로 얻는 경험치
+
         if(findUser.isAttendance()) { // 이미 출석체크를 했다면 예외 발생
             throw new BusinessLogicException(ExceptionCode.USER_ALREADY_CHECKED_ATTENDANCE);
         }
 
-        findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + 10); // 선택한 stat 경험치 10 증가
+        findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + expGain); // 선택한 stat 경험치 증가
+        levelUpCheck(userId, chosenStat); // 레벨업 체크
+        findUser.setAttendance(true); // 출석체크 상태를 true로 변경
+        repository.save(findUser);
     }
 
     // 유저 탈퇴
@@ -221,5 +229,23 @@ public class UserService {
         }
 
         return id;
+    }
+    public void levelUpCheck(Long userId, int chooseStat) {
+        User findUser = findVerifiedUser(userId);
+        int currentLevel = findUser.getStatuses().get(chooseStat).getStatLevel();
+        int currentExp = findUser.getStatuses().get(chooseStat).getStatExp();
+        int requiredExp = expTableRepository.findById((long) currentLevel).get().getRequired();
+        int maxLevel = 100;
+
+        if (currentLevel >= maxLevel) { // 현재 레벨이 최대 레벨이라면 레벨업 불가
+            return;
+        }
+
+        if (currentExp >= requiredExp) { // 현재 경험치가 필요 경험치보다 많다면 레벨업
+            findUser.getStatuses().get(chooseStat).setStatLevel(currentLevel + 1); // 레벨업
+            findUser.getStatuses().get(chooseStat).setStatExp(currentExp - requiredExp); // 경험치 차감
+        }
+
+        repository.save(findUser);
     }
 }
