@@ -1,14 +1,25 @@
 import { useState } from 'react';
-import Login from '../components/user/Login';
-import Register from '../components/user/Register';
+import TitleScreen from '../components/title-page/TitleScreen';
 
 const TitlePage = () => {
-  const [stage, setStage] = useState<0 | 1>(0);
+  const [step, setStep] = useState(0);
   return (
-    <div>
-      {stage === 0 && <Login setStage={setStage} />}
-      {stage === 1 && <Register setStage={setStage} />}
-    </div>
+    <>
+      <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] z-10">
+        <div
+          className="bg-title w-[1200px] h-[720px] bg-cover
+        bg-no-repeat bg-center"
+        >
+          {step === 0 && (
+            <TitleScreen
+              onClick={() => {
+                setStep(1);
+              }}
+            />
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 
