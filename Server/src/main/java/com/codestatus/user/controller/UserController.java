@@ -37,9 +37,9 @@ public class UserController {
     // 유저 조회 컨트롤러
     @GetMapping("/mypage")
     public ResponseEntity<UserDto.Response> getUser() {
-        User user = service.findUser();
-        UserDto.Response responseBody = userMapper.userToUserResponse(user);
-        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        User user = service.findUser(); // 유저 조회 메서드 호출
+        UserDto.Response responseBody = userMapper.userToUserResponse(user); // Entity -> ResponseDto
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody); // 유저 정보 반환
     }
 
     // 유저 닉네임 수정 컨트롤러
@@ -61,21 +61,21 @@ public class UserController {
     // 출석체크 컨트롤러
     @PostMapping("/mypage/attendance/{chosenStat}")
     public ResponseEntity checkAttendance(@PathVariable @Min(0) @Max(4) int chosenStat) {
-        service.checkAttendance(chosenStat);
-        return ResponseEntity.status(HttpStatus.OK).body("attendance check success");
+        service.checkAttendance(chosenStat); // 출석체크 메서드 호출
+        return ResponseEntity.status(HttpStatus.OK).body("attendance check success"); // 출석체크 성공 메시지 반환
     }
 
     // 프로필 이미지 업로드
     @PostMapping("/mypage/edit/image")
     public ResponseEntity uploadProfileImage(@RequestParam("imageFile") MultipartFile imageFile) {
-        service.uploadProfileImage(imageFile);
-        return ResponseEntity.status(HttpStatus.OK).body("profile image upload success");
+        service.uploadProfileImage(imageFile); // 프로필 이미지 업로드 메서드 호출
+        return ResponseEntity.status(HttpStatus.OK).body("profile image upload success"); // 프로필 이미지 업로드 성공 메시지 반환
     }
 
     // 유저 탈퇴
     @DeleteMapping("/mypage/delete")
     public ResponseEntity deleteUser() {
-        service.deleteUser();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        service.deleteUser(); // 유저 탈퇴 메서드 호출
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 유저 탈퇴 성공
     }
 }

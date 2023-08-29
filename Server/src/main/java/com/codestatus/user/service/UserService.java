@@ -45,34 +45,36 @@ public class UserService {
 
     // 유저 생성
     public void createUser(User user) {
-        verifyExistsEmail(user.getEmail());
-        verifyExistsNickName(user.getNickName());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        List<String> roles = customAuthorityUtils.createRoles(user.getEmail());
-        user.setRoles(roles);
+        verifyExistsEmail(user.getEmail()); // 이메일 중복 검사
+        verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
+        List<String> roles = customAuthorityUtils.createRoles(user.getEmail()); // 권한 생성
+        user.setRoles(roles); // 권한 저장
 
-        List<String> defaultImage = Arrays.asList(
+        List<String> defaultImage = Arrays.asList( // 프로필 이미지
                 "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
                 "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
                 "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image3.png",
                 "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image4.png");
         int random = (int)(Math.random() * defaultImage.size());
 
-        user.setProfileImage(defaultImage.get(random));
-        repository.save(user);
+        user.setProfileImage(defaultImage.get(random)); // 프로필 이미지 랜덤 배정
+        repository.save(user); // 유저 저장
 
+        // 유저 생성 시 기본 stat 조회
         Stat strStat = findStat(1L);
         Stat dexStat = findStat(2L);
         Stat intStat = findStat(3L);
         Stat charmStat = findStat(4L);
         Stat vitalityStat = findStat(5L);
 
+        // 유저 생성 시 기본 status 생성
         Status strStatus = createStatus(user, strStat, 1, 0);
         Status dexStatus = createStatus(user, dexStat, 1, 0);
         Status intStatus = createStatus(user, intStat, 1, 0);
         Status charmStatus = createStatus(user, charmStat, 1, 0);
         Status vitalityStatus = createStatus(user, vitalityStat, 1, 0);
-        user.getStatuses().addAll(Arrays.asList(strStatus, dexStatus, intStatus, charmStatus, vitalityStatus));
+        user.getStatuses().addAll(Arrays.asList(strStatus, dexStatus, intStatus, charmStatus, vitalityStatus)); // status 저장
     }
 
     // 유저 조회
@@ -191,7 +193,7 @@ public class UserService {
     // stat 조회
     private Stat findStat(Long statId) {
         Optional<Stat> existingStat = statRepository.findById(statId);
-        return existingStat.orElseThrow(() -> new RuntimeException("Stat with ID " + statId + " not found")); // Handle this exception appropriately
+        return existingStat.orElseThrow(() -> new RuntimeException("Stat with ID " + statId + " not found")); // stat이 없다면 예외 발생(테스트용)
     }
 
     // status 생성
@@ -219,7 +221,7 @@ public class UserService {
         repository.saveAll(users);
     }
 
-    // 로그인한 유저의 id를 가져옴(헤더의 토큰에 포함된 유저의 id)
+    // 로그인한 유저의 id를 가져옴
     public Long getLoginUserId() {
         Long id = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -230,12 +232,12 @@ public class UserService {
 
         return id;
     }
-    public void levelUpCheck(Long userId, int chooseStat) {
-        User findUser = findVerifiedUser(userId);
-        int currentLevel = findUser.getStatuses().get(chooseStat).getStatLevel();
-        int currentExp = findUser.getStatuses().get(chooseStat).getStatExp();
-        int requiredExp = expTableRepository.findById((long) currentLevel).get().getRequired();
-        int maxLevel = 100;
+    public void levelUpCheck(Long userId, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
+        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        int currentLevel = findUser.getStatuses().get(chooseStat).getStatLevel(); // 현재 레벨
+        int currentExp = findUser.getStatuses().get(chooseStat).getStatExp(); // 현재 경험치
+        int requiredExp = expTableRepository.findById((long) currentLevel).get().getRequired(); // 필요 경험치
+        int maxLevel = 100; // 최대 레벨
 
         if (currentLevel >= maxLevel) { // 현재 레벨이 최대 레벨이라면 레벨업 불가
             return;
@@ -246,6 +248,6 @@ public class UserService {
             findUser.getStatuses().get(chooseStat).setStatExp(currentExp - requiredExp); // 경험치 차감
         }
 
-        repository.save(findUser);
+        repository.save(findUser); // 유저 정보 저장
     }
 }
