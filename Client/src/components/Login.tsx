@@ -4,10 +4,30 @@ import ModalFrame from './common/ModalFrame';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailErr, setEmailErr] = useState(false);
+  const [passwordErr, setPasswordErr] = useState(false);
+
+  // email format
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+  // 최소 8 자, 하나 이상의 대문자, 하나의 소문자, 하나의 숫자 및 하나의 특수 문자
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$/;
+
+  const validateUserInput = () => {
+    if (!emailRegEx.test(email)) {
+      setEmailErr(true);
+      alert('check email');
+    }
+    if (!passwordRegex.test(password)) {
+      setPasswordErr(true);
+      alert('check password');
+    }
+  };
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    validateUserInput();
     setEmail('');
     setPassword('');
   };
@@ -21,7 +41,7 @@ const Login = () => {
         >
           <input
             placeholder="Email"
-            type="email"
+            type="text"
             className="border-solid border-2 border-000 p-2 rounded-lg my-2"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
