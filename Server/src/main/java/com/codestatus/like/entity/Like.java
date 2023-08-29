@@ -20,7 +20,7 @@ public class Like {
     private long likeId;
 
     @Column
-    private boolean deleted = false;
+    private Boolean deleted = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id", updatable = false)
