@@ -113,7 +113,7 @@ public class UserService {
     }
 
     // 출석체크
-    public void checkAttendance(int chosenStat) {
+    public void checkAttendance(int chosenStat) { // chosenStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
         Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
         User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
@@ -121,33 +121,7 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.USER_ALREADY_CHECKED_ATTENDANCE);
         }
 
-        switch (chosenStat) {
-            case 0: // 힘
-                findUser.getStatuses().get(0).setStatExp(findUser.getStatuses().get(0).getStatExp() + 10); // 힘 경험치 10 증가
-                findUser.setAttendance(true); // 출석체크 상태 true로 변경
-                repository.save(findUser);
-                break;
-            case 1: // 민첩
-                findUser.getStatuses().get(1).setStatExp(findUser.getStatuses().get(1).getStatExp() + 10); // 민첩 경험치 10 증가
-                findUser.setAttendance(true);
-                repository.save(findUser);
-                break;
-            case 2: // 지능
-                findUser.getStatuses().get(2).setStatExp(findUser.getStatuses().get(2).getStatExp() + 10); // 지능 경험치 10 증가
-                findUser.setAttendance(true);
-                repository.save(findUser);
-                break;
-            case 3: // 매력
-                findUser.getStatuses().get(3).setStatExp(findUser.getStatuses().get(3).getStatExp() + 10); // 매력 경험치 10 증가
-                findUser.setAttendance(true);
-                repository.save(findUser);
-                break;
-            case 4: // 생활력
-                findUser.getStatuses().get(4).setStatExp(findUser.getStatuses().get(4).getStatExp() + 10); // 생활력 경험치 10 증가
-                findUser.setAttendance(true);
-                repository.save(findUser);
-                break;
-        }
+        findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + 10); // 선택한 stat 경험치 10 증가
     }
 
     // 유저 탈퇴
@@ -178,6 +152,11 @@ public class UserService {
         User findUser =
                 OptionalUser.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.USER_NOT_FOUND)); // 유저가 없다면 예외 발생
+
+        if(findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 탈퇴 상태라면 예외 발생
+            throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
+        }
+
         return findUser;
     }
 
@@ -225,8 +204,8 @@ public class UserService {
     // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 변경(매일 자정마다 실행)
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // cron = "0 0 0 * * ?", zone = "Asia/Seoul" <- 매일 자정마다 실행
     public void updateAttendance() {
-        List<User> users = repository.findAllByUserStatusAndAttendance(User.UserStatus.USER_ACTIVE, true);
-        for (User user : users) {
+        List<User> users = repository.findAllByUserStatusAndAttendance(User.UserStatus.USER_ACTIVE, true); // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 조회
+        for (User user : users) { // 출석체크 상태를 false로 변경
             user.setAttendance(false);
         }
         repository.saveAll(users);
