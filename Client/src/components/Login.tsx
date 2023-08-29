@@ -6,6 +6,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [emailErr, setEmailErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
+  //   const [userAlert, setUserAlert] = useState(false);
 
   // email format
   const emailRegEx =
@@ -16,25 +17,21 @@ const Login = () => {
 
   const validateUserInput = () => {
     if (!emailRegEx.test(email)) {
-      setEmailErr(true);
-      alert('check email');
+      setEmailErr(!emailErr);
     }
     if (!passwordRegex.test(password)) {
-      setPasswordErr(true);
-      alert('check password');
+      setPasswordErr(!passwordErr);
     }
   };
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     validateUserInput();
-    setEmail('');
-    setPassword('');
   };
 
   return (
     <div className="flex justify-center items-center">
-      <ModalFrame height={450} width={600}>
+      <ModalFrame height={500} width={650}>
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center justify-center"
@@ -43,11 +40,23 @@ const Login = () => {
             placeholder="Email"
             type="text"
             className="border-solid border-2 border-000 p-2 rounded-lg my-2"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              {
+                emailErr ? setEmailErr(true) : setEmailErr(false);
+              }
+            }}
             value={email}
             onFocus={(e) => console.log('onFocus')}
             onBlur={(e) => console.log('onBlur')}
           />
+
+          {emailErr && (
+            <p className="text-[10px] my-2 text-red-500">
+              Please check email format
+            </p>
+          )}
+
           <input
             placeholder="Password"
             type="password"
@@ -57,13 +66,15 @@ const Login = () => {
             onFocus={(e) => console.log('onFocus')}
             onBlur={(e) => console.log('onBlur')}
           />
+          {passwordErr && (
+            <p className="text-[10px] my-2 text-red-500">
+              Eight characters, at least one letter and one number
+            </p>
+          )}
+
           <button className="w-full h-[40px] bg-black text-white rounded-lg my-2 hover:cursor-grabbing">
             Login
           </button>
-
-          <div className="my-2">
-            <span>OR</span>
-          </div>
 
           <div className="flex items-center justify-center my-2">
             <img
