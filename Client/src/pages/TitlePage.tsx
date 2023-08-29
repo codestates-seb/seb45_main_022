@@ -1,21 +1,41 @@
 import { useState } from 'react';
 import TitleScreen from '../components/title-page/TitleScreen';
+import StatusScreen from '../components/title-page/StatusScreen';
 
 const TitlePage = () => {
-  const [step, setStep] = useState(0);
+  const [showTitle, setShowTitle] = useState<boolean>(true);
+  const [showStatus, setShowStatus] = useState<boolean>(false);
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] z-10">
         <div
-          className="bg-title w-[1200px] h-[720px] bg-cover
+          className="relative bg-title w-[1200px] h-[720px] bg-cover
         bg-no-repeat bg-center"
         >
-          {step === 0 && (
+          {showTitle && (
             <TitleScreen
               onClick={() => {
-                setStep(1);
+                setShowTitle(false);
               }}
             />
+          )}
+          {showStatus && (
+            <StatusScreen
+              onClick={() => {
+                setShowStatus(false);
+              }}
+            />
+          )}
+          {!showTitle && (
+            <div className="absolute left-[400px] top-[360px] flex flex-col justify-between items-center gap-[1rem]">
+              <p className="text-white drop-shadow-[0_0_2px_#000]">My Status</p>
+              <div
+                className=" w-[60px] h-[60px] bg-[url('/src/assets/objects/note.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-150 hover:scale-105 cursor-pointer"
+                onClick={() => {
+                  setShowStatus(true);
+                }}
+              ></div>
+            </div>
           )}
         </div>
       </div>
