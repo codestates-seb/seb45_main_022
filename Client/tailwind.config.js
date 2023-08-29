@@ -9,6 +9,9 @@ export default {
         feed: "url('/src/assets/bg/village.png')",
       },
     },
+    fontFamily: {
+      default: ['Press Start 2P'],
+    },
   },
   plugins: [],
 };
