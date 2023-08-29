@@ -4,10 +4,10 @@ import kakaoLoginBar from '../assets/common/kakao-login.png';
 import googleLoginBar from '../assets/common/google-login.png';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailErr, setEmailErr] = useState(false);
-  const [passwordErr, setPasswordErr] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [emailErr, setEmailErr] = useState<boolean>(false);
+  const [passwordErr, setPasswordErr] = useState<boolean>(false);
   //   const [userAlert, setUserAlert] = useState(false);
 
   // 이메일 포멧
