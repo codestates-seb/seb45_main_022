@@ -12,6 +12,11 @@ import java.util.List;
 
 @Configuration
 public class UserMapper {
+    public User userIdToUser(Long userId){
+        User user = new User();
+        user.setUserId(userId);
+        return user;
+    }
     //Dto -> Entity
     public User userPostToUser(UserDto.signup requestBody) {
         User user = new User();
