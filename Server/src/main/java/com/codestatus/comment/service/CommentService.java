@@ -28,18 +28,23 @@ public class CommentService {
     public void createComment(long feedId, long userId, Comment comment){
         User user = userMapper.userIdToUser(userId);
         Feed feed = feedMapper.feedIdToFeed(feedId);
+        comment.setUser(user);
+        comment.setFeed(feed);
+
         commentRepository.save(comment);
     }
 
-    public void updateComment(long commentId, Comment comment){
+    public void updateComment(long commentId, long userId, Comment comment){
         Comment findComment = findVerifiedComment(commentId);
+        checkUser(findComment, userId);
         Optional.ofNullable(comment.getBody()).ifPresent(findComment::setBody);
 
         commentRepository.save(comment);
     }
 
-    public void deleteComment(long commentId) {
+    public void deleteComment(long commentId, long userId) {
         Comment findComment = findVerifiedComment(commentId);
+        checkUser(findComment, userId);
         findComment.setDeleted(true);
 
         commentRepository.save(findComment);
@@ -49,5 +54,9 @@ public class CommentService {
     public Comment findVerifiedComment(long commentId){
         Optional<Comment> optionalComment = commentRepository.findCommentByCommentIdAndDeleted(commentId, false);
         return optionalComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
+    }
+
+    private void checkUser(Comment findComment, long userId){
+        if (findComment.getUser().getUserId() != userId) throw new BusinessLogicException(ExceptionCode.FORBIDDEN_REQUEST);
     }
 }
