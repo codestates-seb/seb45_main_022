@@ -14,14 +14,6 @@ const router = createBrowserRouter([
     element: <TitlePage />,
   },
   {
-    path: '/auth',
-    element: <AuthPage />,
-  },
-  {
-    path: '/profile',
-    element: <ProfilePage />,
-  },
-  {
     path: '/map',
     element: <MapPage />,
   },
