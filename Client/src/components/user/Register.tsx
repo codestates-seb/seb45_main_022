@@ -22,19 +22,21 @@ const Register = () => {
             />
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center relative">
             <input
               placeholder="Password"
               type={passwordVisible ? 'text' : 'password'}
-              className="border-solid border-2 border-000 p-2 rounded-lg my-2"
+              className="border-solid border-2 border-000 p-2 rounded-lg my-2 w-full "
             />
             <img
-              src={view}
+              src={!passwordVisible ? hide : view}
               alt="view icon"
-              width={35}
+              width={25}
               onClick={toggleViewPassword}
+              className="absolute right-2 cursor-pointer"
             />
           </div>
+
           {/* <div className="flex items-center">
             <input
               placeholder="Password Confirm"
@@ -50,8 +52,13 @@ const Register = () => {
             />
           </div>
 
-          <div className="my-2 text-sm">
+          <div className="my-4 text-sm">
             <Button width={300}>Create an Account</Button>
+          </div>
+
+          <div className="text-[10px] flex items-center justify-center w-full my-2">
+            <span className="text-neutral-500">Already a user?</span>
+            <span className="text-neutral-100 ml-4">Login!</span>
           </div>
         </form>
       </ModalFrame>
