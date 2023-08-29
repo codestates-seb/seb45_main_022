@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import TitlePage from './pages/TitlePage';
-import AuthPage from './pages/AuthPage';
-import ProfilePage from './pages/ProfilePage';
 import FeedPage from './pages/FeedPage';
 import MapPage from './pages/MapPage';
 
