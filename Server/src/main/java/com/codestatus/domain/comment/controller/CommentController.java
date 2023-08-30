@@ -1,5 +1,7 @@
 package com.codestatus.domain.comment.controller;
 
+import com.codestatus.domain.feed.mapper.FeedMapper;
+import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.domain.comment.dto.CommentPostDto;
 import com.codestatus.domain.comment.dto.CommnetPatchDto;
@@ -20,10 +22,14 @@ import javax.validation.Valid;
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final UserMapper userMapper;
+    private final FeedMapper feedMapper;
 
-    public CommentController(CommentService commentService, CommentMapper commentMapper) {
+    public CommentController(CommentService commentService, CommentMapper commentMapper, UserMapper userMapper, FeedMapper feedMapper) {
         this.commentService = commentService;
         this.commentMapper = commentMapper;
+        this.userMapper = userMapper;
+        this.feedMapper = feedMapper;
     }
 
     @PostMapping("/{feedId}")
@@ -31,7 +37,11 @@ public class CommentController {
                                       @Valid @RequestBody CommentPostDto requestBody,
                                       @AuthenticationPrincipal PrincipalDto principal) {
         Comment comment = commentMapper.commentPostDtoToComment(requestBody);
-        commentService.createComment(feedId, principal.getId(), comment);
+        comment.setFeed(feedMapper.feedIdToFeed(feedId));
+        comment.setUser(userMapper.userIdToUser(principal.getId()));
+
+        commentService.createEntity(comment);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -40,14 +50,18 @@ public class CommentController {
                                        @Valid @RequestBody CommnetPatchDto requestBody,
                                        @AuthenticationPrincipal PrincipalDto principal){
         Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
-        commentService.updateComment(commentId, principal.getId(), comment);
+        comment.setCommentId(commentId);
+
+        commentService.updateEntity(comment, principal.getId());
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity deleteComment(@PathVariable("commentId") long commentId,
                                        @AuthenticationPrincipal PrincipalDto principal){
-        commentService.deleteComment(commentId, principal.getId());
+        commentService.deleteEntity(commentId, principal.getId());
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
