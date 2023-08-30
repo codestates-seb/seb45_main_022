@@ -7,7 +7,7 @@ import shield from '../assets/common/shield.png';
 import axios from 'axios';
 
 interface LoginProps {
-  setStage: number;
+  setStage: (stage: number) => void;
 }
 
 const Login = ({ setStage }: LoginProps) => {

@@ -5,7 +5,7 @@ import view from '../../assets/icons/view.png';
 import { useState } from 'react';
 
 interface RegisterProps {
-  setStage: number;
+  setStage: (stage: number) => void;
 }
 
 const Register = ({ setStage }: RegisterProps) => {
