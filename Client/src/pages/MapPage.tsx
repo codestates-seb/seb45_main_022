@@ -29,21 +29,15 @@ const MapPage = () => {
         );
         const jsonData = response.data;
 
-        setCategoryList(
-          jsonData.categories.map((category) => {
-            const { categoryName } = category;
-
-            return categoryName;
-          }),
-        );
-
-        setIconNumbers(
-          jsonData.categories.map((category) => {
-            const { categoryCode } = category;
-
-            return categoryCode;
-          }),
-        );
+        const codes: number[] = [];
+        const names: string[] = [];
+        jsonData.categories.forEach((category) => {
+          const { categoryCode, categoryName } = category;
+          codes.push(categoryCode);
+          names.push(categoryName);
+        });
+        setCategoryList(names);
+        setIconNumbers(codes);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
