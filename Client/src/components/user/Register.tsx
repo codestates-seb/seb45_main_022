@@ -2,10 +2,13 @@ import ModalFrame from '../common/ModalFrame';
 import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
-import glasses from '../../assets/icons/pixel-glasses.png';
 import { useState } from 'react';
 
-const Register = () => {
+interface RegisterProps {
+  setStage: number;
+}
+
+const Register = ({ setStage }: RegisterProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
@@ -13,7 +16,6 @@ const Register = () => {
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [nicknameErr, setNicknameErr] = useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  //   const [color, setColor] = useState<boolean>('')
 
   // 이메일 포멧
   const emailRegEx =
@@ -72,13 +74,7 @@ const Register = () => {
           onSubmit={handleRegister}
           className="flex flex-col items-center justify-center w-[550px] h-[450px] p-5 relative"
         >
-          {/* <img
-            src={glasses}
-            alt="pixel glasses"
-            width={300}
-            className="absolute top-[-105px]  left-[150px] z-99 fill-gray-100"
-          /> */}
-          <h1 className="my-2 text-xl">Register</h1>
+          <h1 className="my-2 text-2xl">Register</h1>
           <div className="flex items-center  ">
             <input
               placeholder="Email"
@@ -112,17 +108,11 @@ const Register = () => {
             />
           </div>
           {passwordErr && (
-            <p className="text-[10px]  text-red-500">
-              8-16 characters, lower&upper case, numbers, and characters
+            <p className="text-[10px]  text-red-500 text-center">
+              8-16 characters, lowercase & uppercase, numbers, and characters
             </p>
           )}
-          {/* <div className="flex items-center">
-            <input
-              placeholder="Password Confirm"
-              type="password"
-              className="border-solid border-2 border-000 p-2 rounded-lg my-2"
-            />
-          </div> */}
+
           <div className="flex items-center">
             <input
               placeholder="Nickname "
@@ -138,17 +128,21 @@ const Register = () => {
               2-6 characters, Korean or English
             </p>
           )}
-          {/* 
-          <button className="w-[400px] h-[40px] bg-black text-white rounded-lg my-2 hover:cursor-grabbing">
-            Create an Account
-          </button> */}
+
           <button className="my-4 text-sm">
             <Button>Create an Account</Button>
           </button>
 
           <div className="text-[10px] flex items-center justify-center w-full my-2">
             <span className="text-neutral-500">Already a user?</span>
-            <span className="text-neutral-100 ml-4">Login!</span>
+            <span
+              onClick={() => {
+                setStage(1);
+              }}
+              className="text-neutral-100 ml-4"
+            >
+              Login!
+            </span>
           </div>
         </form>
       </ModalFrame>

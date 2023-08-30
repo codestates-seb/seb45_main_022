@@ -1,13 +1,13 @@
-// import Login from '../components/user/Login';
-
+import { useState } from 'react';
+import Login from '../components/user/Login';
 import Register from '../components/user/Register';
 
 const TitlePage = () => {
+  const [stage, setStage] = useState<0 | 1>(0);
   return (
     <div>
-      <h1 className="text-4xl">STAT & US</h1>
-      {/* <Login /> */}
-      <Register />
+      {stage === 0 && <Login setStage={setStage} />}
+      {stage === 1 && <Register setStage={setStage} />}
     </div>
   );
 };

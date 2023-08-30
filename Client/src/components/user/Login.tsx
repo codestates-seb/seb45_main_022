@@ -6,7 +6,11 @@ import sword from '../assets/common/sword.png';
 import shield from '../assets/common/shield.png';
 import axios from 'axios';
 
-const Login = () => {
+interface LoginProps {
+  setStage: number;
+}
+
+const Login = ({ setStage }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailErr, setEmailErr] = useState<boolean>(false);
@@ -141,7 +145,14 @@ const Login = () => {
           </div>
           <div className="text-[10px] flex items-center justify-evenly w-full">
             <span className="text-neutral-500">Don't have an account yet?</span>
-            <span className="text-neutral-100">Sign up!</span>
+            <span
+              onClick={() => {
+                setStage(0);
+              }}
+              className="text-neutral-100"
+            >
+              Sign up!
+            </span>
           </div>
         </form>
       </ModalFrame>
