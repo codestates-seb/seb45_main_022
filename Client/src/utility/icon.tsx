@@ -19,6 +19,7 @@ import weightIcon from '../assets/icons/weight.png';
 
 interface IconInfo {
   [categoryCode: number]: string;
+  length: number;
 }
 
 export const icons: IconInfo = [

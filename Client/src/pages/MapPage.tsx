@@ -1,9 +1,9 @@
-//MapPage.tsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import Backdrop from '../components/common/Backdrop';
 import ModalFrame from '../components/common/ModalFrame';
 import ServerList from '../components/map/ServerList';
+import { icons } from '../utility/icon';
 import axios from 'axios';
 
 interface Category {
@@ -23,44 +23,50 @@ const MapPage = () => {
   const { statusCode } = useParams();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategoryData = async () => {
       try {
         const response = await axios.get<JsonData>(
           `../../public/categoryList/${statusCode}.json`,
         );
-        const jsonData = await response.data;
+        const jsonData = response.data;
 
         const selectedCategoryCodes = jsonData.categories.map(
-          (category) => category.categoryCode,
+          (category) => category.categoryCode % icons.length,
         );
 
-        const selectedCategoryNames = selectedCategoryCodes
-          .filter((code) =>
-            jsonData.categories.some(
-              (category) => category.categoryCode === code,
-            ),
-          )
-          .map((code) => {
-            const selectedCategory = jsonData.categories.find(
-              (category) => category.categoryCode === code,
-            );
-
-            return selectedCategory ? selectedCategory.categoryName : '';
-          });
-
-        const selectedIconNumbers = selectedCategoryCodes.map(
-          (code) => code % 13, // 각각의 카테고리에 대한 끝자리 추출
+        const selectedCategoryNames = getSelectedCategoryNames(
+          selectedCategoryCodes,
+          jsonData.categories,
         );
+
+        console.log(selectedCategoryCodes);
+        console.log(selectedCategoryNames);
 
         setCategoryList(selectedCategoryNames);
-        setIconNumbers(selectedIconNumbers);
+        setIconNumbers(selectedCategoryCodes);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
-    fetchData();
+    fetchCategoryData();
   }, [statusCode]);
+
+  const getSelectedCategoryNames = (
+    selectedCategoryCodes: number[],
+    categories: Category[],
+  ) => {
+    return selectedCategoryCodes
+      .filter((code) =>
+        categories.some((category) => category.categoryCode === code),
+      )
+      .map((code) => {
+        const selectedCategory = categories.find(
+          (category) => category.categoryCode === code,
+        );
+        return selectedCategory ? selectedCategory.categoryName : '';
+      });
+  };
 
   return (
     <div className="flex justify-center items-center w-full h-full absolute bg-map bg-center bg-cover">
