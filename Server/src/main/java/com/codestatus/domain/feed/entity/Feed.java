@@ -1,7 +1,9 @@
 package com.codestatus.domain.feed.entity;
 
 import com.codestatus.global.audit.Auditable;
+import com.codestatus.domain.category.entity.Category;
 import com.codestatus.domain.comment.entity.Comment;
+import com.codestatus.domain.image.entity.Image;
 import com.codestatus.domain.like.entity.Like;
 import com.codestatus.domain.user.entity.User;
 import lombok.Getter;
@@ -31,12 +33,15 @@ public class Feed extends Auditable {
     @JoinColumn(name = "category_id", updatable = false)
     private Category category;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
     @OneToMany(mappedBy = "feed")
     private List<FeedHashTag> feedHashTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feed")
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed")
     private List<Comment> comments = new ArrayList<>();
