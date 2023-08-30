@@ -137,9 +137,9 @@ const Register = ({ setStage }: RegisterProps) => {
             <span className="text-neutral-500">Already a user?</span>
             <span
               onClick={() => {
-                setStage(1);
+                setStage(0);
               }}
-              className="text-neutral-100 ml-4"
+              className="text-neutral-100 ml-4 hover:cursor-pointer"
             >
               Login!
             </span>
