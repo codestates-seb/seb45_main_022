@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 import Backdrop from '../components/common/Backdrop';
 import ModalFrame from '../components/common/ModalFrame';
 import ServerList from '../components/map/ServerList';
-import { icons } from '../utility/icon';
 import axios from 'axios';
 
 interface Category {
@@ -30,20 +29,21 @@ const MapPage = () => {
         );
         const jsonData = response.data;
 
-        const selectedCategoryCodes = jsonData.categories.map(
-          (category) => category.categoryCode % icons.length,
+        setCategoryList(
+          jsonData.categories.map((category) => {
+            const { categoryName } = category;
+
+            return categoryName;
+          }),
         );
 
-        const selectedCategoryNames = getSelectedCategoryNames(
-          selectedCategoryCodes,
-          jsonData.categories,
+        setIconNumbers(
+          jsonData.categories.map((category) => {
+            const { categoryCode } = category;
+
+            return categoryCode;
+          }),
         );
-
-        console.log(selectedCategoryCodes);
-        console.log(selectedCategoryNames);
-
-        setCategoryList(selectedCategoryNames);
-        setIconNumbers(selectedCategoryCodes);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -51,22 +51,6 @@ const MapPage = () => {
 
     fetchCategoryData();
   }, [statusCode]);
-
-  const getSelectedCategoryNames = (
-    selectedCategoryCodes: number[],
-    categories: Category[],
-  ) => {
-    return selectedCategoryCodes
-      .filter((code) =>
-        categories.some((category) => category.categoryCode === code),
-      )
-      .map((code) => {
-        const selectedCategory = categories.find(
-          (category) => category.categoryCode === code,
-        );
-        return selectedCategory ? selectedCategory.categoryName : '';
-      });
-  };
 
   return (
     <div className="flex justify-center items-center w-full h-full absolute bg-map bg-center bg-cover">
