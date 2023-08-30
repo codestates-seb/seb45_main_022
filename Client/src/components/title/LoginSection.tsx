@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import ModalFrame from '../common/ModalFrame';
-import { useMutation } from 'react-query';
+import { QueryClient, useMutation } from 'react-query';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import axios from 'axios';
 import Button from '../common/Button';
+import { UNSAFE_enhanceManualRouteObjects } from 'react-router';
 // import userData from '../../../public/user/users.json';
 
 interface LoginProps {
@@ -52,34 +53,30 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     }
   };
 
-  //useMutation
-  const userLogin = useMutation(async (userOption: UserData) => {
+  //테스트용 -- 추후 수정 예정
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const payoad = {
+      email: email,
+      password: password,
+    };
+
     try {
       const response = await axios.post<UserData>(
         '../../../public/user/users.json',
-        userOption,
+        payoad,
       );
       console.log(response.data);
-      return response.data;
+      validateEmail();
+      validatePass();
+      setEmail('');
+      setPassword('');
+      closeScreen();
     } catch (err) {
-      console.error('Login error:', err);
+      console.log('Error', err);
     }
-  });
-
-  //테스트용 -- 추후 수정 예정
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    userLogin.mutate({ email, password });
-    validateEmail();
-    validatePass();
-    setEmail('');
-    setPassword('');
-    closeScreen();
   };
-
-  if (userLogin.isLoading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <ModalFrame height={550} width={700}>
