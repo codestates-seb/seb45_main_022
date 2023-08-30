@@ -74,7 +74,7 @@ const Login = ({ setStage }: LoginProps) => {
 
   return (
     <div className="flex justify-center items-evenly ">
-      <ModalFrame height={550} width={750}>
+      <ModalFrame height={550} width={700}>
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center justify-center w-[500px]  p-3"
@@ -151,7 +151,10 @@ const Login = ({ setStage }: LoginProps) => {
         </div>
         <div className="text-[10px] flex items-center justify-evenly w-full my-2">
           <span className="text-neutral-500">Don't have an account yet?</span>
-          <span className="text-neutral-100" onClick={() => setStage(1)}>
+          <span
+            className="text-neutral-100 hover:cursor-pointer"
+            onClick={() => setStage(1)}
+          >
             Sign up!
           </span>
         </div>
