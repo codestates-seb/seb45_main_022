@@ -1,19 +1,11 @@
 [
   {
     "email": "test@test.com",
-    "password": "Test123!@#",
-    "token": {
-      "access": "uasfn21tfn1usafjifsaobanofjuia",
-      "refresh": "gdnuasgoasug2fgeaiofsafad"
-    }
+    "password": "Test123!@#"
   },
 
   {
     "email": "test2@test.com",
-    "password": "Test123!@#",
-    "token": {
-      "access": "fsaf23rtf1242r15r1r12r2113t132t",
-      "refresh": "gdnuasgsdgdsgsgoasug2fgeaiofsafad"
-    }
+    "password": "Test123!@#"
   }
 ]

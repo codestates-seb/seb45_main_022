@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import ModalFrame from '../common/ModalFrame';
-
+import { useMutation } from 'react-query';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import axios from 'axios';
 import Button from '../common/Button';
+// import userData from '../../../public/user/users.json';
 
 interface LoginProps {
   changeSection: () => void;
@@ -23,7 +24,6 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [emailFocus, setEmailFocus] = useState<boolean>(false);
   const [passFocus, setPassFocus] = useState<boolean>(false);
-  const [loading, isLoading] = useState<boolean>(false);
 
   // 이메일 포멧
   const emailRegEx =
@@ -52,35 +52,33 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     }
   };
 
-  //테스트용 -- 추후 수정 예정
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    isLoading(true);
+  //useMutation
+  const userLogin = useMutation(async (userOption: UserData) => {
     try {
-      const userOption = {
-        email,
-        password,
-      };
       const response = await axios.post<UserData>(
         '../../../public/user/users.json',
         userOption,
       );
-      setEmail('');
-      setPassword('');
-      isLoading(false);
-      closeScreen();
       console.log(response.data);
-      alert('success');
+      return response.data;
     } catch (err) {
-      console.log(err);
+      console.error('Login error:', err);
     }
+  });
 
+  //테스트용 -- 추후 수정 예정
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    userLogin.mutate({ email, password });
     validateEmail();
     validatePass();
+    setEmail('');
+    setPassword('');
+    closeScreen();
   };
 
-  {
-    loading && <p>Loading...</p>;
+  if (userLogin.isLoading) {
+    return <p>Loading...</p>;
   }
 
   return (
