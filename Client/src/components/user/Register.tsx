@@ -1,5 +1,5 @@
 import ModalFrame from '../common/ModalFrame';
-// import Button from '../common/Button';
+import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
 import glasses from '../../assets/icons/pixel-glasses.png';
@@ -72,12 +72,12 @@ const Register = () => {
           onSubmit={handleRegister}
           className="flex flex-col items-center justify-center w-[550px] h-[450px] p-5 relative"
         >
-          <img
+          {/* <img
             src={glasses}
             alt="pixel glasses"
             width={300}
             className="absolute top-[-105px]  left-[150px] z-99 fill-gray-100"
-          />
+          /> */}
           <h1 className="my-2 text-xl">Register</h1>
           <div className="flex items-center  ">
             <input
@@ -100,10 +100,7 @@ const Register = () => {
               placeholder="Password"
               type={passwordVisible ? 'text' : 'password'}
               className="border-solid border-2 border-000 p-2 rounded-lg my-4 w-full "
-              onChange={(e) => {
-                setPassword(e.target.value);
-                console.log(e.target.value);
-              }}
+              onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
             <img
@@ -141,13 +138,13 @@ const Register = () => {
               2-6 characters, Korean or English
             </p>
           )}
-
+          {/* 
           <button className="w-[400px] h-[40px] bg-black text-white rounded-lg my-2 hover:cursor-grabbing">
             Create an Account
+          </button> */}
+          <button className="my-4 text-sm">
+            <Button>Create an Account</Button>
           </button>
-          {/* <div className="my-4 text-sm">
-            <Button width={300}>Create an Account</Button>
-          </div> */}
 
           <div className="text-[10px] flex items-center justify-center w-full my-2">
             <span className="text-neutral-500">Already a user?</span>
