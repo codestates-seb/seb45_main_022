@@ -2,10 +2,12 @@ import { useState } from 'react';
 import TitleScreen from '../components/title/TitleScreen';
 import StatusScreen from '../components/title/StatusScreen';
 import ProfileScreen from '../components/title/ProfileScreen';
+import AuthScreen from '../components/title/AuthScreen';
 
 enum Screen {
   TITLE,
   STATUS,
+  AUTH,
   PROFILE,
   DEFAULT,
 }
@@ -23,6 +25,13 @@ const TitlePage = () => {
           {screen === Screen.TITLE && (
             <TitleScreen
               onClick={() => {
+                setScreen(Screen.AUTH);
+              }}
+            />
+          )}
+          {screen === Screen.AUTH && (
+            <AuthScreen
+              closeScreen={() => {
                 setScreen(Screen.DEFAULT);
               }}
             />
