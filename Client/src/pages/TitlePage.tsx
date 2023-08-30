@@ -3,10 +3,16 @@ import TitleScreen from '../components/title/TitleScreen';
 import StatusScreen from '../components/title/StatusScreen';
 import ProfileScreen from '../components/title/ProfileScreen';
 
+enum Screen {
+  TITLE,
+  STATUS,
+  PROFILE,
+  DEFAULT,
+}
+
 const TitlePage = () => {
-  const [showTitle, setShowTitle] = useState<boolean>(true);
-  const [showStatus, setShowStatus] = useState<boolean>(false);
-  const [showProfile, setShowProfile] = useState<boolean>(false);
+  const [screen, setScreen] = useState<Screen>(Screen.TITLE);
+
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] z-10">
@@ -14,28 +20,28 @@ const TitlePage = () => {
           className="relative bg-title w-[1200px] h-[720px] bg-cover
         bg-no-repeat bg-center"
         >
-          {showTitle && (
+          {screen === Screen.TITLE && (
             <TitleScreen
               onClick={() => {
-                setShowTitle(false);
+                setScreen(Screen.DEFAULT);
               }}
             />
           )}
-          {showStatus && (
+          {screen === Screen.STATUS && (
             <StatusScreen
               onClick={() => {
-                setShowStatus(false);
+                setScreen(Screen.DEFAULT);
               }}
             />
           )}
-          {showProfile && (
+          {screen === Screen.PROFILE && (
             <ProfileScreen
               onClick={() => {
-                setShowProfile(false);
+                setScreen(Screen.DEFAULT);
               }}
             />
           )}
-          {!showTitle && (
+          {screen === Screen.DEFAULT && (
             <>
               {/* 책 아이콘 */}
               <div className="absolute left-[410px] top-[360px] flex flex-col justify-between items-center gap-[1rem]">
@@ -45,7 +51,7 @@ const TitlePage = () => {
                 <div
                   className=" w-[60px] h-[60px] bg-[url('/src/assets/objects/note.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"
                   onClick={() => {
-                    setShowStatus(true);
+                    setScreen(Screen.STATUS);
                   }}
                 ></div>
               </div>
@@ -57,7 +63,7 @@ const TitlePage = () => {
                 <div
                   className=" w-[50px] h-[60px] bg-[url('/src/assets/objects/paper.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"
                   onClick={() => {
-                    setShowProfile(true);
+                    setScreen(Screen.PROFILE);
                   }}
                 ></div>
               </div>
