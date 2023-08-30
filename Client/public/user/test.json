@@ -1,0 +1,41 @@
+{
+  "id": 1,
+  "email": "black@dragon.luv",
+  "nickName": "흑룡",
+  "profileImage": "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
+  "attendance": false,
+  "statuses": [
+    {
+      "statName": "힘",
+      "statLevel": 1,
+      "statExp": 10,
+      "requiredExp": 100
+    },
+    {
+      "statName": "민첩",
+      "statLevel": 1,
+      "statExp": 2,
+      "requiredExp": 100
+    },
+    {
+      "statName": "지능",
+      "statLevel": 1,
+      "statExp": 69,
+      "requiredExp": 100
+    },
+    {
+      "statName": "매력",
+      "statLevel": 1,
+      "statExp": 0,
+      "requiredExp": 100
+    },
+    {
+      "statName": "생활력",
+      "statLevel": 1,
+      "statExp": 0,
+      "requiredExp": 100
+    }
+  ],
+  "createDate": "2023-08-28T20:29:17.611235",
+  "modifiedDate": "2023-08-28T21:36:36.822127"
+}
