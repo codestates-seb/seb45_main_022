@@ -1,0 +1,18 @@
+{
+  "statusCode": 4,
+  "statusName": "생활력",
+  "categories": [
+    {
+      "categoryCode": 10,
+      "categoryName": "인테리어"
+    },
+    {
+      "categoryCode": 11,
+      "categoryName": "여행"
+    },
+    {
+      "categoryCode": 12,
+      "categoryName": "요리"
+    }
+  ]
+}

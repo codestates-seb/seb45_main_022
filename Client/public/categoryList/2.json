@@ -1,0 +1,18 @@
+{
+  "statusCode": 2,
+  "statusName": "지력",
+  "categories": [
+    {
+      "categoryCode": 5,
+      "categoryName": "독서"
+    },
+    {
+      "categoryCode": 6,
+      "categoryName": "스터디"
+    },
+    {
+      "categoryCode": 7,
+      "categoryName": "IT"
+    }
+  ]
+}

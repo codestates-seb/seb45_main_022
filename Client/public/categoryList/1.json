@@ -1,0 +1,18 @@
+{
+  "statusCode": 1,
+  "statusName": "민첩",
+  "categories": [
+    {
+      "categoryCode": 2,
+      "categoryName": "구기종목"
+    },
+    {
+      "categoryCode": 3,
+      "categoryName": "e스포츠"
+    },
+    {
+      "categoryCode": 4,
+      "categoryName": "조깅"
+    }
+  ]
+}

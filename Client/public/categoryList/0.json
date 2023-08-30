@@ -1,0 +1,14 @@
+{
+  "statusCode": 0,
+  "statusName": "힘",
+  "categories": [
+    {
+      "categoryCode": 0,
+      "categoryName": "헬스"
+    },
+    {
+      "categoryCode": 1,
+      "categoryName": "등산"
+    }
+  ]
+}
