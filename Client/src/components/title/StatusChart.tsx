@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { useEffect, useState } from 'react';
 
 ChartJS.register(
   RadialLinearScale,
@@ -18,12 +19,28 @@ ChartJS.register(
   Legend,
 );
 
-interface Props {
-  statusNames: string[];
-  statusLevels: number[];
+interface Status {
+  statName: string;
+  statLevel: number;
+  statExp: number;
+  requiredExp: number;
 }
 
-const StatusChart = ({ statusNames, statusLevels }: Props) => {
+interface Props {
+  status: Status[];
+}
+
+const StatusChart = ({ status }: Props) => {
+  const [statusNames, setStatusNames] = useState<string[]>([]);
+  const [statusLevels, setStatusLevels] = useState<number[]>([]);
+
+  useEffect(() => {
+    const statusNameArray = status.map((stat) => stat.statName);
+    const statusLevelArray = status.map((stat) => stat.statLevel);
+    setStatusNames(statusNameArray);
+    setStatusLevels(statusLevelArray);
+  }, [status]);
+
   return (
     <Radar
       options={{

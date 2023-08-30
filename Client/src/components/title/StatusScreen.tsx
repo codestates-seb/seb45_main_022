@@ -25,19 +25,13 @@ interface UserInfo {
 }
 
 const StatusScreen = ({ onClick }: Props) => {
-  const [statusNames, setStatusNames] = useState<string[]>([]);
-  const [statusLevels, setStatusLevels] = useState<number[]>([]);
+  const [status, setStatus] = useState<Status[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
         const { data }: { data: UserInfo } = await axios.get('user/test.json');
-        const status = data.statuses;
-        console.log(status);
-        const statusNameArray = status.map((stat) => stat.statName);
-        const statusLevelArray = status.map((stat) => stat.statLevel);
-        setStatusNames(statusNameArray);
-        setStatusLevels(statusLevelArray);
+        setStatus(data.statuses);
       } catch (error) {
         console.log(error);
       }
@@ -49,12 +43,13 @@ const StatusScreen = ({ onClick }: Props) => {
         <div className="w-[1200px] h-[600px] p-5 bg-[url('/src/assets/common/modal-frame-note.png')] bg-center bg-cover bg-no-repeat flex flex-row justify-between">
           <div className="w-[500px] h-[600px] p-5 flex flex-col gap-[1rem] justify-center items-center">
             <h1 className="text-[2rem] ml-5">YOUR STATUS</h1>
-            <StatusChart
-              statusNames={statusNames}
-              statusLevels={statusLevels}
-            />
+            <StatusChart status={status} />
           </div>
-          <div className="w-[500px] h-[600px] flex flex-col justify-center items-center"></div>
+          <div className="w-[500px] h-[600px] p-5 flex flex-col justify-center items-center">
+            {/* {new Array(5).fill(0).map((_, index) => (
+              <div key={index}>안녕</div>
+            ))} */}
+          </div>
         </div>
         <Button onClick={onClick}>Close</Button>
       </div>
