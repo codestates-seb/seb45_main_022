@@ -3,6 +3,7 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import axios from 'axios';
 import StatusChart from './StatusChart';
+import StatusListItem from './StatusListItem';
 
 interface Props {
   onClick?: () => void;
@@ -45,10 +46,10 @@ const StatusScreen = ({ onClick }: Props) => {
             <h1 className="text-[2rem] ml-5">YOUR STATUS</h1>
             <StatusChart status={status} />
           </div>
-          <div className="w-[500px] h-[600px] p-5 flex flex-col justify-center items-center">
-            {/* {new Array(5).fill(0).map((_, index) => (
-              <div key={index}>안녕</div>
-            ))} */}
+          <div className="w-[500px] h-[600px] px-5 pb-10 flex flex-col justify-center items-center gap-2">
+            {status.map((stat, i) => (
+              <StatusListItem key={i} status={stat} statusCode={i} />
+            ))}
           </div>
         </div>
         <Button onClick={onClick}>Close</Button>
