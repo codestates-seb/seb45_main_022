@@ -1,11 +1,32 @@
+import { useEffect, useState } from 'react';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
+import axios from 'axios';
 
 interface Props {
   onClick?: () => void;
 }
 
-const TitleScreen = ({ onClick }: Props) => {
+interface Status {
+  statName: string;
+  statLevel: number;
+  statExp: number;
+  requiredExp: number;
+}
+
+const StatusScreen = ({ onClick }: Props) => {
+  const [status, setStatus] = useState<null | Array<Status>>(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get('user/test.json');
+        setStatus(res.data.statuses);
+        console.log(res.data.statuses);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
   return (
     <Backdrop>
       <div className="relative w-full h-full flex flex-col justify-center items-center gap-[2rem]">
@@ -19,4 +40,4 @@ const TitleScreen = ({ onClick }: Props) => {
   );
 };
 
-export default TitleScreen;
+export default StatusScreen;
