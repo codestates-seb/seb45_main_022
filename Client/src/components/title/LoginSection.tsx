@@ -11,6 +11,11 @@ interface LoginProps {
   closeScreen: () => void;
 }
 
+interface UserData {
+  email: string;
+  password: string;
+}
+
 const Login = ({ changeSection, closeScreen }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -56,12 +61,17 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
         email,
         password,
       };
-      const response = await axios.post('localhost:8080/login', userOption);
+      const response = await axios.post<UserData>(
+        '../../../public/user/users.json',
+        userOption,
+      );
+      setEmail('');
+      setPassword('');
       isLoading(false);
-      console.log(response);
+      closeScreen();
+      console.log(response.data);
       alert('success');
     } catch (err) {
-      isLoading(true);
       console.log(err);
     }
 
@@ -134,7 +144,8 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
         )}
 
         <button className="my-1">
-          <Button onClick={closeScreen}>Login</Button>
+          {/* <Button onClick={closeScreen}>Login</Button> */}
+          <Button>Login</Button>
         </button>
       </form>
       <div className="flex items-center justify-around my-4 w-full h-10">
