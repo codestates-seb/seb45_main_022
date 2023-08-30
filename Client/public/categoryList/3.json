@@ -1,0 +1,14 @@
+{
+  "statusCode": 3,
+  "statusName": "매력",
+  "categories": [
+    {
+      "categoryCode": 8,
+      "categoryName": "뷰티"
+    },
+    {
+      "categoryCode": 9,
+      "categoryName": "음악"
+    }
+  ]
+}
