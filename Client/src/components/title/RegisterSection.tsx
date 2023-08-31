@@ -2,7 +2,7 @@ import ModalFrame from '../common/ModalFrame';
 import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useMutation } from 'react-query';
 
@@ -65,6 +65,16 @@ const Register = ({ changeSection }: RegisterProps) => {
     }
   };
 
+  useEffect(() => {
+    if (email.length === 0) {
+      setEmailErr(false);
+    } else if (!emailRegEx.test(email)) {
+      setEmailErr(true);
+    } else {
+      setEmailErr(false);
+    }
+  });
+
   const toggleViewPassword = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -74,14 +84,16 @@ const Register = ({ changeSection }: RegisterProps) => {
     return response.data;
   };
 
-  const mutation = useMutation(addUser, {
+  const { isLoading, mutate: register } = useMutation(addUser, {
+    //서버에서 데이터 받으면 성공
+    // 서버 status에 따라 실행되는 조건문 걸면 좋을 듯
     onSuccess: (data) => {
       console.log(data);
 
       //if(status === 200)
 
       //로그인 창으로 전환
-      changeSection();
+      // changeSection();
     },
     onError: (err) => {
       console.log(err);
@@ -91,16 +103,15 @@ const Register = ({ changeSection }: RegisterProps) => {
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const inputData = {
-      email,
-      password,
-      nickname,
-    };
-    mutation.mutate(inputData);
+    register({ email, password, nickname });
     validateEmail();
     validatePass();
     validateNickname();
   };
+
+  {
+    isLoading && <h1>Loading...</h1>;
+  }
   return (
     <ModalFrame height={550} width={700}>
       <form
