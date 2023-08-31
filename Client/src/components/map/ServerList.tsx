@@ -1,5 +1,6 @@
 import Button from '../common/Button';
 import { icons } from '../../utility/icon';
+import { Link } from 'react-router-dom';
 
 interface Props {
   title: string;
@@ -16,7 +17,9 @@ const ServerList = ({ title, categoryCode }: Props) => {
       </div>
       <div className="flex w-[50%] flex-col justify-center items-center gap-3">
         <div className="text-xl font-bold">{title}</div>
-        <Button>Stat Up !</Button>
+        <Link to={`/feed/${categoryCode}`}>
+          <Button>Stat Up !</Button>
+        </Link>
       </div>
     </div>
   );
