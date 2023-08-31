@@ -7,19 +7,19 @@
   "statuses": [
     {
       "statName": "힘",
-      "statLevel": 1,
+      "statLevel": 6,
       "statExp": 10,
       "requiredExp": 100
     },
     {
       "statName": "민첩",
-      "statLevel": 1,
+      "statLevel": 2,
       "statExp": 2,
       "requiredExp": 100
     },
     {
       "statName": "지능",
-      "statLevel": 1,
+      "statLevel": 24,
       "statExp": 69,
       "requiredExp": 100
     },
