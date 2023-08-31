@@ -65,11 +65,13 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
   const mutation = useMutation(loginUser, {
     onSuccess: (data) => {
       console.log('Logged in', data);
+
       closeScreen();
     },
     onError: (err) => {
       console.log('Login fail', err);
     },
+    cacheTime: 0,
   });
 
   //테스트용 -- 추후 수정 예정
