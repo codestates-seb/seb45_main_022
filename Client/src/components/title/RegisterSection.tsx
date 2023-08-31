@@ -35,45 +35,40 @@ const Register = ({ changeSection }: RegisterProps) => {
   //한글 또는 영어, 2-6길이
   const nicknameRegex = /^[가-힣a-zA-Z]{2,6}$/;
 
+  // const validateEmail = () => {
+  //   if (!emailRegEx.test(email)) {
+  //     setEmailErr(true);
+  //     console.log('email failure');
+  //   } else {
+  //     setEmailErr(false);
+  //     console.log('email success');
+  //   }
+  // };
   const validateEmail = () => {
     if (!emailRegEx.test(email)) {
       setEmailErr(true);
-      console.log('email failure');
     } else {
       setEmailErr(false);
-      console.log('email success');
     }
   };
 
   const validatePass = () => {
     if (!passwordRegex.test(password)) {
       setPasswordErr(true);
-      console.log('password failure');
     } else {
       setPasswordErr(false);
-      console.log('password success');
     }
   };
 
   const validateNickname = () => {
     if (!nicknameRegex.test(nickname)) {
       setNicknameErr(true);
-      console.log('nickname failure');
     } else {
       setNicknameErr(false);
-      console.log('nickname success');
     }
   };
 
-  useEffect(() => {
-    if (email.length === 0) {
-      setEmailErr(false);
-    } else if (!emailRegEx.test(email)) {
-      setEmailErr(true);
-    } else {
-      setEmailErr(false);
-    }
-  });
+  // useE
 
   const toggleViewPassword = () => {
     setPasswordVisible(!passwordVisible);
@@ -126,6 +121,7 @@ const Register = ({ changeSection }: RegisterProps) => {
             className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            onBlur={() => validateEmail()}
           />
         </div>
 
@@ -140,6 +136,7 @@ const Register = ({ changeSection }: RegisterProps) => {
             className="border-solid border-2 border-000 p-2 rounded-lg my-4 w-full "
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            onBlur={() => validatePass()}
           />
           <img
             src={!passwordVisible ? hide : view}
@@ -162,6 +159,7 @@ const Register = ({ changeSection }: RegisterProps) => {
             className="border-solid border-2 border-000 p-2 rounded-lg my-4"
             onChange={(e) => setNickname(e.target.value)}
             value={nickname}
+            onBlur={() => validateNickname()}
           />
         </div>
 
