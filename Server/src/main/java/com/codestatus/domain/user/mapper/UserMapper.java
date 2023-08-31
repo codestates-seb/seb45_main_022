@@ -56,7 +56,7 @@ public class UserMapper {
 
             statusResponse.setStatLevel(status.getStatLevel());
             statusResponse.setStatExp(status.getStatExp());
-
+            statusResponse.setRequiredExp(status.getRequiredExp());
             statusResponses.add(statusResponse);
         }
 

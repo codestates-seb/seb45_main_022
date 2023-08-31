@@ -31,4 +31,7 @@ public class Status {
 
     @Column(nullable = false)
     private int statExp;
+
+    @Column(nullable = false)
+    private int requiredExp;
 }
