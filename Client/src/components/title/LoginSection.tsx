@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ModalFrame from '../common/ModalFrame';
-import { QueryClient, useMutation } from 'react-query';
+import { useMutation } from 'react-query';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import axios from 'axios';
@@ -57,10 +57,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
   };
 
   const loginUser = async (userData: UserData) => {
-    const response = await axios.post(
-      '../../../public/user/users.json',
-      userData,
-    ); // Update the URL to match your API endpoint
+    const response = await axios.post('user/users.json', userData);
     return response.data;
   };
 
@@ -114,6 +111,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
             className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
             onFocus={() => {
               setEmailFocus(true);
             }}
@@ -138,6 +136,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
             className="border-solid border-2 border-000 p-2 rounded-lg my-4"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            required
             onFocus={() => {
               setPassFocus(true);
             }}
