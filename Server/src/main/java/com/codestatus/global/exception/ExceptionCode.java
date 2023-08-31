@@ -18,7 +18,8 @@ public enum ExceptionCode {
     INVALID_FILE_TYPE(400, "이미지 파일만 업로드 가능합니다."),
     FILE_TOO_LARGE(400, "파일 크기는 5MB를 넘을 수 없습니다."),
     COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
-    FORBIDDEN_REQUEST(403, "해당 리소스에 접근이 불가능합니다.");
+    FORBIDDEN_REQUEST(403, "해당 리소스에 접근이 불가능합니다."),
+    STAT_NOT_FOUND(404, "스탯을 찾을 수 없습니다.");
 
 //    NOT_IMPLEMENTATION(501, "해당 기능은 구현되지 않았습니다.");
 

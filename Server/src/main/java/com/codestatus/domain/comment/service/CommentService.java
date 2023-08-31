@@ -29,14 +29,14 @@ public class CommentService implements BaseService<Comment> {
     }
 
     @Override
-    public Comment getEntity(Long entityId) {
+    public Comment findEntity(long entityId) {
         return null;
     }
 
     // comment가 존재하는지, 요청한 유저와 리소스의 주인이 일치하는지 검사하고,
     // body값의 null 판별을 통해 수정
     @Override
-    public void updateEntity(Comment comment, Long userId) {
+    public void updateEntity(Comment comment, long userId) {
         Comment findComment = findVerifiedComment(comment.getCommentId());
         CheckUser.isCreator(findComment.getUser().getUserId(), userId);
         Optional.ofNullable(comment.getBody()).ifPresent(findComment::setBody);
@@ -47,7 +47,7 @@ public class CommentService implements BaseService<Comment> {
     // comment가 존재하는지, 요청한 유저와 리소스의 주인이 일치하는지 검사하고,
     // db에서 완전 삭제가 아닌 deleted=true 로 수정
     @Override
-    public void deleteEntity(Long commentId, Long userId) {
+    public void deleteEntity(long commentId, long userId) {
         Comment findComment = findVerifiedComment(commentId);
         CheckUser.isCreator(findComment.getUser().getUserId(), userId);
         findComment.setDeleted(true);
