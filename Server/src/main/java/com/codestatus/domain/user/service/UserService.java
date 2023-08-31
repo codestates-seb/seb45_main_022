@@ -130,7 +130,7 @@ public class UserService {
 
         findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + expGain); // 선택한 stat 경험치 증가
         levelUpCheck(userId, chosenStat); // 레벨업 체크
-        findUser.setAttendance(true); // 출석체크 상태를 true로 변경
+        // findUser.setAttendance(true); // 출석체크 상태를 true로 변경
         repository.save(findUser);
     }
 
@@ -245,9 +245,15 @@ public class UserService {
         }
 
         if (currentExp >= requiredExp) { // 현재 경험치가 필요 경험치보다 많다면 레벨업
-            findUser.getStatuses().get(chooseStat).setStatLevel(currentLevel + 1); // 레벨업
-            findUser.getStatuses().get(chooseStat).setStatExp(currentExp - requiredExp); // 경험치 차감
+            currentLevel += 1; // 레벨업
+            findUser.getStatuses().get(chooseStat).setStatLevel(currentLevel); // 레벨 저장
+            currentExp -= requiredExp; // 현재 경험치에서 필요 경험치 차감
+            findUser.getStatuses().get(chooseStat).setStatExp(currentExp); // 경험치 차감
         }
+
+        // 현재 레벨에서 다음 레벨까지 필요한 경험치 = 다음 레벨까지 필요한 경험치 - 현재 레벨까지 필요한 경험치 (백분률로 저장)
+        int nextLevelRequiredExp = expTableRepository.findById((long) (currentLevel)).get().getRequired() - currentExp;
+        findUser.getStatuses().get(chooseStat).setRequiredExp(nextLevelRequiredExp); // 다음 레벨까지 필요한 경험치 저장
 
         repository.save(findUser); // 유저 정보 저장
     }
