@@ -56,3 +56,7 @@ jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 600
   refresh-token-expiration-minutes: 420
+
+exp:
+  attendance-exp: 10
+  like-exp: 10
