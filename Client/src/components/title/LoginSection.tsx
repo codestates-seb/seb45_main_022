@@ -5,7 +5,6 @@ import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import axios from 'axios';
 import Button from '../common/Button';
-import { UNSAFE_enhanceManualRouteObjects } from 'react-router';
 // import userData from '../../../public/user/users.json';
 
 interface LoginProps {
@@ -16,6 +15,10 @@ interface LoginProps {
 interface UserData {
   email: string;
   password: string;
+}
+
+interface Error {
+  message: string;
 }
 
 const Login = ({ changeSection, closeScreen }: LoginProps) => {
@@ -53,30 +56,46 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     }
   };
 
+  const loginUser = async (userData: UserData) => {
+    const response = await axios.post(
+      '../../../public/user/users.json',
+      userData,
+    ); // Update the URL to match your API endpoint
+    return response.data;
+  };
+
+  const mutation = useMutation(loginUser, {
+    onSuccess: (data) => {
+      console.log('Logged in', data);
+      closeScreen();
+    },
+    onError: (err) => {
+      console.log('Login fail', err);
+    },
+  });
+
   //테스트용 -- 추후 수정 예정
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const payoad = {
+    const inputData = {
       email: email,
       password: password,
     };
-
-    try {
-      const response = await axios.post<UserData>(
-        '../../../public/user/users.json',
-        payoad,
-      );
-      console.log(response.data);
-      validateEmail();
-      validatePass();
-      setEmail('');
-      setPassword('');
-      closeScreen();
-    } catch (err) {
-      console.log('Error', err);
-    }
+    mutation.mutate(inputData);
+    validateEmail();
+    validatePass();
+    setEmail('');
+    setPassword('');
+    closeScreen();
   };
+
+  {
+    mutation.isLoading && <p>Loading...</p>;
+  }
+  {
+    mutation.isError && <p>Error: {(mutation.error as Error).message}</p>;
+  }
 
   return (
     <ModalFrame height={550} width={700}>
@@ -117,10 +136,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
             placeholder="Password"
             type="password"
             className="border-solid border-2 border-000 p-2 rounded-lg my-4"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              console.log(e.target.value);
-            }}
+            onChange={(e) => setPassword(e.target.value)}
             value={password}
             onFocus={() => {
               setPassFocus(true);
@@ -147,7 +163,10 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
         <button className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
           Kakao Login
         </button>
-        <button className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
+        <button
+          disabled={mutation.isLoading}
+          className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black "
+        >
           Google Login
         </button>
       </div>
