@@ -71,12 +71,13 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     onSuccess: (data) => {
       console.log('Logged in', data);
 
+      //status 관리
+      // if(response === 200)
+
       const tokenData: TokenData = data.token;
       localStorage.setItem('accessToken', tokenData.access);
       localStorage.setItem('refreshToken', tokenData.refresh);
 
-      validateEmail();
-      validatePass();
       closeScreen();
     },
     onError: (err) => {
@@ -86,6 +87,12 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    validateEmail();
+    validatePass();
+
+    if (emailErr || passwordErr === true) {
+      return;
+    }
 
     const inputData = {
       email,
