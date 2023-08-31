@@ -46,7 +46,7 @@ public class LikeService {
             like.setFeed(feed);
             like.setUser(user);
             // 경험치 획득 및 level up  check 메서드
-            userService.gainExp(user, 10, feed.getCategory().getStat().getStatId().intValue());
+            userService.gainExp(feed.getUser(), 10, feed.getCategory().getStat().getStatId().intValue());
         }
         likeRepository.save(like);
     }

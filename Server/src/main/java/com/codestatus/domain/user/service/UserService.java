@@ -260,9 +260,9 @@ public class UserService {
     }
 
     public void gainExp(User user, int exp, int statId) {
-        user.getStatuses().get(statId).setStatExp(
-                user.getStatuses().get(statId).getStatExp() + exp
+        user.getStatuses().get(statId-1).setStatExp(
+                user.getStatuses().get(statId-1).getStatExp() + exp
         );
-        levelUpCheck(user, statId);
+        levelUpCheck(user, statId-1);
     }
 }
