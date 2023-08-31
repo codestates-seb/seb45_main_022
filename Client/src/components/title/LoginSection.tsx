@@ -61,6 +61,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     return response.data;
   };
 
+  //기본적으로 react query에서 5분동안 캐시 지원해줌,  시간설정 변경 가능
   const mutation = useMutation(loginUser, {
     onSuccess: (data) => {
       console.log('Logged in', data);
@@ -153,8 +154,9 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
           </p>
         )}
 
-        <button className="my-1">
+        <button disabled={mutation.isLoading} className="my-1">
           {/* <Button onClick={closeScreen}>Login</Button> */}
+
           <Button>Login</Button>
         </button>
       </form>
@@ -162,10 +164,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
         <button className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
           Kakao Login
         </button>
-        <button
-          disabled={mutation.isLoading}
-          className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black "
-        >
+        <button className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
           Google Login
         </button>
       </div>
