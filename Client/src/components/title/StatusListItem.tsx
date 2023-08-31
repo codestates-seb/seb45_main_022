@@ -1,4 +1,4 @@
-import { icons } from '../../utility/icon';
+import { titleIcons } from '../../utility/icon';
 import { Link } from 'react-router-dom';
 
 interface Status {
@@ -22,7 +22,7 @@ const StatusListItem = ({ status, statusCode }: Props) => {
         <div className="flex flex-row justify-center items-end gap-3">
           <img
             className="w-[30px] h-[30px]"
-            src={icons[statusCode]}
+            src={titleIcons[statusCode]}
             alt="icon"
           />
           <span className="text-[1.5rem] font-bold leading-10">{statName}</span>{' '}
