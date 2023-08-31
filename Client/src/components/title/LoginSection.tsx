@@ -1,14 +1,29 @@
 import { useState } from 'react';
 import ModalFrame from '../common/ModalFrame';
-
+import { useMutation } from 'react-query';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import axios from 'axios';
 import Button from '../common/Button';
+// import userData from '../../../public/user/users.json';
 
 interface LoginProps {
   changeSection: () => void;
   closeScreen: () => void;
+}
+
+interface UserData {
+  email: string;
+  password: string;
+}
+
+interface Error {
+  message: string;
+}
+
+interface TokenData {
+  access: string;
+  refresh: string;
 }
 
 const Login = ({ changeSection, closeScreen }: LoginProps) => {
@@ -18,7 +33,6 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [emailFocus, setEmailFocus] = useState<boolean>(false);
   const [passFocus, setPassFocus] = useState<boolean>(false);
-  const [loading, isLoading] = useState<boolean>(false);
 
   // 이메일 포멧
   const emailRegEx =
@@ -47,30 +61,54 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     }
   };
 
-  //테스트용 -- 추후 수정 예정
+  const loginUser = async (userData: UserData) => {
+    const response = await axios.post('user/users.json', userData);
+    return response.data;
+  };
+
+  //기본적으로 react query에서 5분동안 캐시 지원해줌,  시간설정 변경 가능
+  const mutation = useMutation(loginUser, {
+    onSuccess: (data) => {
+      console.log('Logged in', data);
+
+      //status 관리
+      // if(response === 200)
+
+      const tokenData: TokenData = data.token;
+      localStorage.setItem('accessToken', tokenData.access);
+      localStorage.setItem('refreshToken', tokenData.refresh);
+
+      closeScreen();
+    },
+    onError: (err) => {
+      console.log('Login fail', err);
+    },
+  });
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    isLoading(true);
-    try {
-      const userOption = {
-        email,
-        password,
-      };
-      const response = await axios.post('localhost:8080/login', userOption);
-      isLoading(false);
-      console.log(response);
-      alert('success');
-    } catch (err) {
-      isLoading(true);
-      console.log(err);
-    }
-
     validateEmail();
     validatePass();
+
+    if (emailErr || passwordErr === true) {
+      return;
+    }
+
+    const inputData = {
+      email,
+      password,
+    };
+    mutation.mutate(inputData);
+
+    setEmail('');
+    setPassword('');
   };
 
   {
-    loading && <p>Loading...</p>;
+    mutation.isLoading && <p>Loading...</p>;
+  }
+  {
+    mutation.isError && <p>Error: {(mutation.error as Error).message}</p>;
   }
 
   return (
@@ -90,6 +128,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
             className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
             onFocus={() => {
               setEmailFocus(true);
             }}
@@ -112,11 +151,9 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
             placeholder="Password"
             type="password"
             className="border-solid border-2 border-000 p-2 rounded-lg my-4"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              console.log(e.target.value);
-            }}
+            onChange={(e) => setPassword(e.target.value)}
             value={password}
+            required
             onFocus={() => {
               setPassFocus(true);
             }}
@@ -133,8 +170,10 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
           </p>
         )}
 
-        <button className="my-1">
-          <Button onClick={closeScreen}>Login</Button>
+        <button disabled={mutation.isLoading} className="my-1">
+          {/* <Button onClick={closeScreen}>Login</Button> */}
+
+          <Button>Login</Button>
         </button>
       </form>
       <div className="flex items-center justify-around my-4 w-full h-10">
