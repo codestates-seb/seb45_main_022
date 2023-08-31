@@ -1,11 +1,8 @@
-[
-  {
-    "email": "test@test.com",
-    "password": "Test123!@#"
-  },
-
-  {
-    "email": "test2@test.com",
-    "password": "Test123!@#"
+{
+  "email": "test@test.com",
+  "password": "Test123!@#",
+  "token": {
+    "access": "fwqfgqwg13g31gg1daga3",
+    "refresh": "fgsadgnasuog9naeuo9gn31"
   }
-]
+}

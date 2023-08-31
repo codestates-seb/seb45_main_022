@@ -21,6 +21,11 @@ interface Error {
   message: string;
 }
 
+interface TokenData {
+  access: string;
+  refresh: string;
+}
+
 const Login = ({ changeSection, closeScreen }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -66,28 +71,30 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
     onSuccess: (data) => {
       console.log('Logged in', data);
 
+      const tokenData: TokenData = data.token;
+      localStorage.setItem('accessToken', tokenData.access);
+      localStorage.setItem('refreshToken', tokenData.refresh);
+
+      validateEmail();
+      validatePass();
       closeScreen();
     },
     onError: (err) => {
       console.log('Login fail', err);
     },
-    cacheTime: 0,
   });
 
-  //테스트용 -- 추후 수정 예정
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const inputData = {
-      email: email,
-      password: password,
+      email,
+      password,
     };
     mutation.mutate(inputData);
-    validateEmail();
-    validatePass();
+
     setEmail('');
     setPassword('');
-    closeScreen();
   };
 
   {
