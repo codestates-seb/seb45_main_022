@@ -77,10 +77,4 @@ public interface FeedMapper {
         feed.setFeedId(feedId);
         return feed;
     }
-    default User mapToUser(long id) {
-        User user = new User();
-        user.setUserId(id);
-
-        return user;
-    }
 }

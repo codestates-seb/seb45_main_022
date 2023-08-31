@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class FeedPostDto {
 
-    @NotBlank
     private long id;
 
     @NotBlank
