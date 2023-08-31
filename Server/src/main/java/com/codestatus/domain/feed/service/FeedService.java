@@ -9,6 +9,7 @@ import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.mapper.UserMapper;
+import com.codestatus.global.service.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
-public class FeedService {
+public class FeedService implements BaseService<Feed> {
 
     private final FeedRepository feedRepository;
 
@@ -40,12 +41,8 @@ public class FeedService {
         this.commentRepository = commentRepository;
     }
 
-    public Feed createFeed(Feed feed, long id) {
-        User user = userMapper.userIdToUser(id);
-        feed.setUser(user);
-
-        return feedRepository.save(feed);
-    }
+    @Override
+    public void createEntity(Feed feed) { feedRepository.save(feed); }
 
     @Transactional(readOnly = true)
     public Feed findFeedByDeleted(long feedId, boolean deleted){
@@ -74,9 +71,9 @@ public class FeedService {
 //        Pageable pageable = PageRequest.of(page, size, sort);
 //        return feedRepository.findByHashTagAndDeleted(text, deleted, pageable);
 //    }
-
+    @Override
     @Transactional(readOnly = true)
-    public Feed findFeed(long feedId){
+    public Feed findEntity(long feedId){
         Optional<Feed> optionalFeed = feedRepository.findById(feedId);
         return optionalFeed.orElseThrow(()-> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
@@ -98,7 +95,7 @@ public class FeedService {
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Feed updateFeed(Feed feed, long userId){
-        Feed modifiedFeed = findFeed(feed.getFeedId());
+        Feed modifiedFeed = findEntity(feed.getFeedId());
         if (modifiedFeed.getUser().getUserId() != userId) throw new BusinessLogicException(ExceptionCode.BOARD_NOT_EDITABLE);
 
         Optional.ofNullable(feed.getBody())
@@ -108,7 +105,7 @@ public class FeedService {
     }
 
     public void deleteFeed(long feedId, long userId){
-        Feed feed = findFeed(feedId);
+        Feed feed = findEntity(feedId);
         if (feed.getUser().getUserId() != userId) throw new BusinessLogicException(ExceptionCode.NOT_RESOURCE_OWNER);
         feed.setDeleted(true);
         feedRepository.save(feed);

@@ -1,5 +1,6 @@
 package com.codestatus.domain.feed.controller;
 
+import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.global.dto.MultiResponseDto;
@@ -29,18 +30,24 @@ public class FeedController {
 
     private final CategoryMapper categoryMapper;
 
+    private final UserMapper userMapper;
 
-    public FeedController(FeedService feedService, FeedMapper feedMapper, CategoryMapper categoryMapper) {
+
+    public FeedController(FeedService feedService, FeedMapper feedMapper, CategoryMapper categoryMapper, UserMapper userMapper) {
         this.feedService = feedService;
         this.feedMapper = feedMapper;
         this.categoryMapper = categoryMapper;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/{categoryId}")
-    public ResponseEntity postFeed(@PathVariable("categoryId") long categoryId, @RequestBody FeedPostDto requstBody, @AuthenticationPrincipal PrincipalDto principal) {
+    public ResponseEntity postFeed(@PathVariable("categoryId") long categoryId,
+                                   @RequestBody FeedPostDto requstBody,
+                                   @AuthenticationPrincipal PrincipalDto principal) {
         Feed feed = feedMapper.feedPostDtoToFeed(requstBody);
         feed.setCategory(categoryMapper.categoryIdToCategory(categoryId));
-        feedService.createFeed(feed, principal.getId());
+        feed.setUser((userMapper.userIdToUser(principal.getId())));
+        feedService.createEntity(feed);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -64,7 +71,9 @@ public class FeedController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity getFeedsBytext(@RequestParam int page, @RequestParam int size, @RequestParam String query) {
+    public ResponseEntity getFeedsBytext(@RequestParam int page,
+                                         @RequestParam int size,
+                                         @RequestParam String query) {
         Page<Feed> pageFeeds = feedService.findFeedByBodyAndDeleted(query,false, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
 
@@ -75,7 +84,9 @@ public class FeedController {
 
 
     @PatchMapping("/{feedId}")
-    public ResponseEntity patchFeed(@PathVariable("feedId") int feedId, @RequestBody FeedPatchDto requestBody, @AuthenticationPrincipal PrincipalDto principal){
+    public ResponseEntity patchFeed(@PathVariable("feedId") int feedId,
+                                    @RequestBody FeedPatchDto requestBody,
+                                    @AuthenticationPrincipal PrincipalDto principal){
         Feed feed = feedMapper.feedPatchDtoToFeed(requestBody);
         feed.setFeedId(feedId);
         feedService.updateFeed(feed, principal.getId());
@@ -83,7 +94,8 @@ public class FeedController {
     }
 
     @DeleteMapping("/{feedId}")
-    public ResponseEntity deleteFeed(@PathVariable("feedId") int feedId, @AuthenticationPrincipal PrincipalDto principal) {
+    public ResponseEntity deleteFeed(@PathVariable("feedId") int feedId,
+                                     @AuthenticationPrincipal PrincipalDto principal) {
         feedService.deleteFeed(feedId, principal.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
