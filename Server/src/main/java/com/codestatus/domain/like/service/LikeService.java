@@ -8,8 +8,8 @@ import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.service.UserService;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -17,6 +17,8 @@ import java.util.Optional;
 @Transactional
 @Service
 public class LikeService {
+    @Value("${exp.like-exp}")
+    private int likeExp;
     private final UserService userService;
     private final FeedService feedService;
     private final LikeRepository likeRepository;
@@ -46,7 +48,7 @@ public class LikeService {
             like.setFeed(feed);
             like.setUser(user);
             // 경험치 획득 및 level up  check 메서드
-            userService.gainExp(feed.getUser(), 10, feed.getCategory().getStat().getStatId().intValue());
+            userService.gainExp(feed.getUser(), likeExp, feed.getCategory().getStat().getStatId().intValue());
         }
         likeRepository.save(like);
     }

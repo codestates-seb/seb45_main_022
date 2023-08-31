@@ -12,6 +12,7 @@ import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,8 @@ import java.util.Optional;
 @Transactional
 @Service
 public class UserService {
+    @Value("${exp.attendance-exp}")
+    private int attendanceExp;
     private final UserRepository repository;
     private final StatRepository statRepository;
     private final StatusRepository statusRepository;
@@ -124,13 +127,11 @@ public class UserService {
         Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
         User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
-        int expGain = 10; // 출석체크로 얻는 경험치
-
         if(findUser.isAttendance()) { // 이미 출석체크를 했다면 예외 발생
             throw new BusinessLogicException(ExceptionCode.USER_ALREADY_CHECKED_ATTENDANCE);
         }
 
-        findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + expGain); // 선택한 stat 경험치 증가
+        findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + attendanceExp); // 선택한 stat 경험치 증가
         levelUpCheck(findUser, chosenStat); // 레벨업 체크
         findUser.setAttendance(true); // 출석체크 상태를 true로 변경
         repository.save(findUser);
