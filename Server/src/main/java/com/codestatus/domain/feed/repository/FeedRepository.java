@@ -9,12 +9,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface FeedRepository extends JpaRepository <Feed, Long> {
 
     @Query("SELECT f FROM Feed f WHERE f.feedId = :feedId AND f.deleted = :deleted ")
-    Optional<Feed> findByFeedIdAndDeleted(long feedId, boolean deleted);
+    Optional<Feed> findFeedByFeedIdAndDeleted(long feedId, boolean deleted);
+
+    Page<Feed> findByCreatedAtAfterAndDeletedOrderByLikesDesc(LocalDateTime createdAt, boolean deleted, Pageable pageable);
 
     @Query("SELECT f FROM Feed f WHERE f.body = :body AND f.deleted = :deleted ")
     Page<Feed> findByBodyAndDeleted(@Param("body") String body, boolean deleted, Pageable pageable);
