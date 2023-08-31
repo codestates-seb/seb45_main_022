@@ -3,9 +3,17 @@ import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
 import { useState } from 'react';
+import axios from 'axios';
+import { useMutation } from 'react-query';
 
 interface RegisterProps {
   changeSection: () => void;
+}
+
+interface UserData {
+  email: string;
+  password: string;
+  nickname: string;
 }
 
 const Register = ({ changeSection }: RegisterProps) => {
@@ -61,8 +69,34 @@ const Register = ({ changeSection }: RegisterProps) => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const addUser = async (userData: UserData) => {
+    const response = await axios.post('user/users.json', userData);
+    return response.data;
+  };
+
+  const mutation = useMutation(addUser, {
+    onSuccess: (data) => {
+      console.log(data);
+
+      //if(status === 200)
+
+      //로그인 창으로 전환
+      changeSection();
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const inputData = {
+      email,
+      password,
+      nickname,
+    };
+    mutation.mutate(inputData);
     validateEmail();
     validatePass();
     validateNickname();
