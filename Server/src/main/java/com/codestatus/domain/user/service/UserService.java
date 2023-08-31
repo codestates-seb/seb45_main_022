@@ -132,7 +132,7 @@ public class UserService {
 
         findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + expGain); // 선택한 stat 경험치 증가
         levelUpCheck(findUser, chosenStat); // 레벨업 체크
-        // findUser.setAttendance(true); // 출석체크 상태를 true로 변경
+        findUser.setAttendance(true); // 출석체크 상태를 true로 변경
         repository.save(findUser);
     }
 
