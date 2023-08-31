@@ -17,12 +17,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class UserService {
     private final UserRepository repository;
@@ -129,7 +131,7 @@ public class UserService {
         }
 
         findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + expGain); // 선택한 stat 경험치 증가
-        levelUpCheck(userId, chosenStat); // 레벨업 체크
+        levelUpCheck(findUser, chosenStat); // 레벨업 체크
         // findUser.setAttendance(true); // 출석체크 상태를 true로 변경
         repository.save(findUser);
     }
@@ -233,10 +235,9 @@ public class UserService {
         return id;
     }
 
-    public void levelUpCheck(Long userId, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
-        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
-        int currentLevel = findUser.getStatuses().get(chooseStat).getStatLevel(); // 현재 레벨
-        int currentExp = findUser.getStatuses().get(chooseStat).getStatExp(); // 현재 경험치
+    public void levelUpCheck(User user, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
+        int currentLevel = user.getStatuses().get(chooseStat).getStatLevel(); // 현재 레벨
+        int currentExp = user.getStatuses().get(chooseStat).getStatExp(); // 현재 경험치
         int requiredExp = expTableRepository.findById((long) currentLevel).get().getRequired(); // 필요 경험치
         int maxLevel = 100; // 최대 레벨
 
@@ -246,15 +247,22 @@ public class UserService {
 
         if (currentExp >= requiredExp) { // 현재 경험치가 필요 경험치보다 많다면 레벨업
             currentLevel += 1; // 레벨업
-            findUser.getStatuses().get(chooseStat).setStatLevel(currentLevel); // 레벨 저장
+            user.getStatuses().get(chooseStat).setStatLevel(currentLevel); // 레벨 저장
             currentExp -= requiredExp; // 현재 경험치에서 필요 경험치 차감
-            findUser.getStatuses().get(chooseStat).setStatExp(currentExp); // 경험치 차감
+            user.getStatuses().get(chooseStat).setStatExp(currentExp); // 경험치 차감
         }
 
         // 현재 레벨에서 다음 레벨까지 필요한 경험치 = 다음 레벨까지 필요한 경험치 - 현재 레벨까지 필요한 경험치 (백분률로 저장)
         int nextLevelRequiredExp = expTableRepository.findById((long) (currentLevel)).get().getRequired() - currentExp;
-        findUser.getStatuses().get(chooseStat).setRequiredExp(nextLevelRequiredExp); // 다음 레벨까지 필요한 경험치 저장
+        user.getStatuses().get(chooseStat).setRequiredExp(nextLevelRequiredExp); // 다음 레벨까지 필요한 경험치 저장
 
-        repository.save(findUser); // 유저 정보 저장
+        repository.save(user); // 유저 정보 저장
+    }
+
+    public void gainExp(User user, int exp, int statId) {
+        user.getStatuses().get(statId).setStatExp(
+                user.getStatuses().get(statId).getStatExp() + exp
+        );
+        levelUpCheck(user, statId);
     }
 }
