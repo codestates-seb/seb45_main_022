@@ -185,7 +185,7 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
         <span className="text-neutral-500">Don't have an account yet?</span>
         <span
           className="text-neutral-100 hover:cursor-pointer"
-          onClick={showDefault}
+          onClick={changeSection}
         >
           Sign up!
         </span>
