@@ -9,7 +9,7 @@ import Button from '../common/Button';
 
 interface LoginProps {
   changeSection: () => void;
-  closeScreen: () => void;
+  showDefault: () => void;
 }
 
 interface UserData {
@@ -25,8 +25,7 @@ interface TokenData {
   access: string;
   refresh: string;
 }
-
-const Login = ({ changeSection, closeScreen }: LoginProps) => {
+const Login = ({ changeSection, showDefault }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailErr, setEmailErr] = useState<boolean>(false);
@@ -169,10 +168,8 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
             characters
           </p>
         )}
-
         <button disabled={mutation.isLoading} className="my-1">
           {/* <Button onClick={closeScreen}>Login</Button> */}
-
           <Button>Login</Button>
         </button>
       </form>
@@ -188,7 +185,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
         <span className="text-neutral-500">Don't have an account yet?</span>
         <span
           className="text-neutral-100 hover:cursor-pointer"
-          onClick={changeSection}
+          onClick={showDefault}
         >
           Sign up!
         </span>

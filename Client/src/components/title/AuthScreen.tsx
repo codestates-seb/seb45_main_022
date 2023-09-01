@@ -4,7 +4,7 @@ import LoginSection from './LoginSection';
 import RegisterSection from './RegisterSection';
 
 interface Props {
-  closeScreen: () => void;
+  showDefault: () => void;
 }
 
 enum Section {
@@ -12,7 +12,7 @@ enum Section {
   REGISTER,
 }
 
-const AuthScreen = ({ closeScreen }: Props) => {
+const AuthScreen = ({ showDefault }: Props) => {
   const [section, setSection] = useState<Section>(Section.LOGIN);
   return (
     <Backdrop>
@@ -22,9 +22,7 @@ const AuthScreen = ({ closeScreen }: Props) => {
             changeSection={() => {
               setSection(Section.REGISTER);
             }}
-            closeScreen={() => {
-              closeScreen();
-            }}
+            showDefault={showDefault}
           />
         )}
         {section === Section.REGISTER && (
