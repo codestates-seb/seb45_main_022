@@ -1,27 +1,31 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router';
 
-const SearchBar = () => {
+const SearchBar: React.FC = () => {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState<string>('');
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+    console.log(keyword);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (keyword === '') return;
+      navigate(`/feed/find/${keyword}`);
+    }
+  };
+
   return (
     <input
-      className="p-2 w-[22vw] focus:outline-none focus:ring focus:ring-cyan-300"
+      className="p-[1rem] w-[20rem] h-[5vh] focus:outline-none focus:ring focus:ring-cyan-300"
       type="text"
       placeholder="Search..."
       value={keyword}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        setKeyword(e.target.value);
-        console.log(keyword);
-      }}
-      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          if (keyword === '') return;
-          navigate(`/feed/find/${keyword}`);
-        }
-      }}
+      onChange={handleInputChange}
+      onKeyDown={handleKeyDown}
     />
   );
 };
