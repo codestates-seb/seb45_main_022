@@ -7,12 +7,11 @@ import com.codestatus.domain.status.entity.Stat;
 import com.codestatus.domain.status.entity.Status;
 import com.codestatus.domain.status.repository.StatRepository;
 import com.codestatus.domain.status.repository.StatusRepository;
-import com.codestatus.domain.user.repository.ExpTableRepository;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
+import com.codestatus.global.service.BaseService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,35 +20,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Transactional
 @Service
-public class UserService {
-    @Value("${exp.attendance-exp}")
-    private int attendanceExp;
+public class UserService implements BaseService<User> {
+
     private final UserRepository repository;
     private final StatRepository statRepository;
     private final StatusRepository statusRepository;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
-    private final ExpTableRepository expTableRepository;
 
-    public UserService(UserRepository repository, StatRepository statRepository, StatusRepository statusRepository, CustomAuthorityUtils customAuthorityUtils, PasswordEncoder passwordEncoder, FileStorageService fileStorageService, ExpTableRepository expTableRepository) {
-        this.repository = repository;
+    public UserService(UserRepository repository, StatRepository statRepository, StatusRepository statusRepository, CustomAuthorityUtils customAuthorityUtils, PasswordEncoder passwordEncoder, FileStorageService fileStorageService) {        this.repository = repository;
         this.statRepository = statRepository;
         this.statusRepository = statusRepository;
         this.customAuthorityUtils = customAuthorityUtils;
         this.passwordEncoder = passwordEncoder;
         this.fileStorageService = fileStorageService;
-        this.expTableRepository = expTableRepository;
     }
 
     // 유저 생성
-    public void createUser(User user) {
+    public void createEntity(User user) {
         verifyExistsEmail(user.getEmail()); // 이메일 중복 검사
         verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사
         user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
@@ -66,25 +62,13 @@ public class UserService {
         user.setProfileImage(defaultImage.get(random)); // 프로필 이미지 랜덤 배정
         repository.save(user); // 유저 저장
 
-        // 유저 생성 시 기본 stat 조회
-        Stat strStat = findStat(1L);
-        Stat dexStat = findStat(2L);
-        Stat intStat = findStat(3L);
-        Stat charmStat = findStat(4L);
-        Stat vitalityStat = findStat(5L);
-
         // 유저 생성 시 기본 status 생성
-        Status strStatus = createStatus(user, strStat, 1, 0);
-        Status dexStatus = createStatus(user, dexStat, 1, 0);
-        Status intStatus = createStatus(user, intStat, 1, 0);
-        Status charmStatus = createStatus(user, charmStat, 1, 0);
-        Status vitalityStatus = createStatus(user, vitalityStat, 1, 0);
-        user.getStatuses().addAll(Arrays.asList(strStatus, dexStatus, intStatus, charmStatus, vitalityStatus)); // status 저장
+        createStatus(user);
+//        user.getStatuses().addAll(Arrays.asList(strStatus, dexStatus, intStatus, charmStatus, vitalityStatus)); // status 저장
     }
 
     // 유저 조회
-    public User findUser() {
-        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴(헤더의 토큰에 포함된 유저의 id)
+    public User findEntity(long userId) {
         User user = findVerifiedUser(userId); // 유저 정보를 가져옴
         if (user.getUserStatus() == User.UserStatus.USER_ACTIVE) { // 유저가 활성화 상태라면 유저 정보 반환
             return user;
@@ -95,23 +79,25 @@ public class UserService {
         }
     }
 
+    @Override
+    public void updateEntity(User updateEntity, long userId) {
+
+    }
+
     // 유저 닉네임 수정
-    public void updateUserNickName(User user) {
-        Long userId = getLoginUserId(); // 로그인한 유저의 id
-        User findUser = findVerifiedUser(userId);
+    public void updateUserNickName(User user, long loginId) {
+        User findUser = findVerifiedUser(loginId);
 
         if (!findUser.getNickName().equals(user.getNickName())) { // 유저 닉네임이 수정되었다면
             verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사 실행
-            findUser.setNickName(user.getNickName()); // 유저 닉네임 수정
+            findUser.setNickName(user.getNickName());
+            repository.save(findUser);// 유저 닉네임 수정
         }
-
-        repository.save(findUser);
     }
 
     // 비밀번호 변경
-    public void updatePassword(User user) {
-        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
-        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+    public void updatePassword(User user, long loginId) {
+        User findUser = findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         // 현재 비밀번호와 같다면 에러
         if (passwordEncoder.matches(user.getPassword(), findUser.getPassword())) {
@@ -122,25 +108,9 @@ public class UserService {
         repository.save(findUser);
     }
 
-    // 출석체크
-    public void checkAttendance(int chosenStat) { // chosenStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
-        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
-        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
-
-        if(findUser.isAttendance()) { // 이미 출석체크를 했다면 예외 발생
-            throw new BusinessLogicException(ExceptionCode.USER_ALREADY_CHECKED_ATTENDANCE);
-        }
-
-        findUser.getStatuses().get(chosenStat).setStatExp(findUser.getStatuses().get(chosenStat).getStatExp() + attendanceExp); // 선택한 stat 경험치 증가
-        levelUpCheck(findUser, chosenStat); // 레벨업 체크
-        findUser.setAttendance(true); // 출석체크 상태를 true로 변경
-        repository.save(findUser);
-    }
-
     // 유저 탈퇴
-    public void deleteUser() {
-        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
-        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+    public void deleteEntity(long loginId, long userId) {
+        User findUser = findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         if (findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 이미 탈퇴 상태라면 예외 발생
             throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
         }
@@ -200,13 +170,18 @@ public class UserService {
     }
 
     // status 생성
-    private Status createStatus(User user, Stat stat, int statLevel, int statExp) {
-        Status status = new Status();
-        status.setUser(user);
-        status.setStat(stat);
-        status.setStatLevel(statLevel);
-        status.setStatExp(statExp);
-        return statusRepository.save(status);
+    private void createStatus(User user) {
+        List<Status> statusList = new ArrayList<>();
+        for(int i=1; i<=5 ; i++) {
+            Stat stat = findStat((long) i);
+            Status status = new Status();
+            status.setUser(user);
+            status.setStat(stat);
+            status.setStatLevel(1);
+            status.setStatExp(0);
+            statusList.add(status);
+        }
+        statusRepository.saveAll(statusList);
     }
 
     /*
@@ -236,34 +211,5 @@ public class UserService {
         return id;
     }
 
-    public void levelUpCheck(User user, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
-        int currentLevel = user.getStatuses().get(chooseStat).getStatLevel(); // 현재 레벨
-        int currentExp = user.getStatuses().get(chooseStat).getStatExp(); // 현재 경험치
-        int requiredExp = expTableRepository.findById((long) currentLevel).get().getRequired(); // 필요 경험치
-        int maxLevel = 100; // 최대 레벨
 
-        if (currentLevel >= maxLevel) { // 현재 레벨이 최대 레벨이라면 레벨업 불가
-            return;
-        }
-
-        if (currentExp >= requiredExp) { // 현재 경험치가 필요 경험치보다 많다면 레벨업
-            currentLevel += 1; // 레벨업
-            user.getStatuses().get(chooseStat).setStatLevel(currentLevel); // 레벨 저장
-            currentExp -= requiredExp; // 현재 경험치에서 필요 경험치 차감
-            user.getStatuses().get(chooseStat).setStatExp(currentExp); // 경험치 차감
-        }
-
-        // 현재 레벨에서 다음 레벨까지 필요한 경험치 = 다음 레벨까지 필요한 경험치 - 현재 레벨까지 필요한 경험치 (백분률로 저장)
-        int nextLevelRequiredExp = expTableRepository.findById((long) (currentLevel)).get().getRequired() - currentExp;
-        user.getStatuses().get(chooseStat).setRequiredExp(nextLevelRequiredExp); // 다음 레벨까지 필요한 경험치 저장
-
-        repository.save(user); // 유저 정보 저장
-    }
-
-    public void gainExp(User user, int exp, int statId) {
-        user.getStatuses().get(statId-1).setStatExp(
-                user.getStatuses().get(statId-1).getStatExp() + exp
-        );
-        levelUpCheck(user, statId-1);
-    }
 }
