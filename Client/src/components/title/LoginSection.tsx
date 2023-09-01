@@ -3,22 +3,13 @@ import ModalFrame from '../common/ModalFrame';
 import { useMutation } from 'react-query';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
-import axios from 'axios';
 import Button from '../common/Button';
+import { loginAuth } from '../../api/auth';
 // import userData from '../../../public/user/users.json';
 
 interface LoginProps {
   changeSection: () => void;
   showDefault: () => void;
-}
-
-interface UserData {
-  email: string;
-  password: string;
-}
-
-interface Error {
-  message: string;
 }
 
 interface TokenData {
@@ -33,42 +24,10 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
   const [emailFocus, setEmailFocus] = useState<boolean>(false);
   const [passFocus, setPassFocus] = useState<boolean>(false);
 
-  // 이메일 포멧
-  const emailRegEx =
-    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  // 최소 8 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자 :
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,16}/;
-
-  const validateEmail = () => {
-    if (!emailRegEx.test(email)) {
-      setEmailErr(true);
-      console.log('email failure');
-    } else {
-      setEmailErr(false);
-      console.log('email success');
-    }
-  };
-
-  const validatePass = () => {
-    if (!passwordRegex.test(password)) {
-      setPasswordErr(true);
-      console.log('password failure');
-    } else {
-      setPasswordErr(false);
-      console.log('password success');
-    }
-  };
-
-  const loginUser = async (userData: UserData) => {
-    const response = await axios.post('user/users.json', userData);
-    return response.data;
-  };
-
   //기본적으로 react query에서 5분동안 캐시 지원해줌,  시간설정 변경 가능
-  const mutation = useMutation(loginUser, {
+  const { isLoading, mutate: login } = useMutation(loginAuth, {
     onSuccess: (data) => {
-      console.log('Logged in', data);
+      console.log(data);
 
       //status 관리
       // if(response === 200)
@@ -86,28 +45,15 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    validateEmail();
-    validatePass();
 
-    if (emailErr || passwordErr === true) {
-      return;
-    }
-
-    const inputData = {
-      email,
-      password,
-    };
-    mutation.mutate(inputData);
+    login({ email, password });
 
     setEmail('');
     setPassword('');
   };
 
   {
-    mutation.isLoading && <p>Loading...</p>;
-  }
-  {
-    mutation.isError && <p>Error: {(mutation.error as Error).message}</p>;
+    isLoading && <p>Loading...</p>;
   }
 
   return (
@@ -168,7 +114,7 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
             characters
           </p>
         )}
-        <button disabled={mutation.isLoading} className="my-1">
+        <button className="my-1">
           {/* <Button onClick={closeScreen}>Login</Button> */}
           <Button>Login</Button>
         </button>
