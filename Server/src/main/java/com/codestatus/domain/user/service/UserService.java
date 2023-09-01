@@ -85,8 +85,8 @@ public class UserService implements BaseService<User> {
     }
 
     // 유저 닉네임 수정
-    public void updateUserNickName(User user, long loginId) {
-        User findUser = findVerifiedUser(loginId);
+    public void updateUserNickName(User user, long loginUserId) {
+        User findUser = findVerifiedUser(loginUserId);
 
         if (!findUser.getNickName().equals(user.getNickName())) { // 유저 닉네임이 수정되었다면
             verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사 실행
@@ -96,8 +96,8 @@ public class UserService implements BaseService<User> {
     }
 
     // 비밀번호 변경
-    public void updatePassword(User user, long loginId) {
-        User findUser = findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+    public void updatePassword(User user, long loginUserId) {
+        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         // 현재 비밀번호와 같다면 에러
         if (passwordEncoder.matches(user.getPassword(), findUser.getPassword())) {
@@ -109,8 +109,8 @@ public class UserService implements BaseService<User> {
     }
 
     // 유저 탈퇴
-    public void deleteEntity(long loginId, long userId) {
-        User findUser = findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+    public void deleteEntity(long loginUserId, long userId) {
+        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         if (findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 이미 탈퇴 상태라면 예외 발생
             throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
         }
@@ -119,9 +119,8 @@ public class UserService implements BaseService<User> {
     }
 
     // 프로필 이미지 업로드
-    public void uploadProfileImage(MultipartFile imageFile) {
-        Long userId = getLoginUserId(); // 로그인한 유저의 id를 가져옴
-        User findUser = findVerifiedUser(userId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+    public void uploadProfileImage(MultipartFile imageFile, long loginUserId) {
+        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         String fileUrl = fileStorageService.storeFile(imageFile); // 파일 업로드
         findUser.setProfileImage(fileUrl); // 유저 프로필 이미지 경로 저장
         repository.save(findUser); // 유저 저장
@@ -182,21 +181,6 @@ public class UserService implements BaseService<User> {
             statusList.add(status);
         }
         statusRepository.saveAll(statusList);
-    }
-
-    /*
-    만약 출석체크 상태를 변경해야 할 유저가 많아진다면
-    서버에 부담이 되지 않을까?
-     */
-
-    // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 변경(매일 자정마다 실행)
-    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // cron = "0 0 0 * * ?", zone = "Asia/Seoul" <- 매일 자정마다 실행
-    public void updateAttendance() {
-        List<User> users = repository.findAllByUserStatusAndAttendance(User.UserStatus.USER_ACTIVE, true); // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 조회
-        for (User user : users) { // 출석체크 상태를 false로 변경
-            user.setAttendance(false);
-        }
-        repository.saveAll(users);
     }
 
     // 로그인한 유저의 id를 가져옴

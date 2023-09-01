@@ -6,8 +6,11 @@ import com.codestatus.domain.user.repository.UserRepository;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 @Service
@@ -42,6 +45,21 @@ public class LevelService {
                 user.getStatuses().get(statId-1).getStatExp() + exp
         );
         levelUpCheck(user, statId-1);
+    }
+
+    /*
+    만약 출석체크 상태를 변경해야 할 유저가 많아진다면
+    서버에 부담이 되지 않을까?
+     */
+
+    // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 변경(매일 자정마다 실행)
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // cron = "0 0 0 * * ?", zone = "Asia/Seoul" <- 매일 자정마다 실행
+    public void updateAttendance() {
+        List<User> users = userRepository.findAllByUserStatusAndAttendance(User.UserStatus.USER_ACTIVE, true); // 유저 상태가 USER_ACTIVE인 유저와 출석체크 상태가 true인 유저만 조회
+        for (User user : users) { // 출석체크 상태를 false로 변경
+            user.setAttendance(false);
+        }
+        userRepository.saveAll(users);
     }
 
     private void levelUpCheck(User user, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
