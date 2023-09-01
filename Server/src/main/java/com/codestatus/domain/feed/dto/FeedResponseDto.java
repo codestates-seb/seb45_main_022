@@ -1,10 +1,7 @@
 package com.codestatus.domain.feed.dto;
 
 import com.codestatus.domain.comment.dto.CommentResponseDto;
-import com.codestatus.domain.comment.entity.Comment;
-import com.codestatus.domain.feed.entity.FeedHashTag;
-import com.codestatus.domain.hashtag.dto.HashtagResponseDto;
-import com.codestatus.domain.like.entity.Like;
+import com.codestatus.domain.hashTag.dto.HashTagResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +24,7 @@ public class FeedResponseDto {
 
     private String body;
 
-    private List<HashtagResponseDto> feedHashTags;
+    private List<HashTagResponseDto> feedHashTags;
 
     private int likeCount;
 

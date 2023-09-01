@@ -1,5 +1,6 @@
 package com.codestatus.domain.feed.entity;
 
+import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import com.codestatus.global.audit.Auditable;
 import com.codestatus.domain.category.entity.Category;
 import com.codestatus.domain.comment.entity.Comment;

@@ -1,6 +1,7 @@
 package com.codestatus.domain.category.entity;
 
 
+import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.status.entity.Stat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +26,8 @@ public class Category {
 
     @Column
     private String category;
+
+    @OneToMany(mappedBy = "category")
+    private List<Feed> feeds = new ArrayList<>();
 
 }
