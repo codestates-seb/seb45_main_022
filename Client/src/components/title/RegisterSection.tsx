@@ -2,8 +2,7 @@ import ModalFrame from '../common/ModalFrame';
 import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { registerAuth } from '../../api/auth';
 import {
@@ -11,16 +10,9 @@ import {
   validateNickname,
   validatePass,
 } from '../../hooks/validation';
-import axios from 'axios';
 
 interface RegisterProps {
   changeSection: () => void;
-}
-
-interface UserData {
-  email: string;
-  password: string;
-  nickname: string;
 }
 
 const Register = ({ changeSection }: RegisterProps) => {
@@ -31,26 +23,39 @@ const Register = ({ changeSection }: RegisterProps) => {
   const [passwordErr, setPasswordErr] = useState<boolean>(false);
   const [nicknameErr, setNicknameErr] = useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [checkExistingEmail, setExistingEmail] = useState<boolean>(false);
+  const [checkExistingNickname, setExistingNickname] = useState<boolean>(false);
+  // const [emailState, setEmailState] = useState<boolean>(false);
 
   const toggleViewPassword = () => {
     setPasswordVisible(!passwordVisible);
-  };
-
-  const registerAuth = async (userData: UserData) => {
-    const response = await axios.post('user/users.json', userData);
-    return response.data;
   };
 
   const { isLoading, mutate: register } = useMutation(registerAuth, {
     //서버에서 데이터 받으면 성공
     // 서버 status에 따라 실행되는 조건문 걸면 좋을 듯
     onSuccess: (data) => {
-      console.log(data);
-
-      //if(status === 200)
-
-      //로그인 창으로 전환
-      // changeSection();
+      if (data.status === 200) {
+        console.log(data);
+        setExistingEmail(false);
+        //
+        //로그인 창으로 전환
+        // changeSection();
+      } else if (
+        data.status === 409 &&
+        data.message === '사용중인 이메일 입니다.'
+      ) {
+        console.log('Existing Email');
+        setExistingEmail(true);
+      } else if (
+        data.status === 409 &&
+        data.message === '사용중인 닉네임 입니다.'
+      ) {
+        console.log('Existing Nickname');
+        setExistingNickname(true);
+      } else if (data.status === 400) {
+        console.log('User authentication error');
+      }
     },
     onError: (err) => {
       console.log(err);
@@ -85,9 +90,6 @@ const Register = ({ changeSection }: RegisterProps) => {
             value={email}
             onBlur={() => validateEmail(email, setEmailErr)}
           />
-          {/* <button className="bg-white  h-[32px] w-20 ml-2 rounded text-sm">
-            Check
-          </button> */}
         </div>
 
         {emailErr && (
