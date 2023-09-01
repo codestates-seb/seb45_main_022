@@ -77,7 +77,7 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
       localStorage.setItem('accessToken', tokenData.access);
       localStorage.setItem('refreshToken', tokenData.refresh);
 
-      closeScreen();
+      showDefault();
     },
     onError: (err) => {
       console.log('Login fail', err);
