@@ -3,8 +3,15 @@ import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+
 import { useMutation } from 'react-query';
+import { registerAuth } from '../../api/auth';
+import {
+  validateEmail,
+  validateNickname,
+  validatePass,
+} from '../../hooks/validation';
+import axios from 'axios';
 
 interface RegisterProps {
   changeSection: () => void;
@@ -25,61 +32,16 @@ const Register = ({ changeSection }: RegisterProps) => {
   const [nicknameErr, setNicknameErr] = useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
-  // 이메일 포멧
-  const emailRegEx =
-    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  // 최소 8 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자 :
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
-
-  //한글 또는 영어, 2-6길이
-  const nicknameRegex = /^[가-힣a-zA-Z]{2,6}$/;
-
-  // const validateEmail = () => {
-  //   if (!emailRegEx.test(email)) {
-  //     setEmailErr(true);
-  //     console.log('email failure');
-  //   } else {
-  //     setEmailErr(false);
-  //     console.log('email success');
-  //   }
-  // };
-  const validateEmail = () => {
-    if (!emailRegEx.test(email)) {
-      setEmailErr(true);
-    } else {
-      setEmailErr(false);
-    }
-  };
-
-  const validatePass = () => {
-    if (!passwordRegex.test(password)) {
-      setPasswordErr(true);
-    } else {
-      setPasswordErr(false);
-    }
-  };
-
-  const validateNickname = () => {
-    if (!nicknameRegex.test(nickname)) {
-      setNicknameErr(true);
-    } else {
-      setNicknameErr(false);
-    }
-  };
-
-  // useE
-
   const toggleViewPassword = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const addUser = async (userData: UserData) => {
+  const registerAuth = async (userData: UserData) => {
     const response = await axios.post('user/users.json', userData);
     return response.data;
   };
 
-  const { isLoading, mutate: register } = useMutation(addUser, {
+  const { isLoading, mutate: register } = useMutation(registerAuth, {
     //서버에서 데이터 받으면 성공
     // 서버 status에 따라 실행되는 조건문 걸면 좋을 듯
     onSuccess: (data) => {
@@ -99,9 +61,9 @@ const Register = ({ changeSection }: RegisterProps) => {
     e.preventDefault();
 
     register({ email, password, nickname });
-    validateEmail();
-    validatePass();
-    validateNickname();
+    validateEmail(email, setEmailErr);
+    validatePass(password, setPasswordErr);
+    validateNickname(nickname, setNicknameErr);
   };
 
   {
@@ -121,27 +83,30 @@ const Register = ({ changeSection }: RegisterProps) => {
             className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            onBlur={() => validateEmail()}
+            onBlur={() => validateEmail(email, setEmailErr)}
           />
+          {/* <button className="bg-white  h-[32px] w-20 ml-2 rounded text-sm">
+            Check
+          </button> */}
         </div>
 
         {emailErr && (
           <p className="text-[10px]  text-red-500">Please check email format</p>
         )}
 
-        <div className="flex items-center relative">
+        <div className="flex items-center relative ">
           <input
             placeholder="Password"
             type={passwordVisible ? 'text' : 'password'}
             className="border-solid border-2 border-000 p-2 rounded-lg my-4 w-full "
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            onBlur={() => validatePass()}
+            onBlur={() => validatePass(password, setPasswordErr)}
           />
           <img
             src={!passwordVisible ? hide : view}
             alt="view icon"
-            width={25}
+            width={40}
             onClick={toggleViewPassword}
             className="absolute right-2 cursor-pointer"
           />
@@ -159,8 +124,11 @@ const Register = ({ changeSection }: RegisterProps) => {
             className="border-solid border-2 border-000 p-2 rounded-lg my-4"
             onChange={(e) => setNickname(e.target.value)}
             value={nickname}
-            onBlur={() => validateNickname()}
+            onBlur={() => validateNickname(nickname, setNicknameErr)}
           />
+          {/* <button className="bg-white  h-[32px] w-20 ml-2 rounded text-sm ">
+            Check
+          </button> */}
         </div>
 
         {nicknameErr && (
