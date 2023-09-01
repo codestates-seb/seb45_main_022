@@ -5,6 +5,7 @@ import com.codestatus.domain.like.repository.LikeRepository;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.like.entity.Like;
 import com.codestatus.domain.user.entity.User;
+import com.codestatus.domain.user.service.LevelService;
 import com.codestatus.domain.user.service.UserService;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
@@ -20,10 +21,12 @@ public class LikeService {
     @Value("${exp.like-exp}")
     private int likeExp;
     private final UserService userService;
+    private final LevelService levelService;
     private final FeedService feedService;
     private final LikeRepository likeRepository;
 
-    public LikeService(UserService userService, FeedService feedService, LikeRepository likeRepository) {
+    public LikeService(UserService userService, LevelService levelService, FeedService feedService, LikeRepository likeRepository) {
+        this.levelService = levelService;
         this.userService = userService;
         this.feedService = feedService;
         this.likeRepository = likeRepository;
@@ -48,7 +51,7 @@ public class LikeService {
             like.setFeed(feed);
             like.setUser(user);
             // 경험치 획득 및 level up  check 메서드
-            userService.gainExp(feed.getUser(), likeExp, feed.getCategory().getStat().getStatId().intValue());
+            levelService.gainExp(feed.getUser(), likeExp, feed.getCategory().getStat().getStatId().intValue());
         }
         likeRepository.save(like);
     }
