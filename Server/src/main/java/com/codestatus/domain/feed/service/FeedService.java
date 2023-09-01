@@ -7,7 +7,6 @@ import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.feed.repository.FeedRepository;
-import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.service.BaseService;
 import com.codestatus.global.utils.CheckUser;
@@ -46,32 +45,47 @@ public class FeedService implements BaseService<Feed> {
     @Override
     public void createEntity(Feed feed) { feedRepository.save(feed); }
 
-    //해당하는 피드 ID와 삭제 여부로 피드 하나 조회
+    public void createFeed(Feed feed) {feedRepository.save(feed);}
+
+    @Override
+    public Feed findEntity(long id){return null;};
+
+    //해당하는 카테고리 ID와 피드 ID로 삭제되지 않은 피드 하나 조회
     @Transactional(readOnly = true)
-    public Feed findFeedByDeleted(long feedId, boolean deleted){
-        Optional<Feed> optionalFeed = feedRepository.findFeedByFeedIdAndDeleted(feedId, deleted);
-        if(deleted) {
-            throw new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND);
-        }
-        return optionalFeed.orElseThrow(()-> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
-    }
+    public Feed findFeedByCategoryAndFeedId(long categoryId, long feedId){
+        Optional<Feed> optionalFeed = feedRepository.findFeedByCategoryIdAndFeedIdAndDeletedIsFalse(categoryId, feedId);
+
+        return optionalFeed.orElseThrow(()-> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));}
 
     //일주일 안에 작성된 피드를 좋아요 순으로 정렬해서 조회
     @Transactional(readOnly = true)
-    public Page<Feed> findWeeklyBestFeeds(boolean deleted, int page, int size) {
+    public Page<Feed> findWeeklyBestFeeds(int page, int size) {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
         Sort sort = Sort.by(Sort.Direction.DESC, "likes"); // likes 내림차순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCreatedAtAfterAndDeletedOrderByLikesDesc(oneWeekAgo, deleted, pageable);
+        return feedRepository.findByCreatedAtAfterAndDeletedIsFalseOrderByLikesDesc(oneWeekAgo, pageable);
     }
-
 
     //(검색기능)텍스트 받아서 해당하는 바디 가지고 있는 피드목록 조회
     @Transactional(readOnly = true)
-    public Page<Feed> findFeedByBodyAndDeleted(String text, boolean deleted, int page, int size) {
+    public Page<Feed> findFeedByBody(String text, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByBodyAndDeleted(text, deleted, pageable);
+        return feedRepository.findByBodyAndDeletedIsFalse(text, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findAllFeedByCategory(categoryId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findByCategoryAndBodyAndDeleted(categoryId, text, pageable);
     }
 //    @Transactional(readOnly = true)
 //    public Page<Feed> findFeedByUserAndDeleted(String text, boolean deleted, int page, int size) {
@@ -85,16 +99,13 @@ public class FeedService implements BaseService<Feed> {
 //        Pageable pageable = PageRequest.of(page, size, sort);
 //        return feedRepository.findByHashTagAndDeleted(text, deleted, pageable);
 //    }
-    @Override
-    @Transactional(readOnly = true)
-    public Feed findEntity(long feedId){ return null;}
 
-    //해당하는 deleted로 피드목록 조회
+    //삭제되지않은 피드목록 조회
     @Transactional(readOnly = true)
-    public Page<Feed> findAllEntityByDeleted(boolean deleted, int page, int size) {
+    public Page<Feed> findAllFeedByDeleted(int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByDeleted(deleted, pageable);
+        return feedRepository.findAllByDeletedIsFalse(pageable);
     }
 
     //관리자 용 모든 피드 조회
@@ -119,6 +130,7 @@ public class FeedService implements BaseService<Feed> {
     }
 
     //db에서 완전 삭제가 아닌 deleted=true 로 수정
+    @Override
     public void deleteEntity(long feedId, long userId){
         Feed findFeed = findVerifiedFeed(feedId);
         CheckUser.isCreator(findFeed.getUser().getUserId(), userId);
@@ -134,7 +146,7 @@ public class FeedService implements BaseService<Feed> {
     // feed가 존재하는지 검사
     @Transactional(readOnly = true)
     public Feed findVerifiedFeed(long feedId){
-        Optional<Feed> optionalFeed = feedRepository.findFeedByFeedIdAndDeleted(feedId, false);
+        Optional<Feed> optionalFeed = feedRepository.findFeedByFeedIdAndDeletedIsFalse(feedId);
         return optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
     }
 

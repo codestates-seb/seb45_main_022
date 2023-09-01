@@ -1,8 +1,6 @@
 package com.codestatus.domain.feed.repository;
 
 import com.codestatus.domain.feed.entity.Feed;
-import com.codestatus.domain.hashtag.entity.HashTag;
-import com.codestatus.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,13 +12,24 @@ import java.util.Optional;
 
 public interface FeedRepository extends JpaRepository <Feed, Long> {
 
-    @Query("SELECT f FROM Feed f WHERE f.feedId = :feedId AND f.deleted = :deleted ")
-    Optional<Feed> findFeedByFeedIdAndDeleted(long feedId, boolean deleted);
+    @Query("SELECT f FROM Feed f WHERE f.feedId = :feedId AND f.deleted = false ")
+    Optional<Feed> findFeedByFeedIdAndDeletedIsFalse(long feedId);
 
-    Page<Feed> findByCreatedAtAfterAndDeletedOrderByLikesDesc(LocalDateTime createdAt, boolean deleted, Pageable pageable);
+    @Query("SELECT f FROM Feed f WHERE f.category.categoryId = :categoryId AND f.feedId =:feedId AND f.deleted = false")
+    Optional<Feed> findFeedByCategoryIdAndFeedIdAndDeletedIsFalse(@Param("categoryId")long categoryId,@Param("feedId") long feedId);
 
-    @Query("SELECT f FROM Feed f WHERE f.body = :body AND f.deleted = :deleted ")
-    Page<Feed> findByBodyAndDeleted(@Param("body") String body, boolean deleted, Pageable pageable);
+    Page<Feed> findByCreatedAtAfterAndDeletedIsFalseOrderByLikesDesc(LocalDateTime createdAt, Pageable pageable);
+
+    @Query("SELECT f FROM Feed f WHERE f.body = :body AND f.deleted = false ")
+    Page<Feed> findByBodyAndDeletedIsFalse(@Param("body") String body, Pageable pageable);
+
+
+
+    @Query("SELECT f FROM Feed f WHERE f.category = :categoryId AND f.body = :body AND f.deleted = false")
+    Page<Feed> findByCategoryAndBodyAndDeleted(@Param("categoryId")long categoryId,@Param("body") String body, Pageable pageable);
+
+    @Query("SELECT f FROM Feed f WHERE f.category = :categoryId AND f.deleted = false ")
+    Page<Feed> findAllFeedByCategory(long categoryId, Pageable pageable);
 
 //    @Query("SELECT f FROM Feed f WHERE f.user = :text AND f.deleted = :deleted ")
 //    Page<Feed> findByUserAndDeleted(@Param("user") String text, boolean deleted, Pageable pageable);
@@ -28,7 +37,7 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
 //    @Query("SELECT f FROM Feed f WHERE f.feedHashTags = :hashTag AND f.deleted = :deleted ")
 //    Page<Feed> findByHashTagAndDeleted(@Param("hashTag") String hashTag, boolean deleted, Pageable pageable);
 
-    Page<Feed> findAllByDeleted(boolean deleted, Pageable pageable);
+    Page<Feed> findAllByDeletedIsFalse(Pageable pageable);
 
 
 

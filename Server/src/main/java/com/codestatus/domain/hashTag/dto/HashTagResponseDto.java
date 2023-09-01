@@ -1,7 +1,7 @@
-package com.codestatus.domain.hashtag.dto;
+package com.codestatus.domain.hashTag.dto;
 
 
-import com.codestatus.domain.feed.entity.FeedHashTag;
+import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,13 +11,11 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class HashtagResponseDto {
+public class HashTagResponseDto {
 
     private long hashTagId;
 
     private String body;
-
-    private List<FeedHashTag> feedHashTags;
 
 
 }

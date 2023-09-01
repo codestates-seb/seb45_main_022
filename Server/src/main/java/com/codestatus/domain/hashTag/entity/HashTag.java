@@ -1,6 +1,5 @@
-package com.codestatus.domain.hashtag.entity;
+package com.codestatus.domain.hashTag.entity;
 
-import com.codestatus.domain.feed.entity.FeedHashTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

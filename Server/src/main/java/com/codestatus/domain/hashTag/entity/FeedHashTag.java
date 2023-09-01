@@ -1,6 +1,7 @@
-package com.codestatus.domain.feed.entity;
+package com.codestatus.domain.hashTag.entity;
 
-import com.codestatus.domain.hashtag.entity.HashTag;
+import com.codestatus.domain.feed.entity.Feed;
+import com.codestatus.domain.hashTag.entity.HashTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,10 @@ public class FeedHashTag {
     @ManyToOne
     @JoinColumn(name = "hashtag_id")
     private HashTag hashTag;
+
+    public FeedHashTag(Feed feed, HashTag hashTag) {
+        this.feed = feed;
+        this.hashTag = hashTag;
+    }
 
 }

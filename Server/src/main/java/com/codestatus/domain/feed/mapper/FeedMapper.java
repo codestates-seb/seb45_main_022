@@ -6,10 +6,7 @@ import com.codestatus.domain.feed.dto.FeedPostDto;
 import com.codestatus.domain.feed.dto.FeedResponseDto;
 import com.codestatus.domain.feed.dto.FeedsResponseDto;
 import com.codestatus.domain.feed.entity.Feed;
-import com.codestatus.domain.feed.entity.FeedHashTag;
-import com.codestatus.domain.hashtag.dto.HashtagResponseDto;
-import com.codestatus.domain.status.entity.Stat;
-import com.codestatus.domain.user.entity.User;
+import com.codestatus.domain.hashTag.dto.HashTagResponseDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -26,7 +23,7 @@ public interface FeedMapper {
                 .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue()).getStatLevel())
                 .body(feed.getBody())
                 .feedHashTags(feed.getFeedHashTags().stream()
-                        .map(feedHashTag -> HashtagResponseDto.builder()
+                        .map(feedHashTag -> HashTagResponseDto.builder()
                                 .hashTagId(feedHashTag.getHashTag().getHashTagId())
                                 .body(feedHashTag.getHashTag().getBody())
                                 .build())
@@ -57,7 +54,7 @@ public interface FeedMapper {
                         .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue()).getStatLevel())
                         .body(feed.getBody())
                         .feedHashTags(feed.getFeedHashTags().stream()
-                                .map(feedHashTag -> HashtagResponseDto.builder()
+                                .map(feedHashTag -> HashTagResponseDto.builder()
                                         .hashTagId(feedHashTag.getHashTag().getHashTagId())
                                         .body(feedHashTag.getHashTag().getBody())
                                         .build())
@@ -69,7 +66,11 @@ public interface FeedMapper {
                 .collect(Collectors.toList());
 
     }
-    Feed feedPostDtoToFeed(FeedPostDto feedPostDto);
+    default Feed feedPostDtoToFeed(FeedPostDto feedPostDto){
+        Feed feed = new Feed();
+        feed.setBody(feedPostDto.getBody());
+        return feed;
+    };
 
     Feed feedPatchDtoToFeed(FeedPatchDto feedPatchDto);
     default Feed feedIdToFeed(Long feedId){
