@@ -1,15 +1,15 @@
 import Backdrop from '../common/Backdrop';
 
 interface Props {
-  onClick: () => void;
+  showAuth: () => void;
 }
 
-const TitleScreen = ({ onClick }: Props) => {
+const TitleScreen = ({ showAuth }: Props) => {
   return (
     <Backdrop>
       <div
         className="w-full h-full flex flex-col justify-center items-center gap-[15rem]"
-        onClick={onClick}
+        onClick={showAuth}
       >
         <h1 className="text-white font-extrabold font-default text-[8rem] tracking-wide drop-shadow-[10px_10px_2px_#000] pointer-events-none">
           STAT & US

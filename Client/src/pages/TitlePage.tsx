@@ -15,6 +15,14 @@ enum Screen {
 const TitlePage = () => {
   const [screen, setScreen] = useState<Screen>(Screen.TITLE);
 
+  const showDefault = () => {
+    setScreen(Screen.DEFAULT);
+  };
+
+  const showAuth = () => {
+    setScreen(Screen.AUTH);
+  };
+
   return (
     <>
       <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] z-10">
@@ -22,33 +30,13 @@ const TitlePage = () => {
           className="relative bg-title w-[1200px] h-[720px] bg-cover
         bg-no-repeat bg-center"
         >
-          {screen === Screen.TITLE && (
-            <TitleScreen
-              onClick={() => {
-                setScreen(Screen.AUTH);
-              }}
-            />
-          )}
-          {screen === Screen.AUTH && (
-            <AuthScreen
-              closeScreen={() => {
-                setScreen(Screen.DEFAULT);
-              }}
-            />
-          )}
+          {screen === Screen.TITLE && <TitleScreen showAuth={showAuth} />}
+          {screen === Screen.AUTH && <AuthScreen showDefault={showDefault} />}
           {screen === Screen.STATUS && (
-            <StatusScreen
-              onClick={() => {
-                setScreen(Screen.DEFAULT);
-              }}
-            />
+            <StatusScreen showDefault={showDefault} />
           )}
           {screen === Screen.PROFILE && (
-            <ProfileScreen
-              onClick={() => {
-                setScreen(Screen.DEFAULT);
-              }}
-            />
+            <ProfileScreen showDefault={showDefault} />
           )}
           {screen === Screen.DEFAULT && (
             <>

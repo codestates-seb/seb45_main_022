@@ -8,10 +8,10 @@ import Button from '../common/Button';
 
 interface LoginProps {
   changeSection: () => void;
-  closeScreen: () => void;
+  showDefault: () => void;
 }
 
-const Login = ({ changeSection, closeScreen }: LoginProps) => {
+const Login = ({ changeSection, showDefault }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailErr, setEmailErr] = useState<boolean>(false);
@@ -134,7 +134,7 @@ const Login = ({ changeSection, closeScreen }: LoginProps) => {
         )}
 
         <button className="my-1">
-          <Button onClick={closeScreen}>Login</Button>
+          <Button onClick={showDefault}>Login</Button>
         </button>
       </form>
       <div className="flex items-center justify-around my-4 w-full h-10">

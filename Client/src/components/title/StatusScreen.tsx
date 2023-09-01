@@ -6,7 +6,7 @@ import StatusChart from './StatusChart';
 import StatusListItem from './StatusListItem';
 
 interface Props {
-  onClick?: () => void;
+  showDefault?: () => void;
 }
 
 interface Status {
@@ -25,7 +25,7 @@ interface UserInfo {
   statuses: Status[];
 }
 
-const StatusScreen = ({ onClick }: Props) => {
+const StatusScreen = ({ showDefault }: Props) => {
   const [status, setStatus] = useState<Status[]>([]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const StatusScreen = ({ onClick }: Props) => {
             ))}
           </div>
         </div>
-        <Button onClick={onClick}>Close</Button>
+        <Button onClick={showDefault}>Close</Button>
       </div>
     </Backdrop>
   );

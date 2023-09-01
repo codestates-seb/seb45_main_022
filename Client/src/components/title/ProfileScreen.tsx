@@ -20,10 +20,10 @@ interface UserInfo {
 }
 
 interface Props {
-  onClick?: () => void;
+  showDefault?: () => void;
 }
 
-const ProfileScreen = ({ onClick }: Props) => {
+const ProfileScreen = ({ showDefault }: Props) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [tab, setTab] = useState<'password' | 'post'>('post');
 
@@ -124,7 +124,7 @@ const ProfileScreen = ({ onClick }: Props) => {
             </div>
           </div>
         </div>
-        <Button onClick={onClick}>Close</Button>
+        <Button onClick={showDefault}>Close</Button>
       </div>
     </Backdrop>
   );
