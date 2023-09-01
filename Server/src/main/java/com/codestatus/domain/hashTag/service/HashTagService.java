@@ -34,18 +34,21 @@ public class HashTagService implements BaseService<HashTag> {
         hashTagRepository.save(hashTag);
     }
 
+    //피드와 해시태그 만들고 연결해주는 메서드
     public List<FeedHashTag> createEntityByString(Feed feed, List<String> hashTags) {
         List<FeedHashTag> feedHashTags = new ArrayList<>();  //기존에 없던 HashTag를 넣어주기 위해 임시 리스트 생성
         for (String hashTagStr : hashTags) {  //리스트 내의 해쉬태그를 하나씩 확인
             HashTag hashTag = findOrCreateHashTag(hashTagStr); //하나씩 받아서 객체로 생성
-            FeedHashTag feedHashTag = new FeedHashTag(feed, hashTag);
-            feedHashTags.add(feedHashTag); //생성한 해쉬태그를 임시 리스트에 추가.
-            feedHashTagRepository.save(feedHashTag); // 피드해쉬태그 저장.
+            FeedHashTag feedHashTag = new FeedHashTag(feed, hashTag); //피드해시태그로 만들어 매핑
+            feedHashTags.add(feedHashTag); //생성한 해쉬태그를 임시 리스트에 추가
         }
+        feedHashTagRepository.saveAll(feedHashTags); //해쉬태그 리스트를 리포지토리에 저장
         return feedHashTags;
     }
 
-    public HashTag findOrCreateHashTag(String hashTagStr) {
+    //createEntityByString에서 쓰는 메서드
+    //String을 받아 해시태그 검색해보고 있으면 있는거 반환, 없으면 만들어서 반환.
+    private HashTag findOrCreateHashTag(String hashTagStr) {
         Optional<HashTag> optionalHashTag = Optional.ofNullable(findByString(hashTagStr));
 
         if (optionalHashTag.isPresent()) {
