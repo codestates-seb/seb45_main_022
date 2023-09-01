@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { useEffect, useState } from 'react';
+import { Status } from '../../api/user';
 
 ChartJS.register(
   RadialLinearScale,
@@ -18,13 +19,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-interface Status {
-  statName: string;
-  statLevel: number;
-  statExp: number;
-  requiredExp: number;
-}
 
 interface Props {
   status: Status[];

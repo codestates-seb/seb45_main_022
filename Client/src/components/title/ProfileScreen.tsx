@@ -1,23 +1,7 @@
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-
-interface Status {
-  statName: string;
-  statLevel: number;
-  statExp: number;
-  requiredExp: number;
-}
-
-interface UserInfo {
-  id: number;
-  email: string;
-  nickName: string;
-  profileImage: string;
-  attendance: boolean;
-  statuses: Status[];
-}
+import { UserInfo, getUserInfo } from '../../api/user';
 
 interface Props {
   showDefault?: () => void;
@@ -30,8 +14,8 @@ const ProfileScreen = ({ showDefault }: Props) => {
   useEffect(() => {
     (async () => {
       try {
-        const { data }: { data: UserInfo } = await axios.get('user/test.json');
-        setUserInfo(data);
+        const userInfo = await getUserInfo();
+        setUserInfo(userInfo);
       } catch (error) {
         console.log(error);
       }
