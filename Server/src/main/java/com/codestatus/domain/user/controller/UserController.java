@@ -77,7 +77,7 @@ public class UserController {
     @PostMapping("/mypage/edit/image")
     public ResponseEntity uploadProfileImage(@RequestParam("imageFile") MultipartFile imageFile,
                                              @AuthenticationPrincipal PrincipalDto principal) {
-        service.uploadProfileImage(imageFile); // 프로필 이미지 업로드 메서드 호출
+        service.uploadProfileImage(imageFile, principal.getId()); // 프로필 이미지 업로드 메서드 호출
         return ResponseEntity.status(HttpStatus.OK).body("profile image upload success"); // 프로필 이미지 업로드 성공 메시지 반환
     }
 
