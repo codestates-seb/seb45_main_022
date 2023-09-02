@@ -1,26 +1,25 @@
+import useUserInfo from '../../hooks/useUserInfo';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
-import { useEffect, useState } from 'react';
-import { UserInfo, getUserInfo } from '../../api/user';
+import { useState } from 'react';
 
 interface Props {
-  showDefault?: () => void;
+  showDefault: () => void;
 }
 
 const ProfileScreen = ({ showDefault }: Props) => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [tab, setTab] = useState<'password' | 'post'>('post');
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const userInfo = await getUserInfo();
-        setUserInfo(userInfo);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+  const { userInfoQuery } = useUserInfo();
+  const { isLoading, data: userInfo } = userInfoQuery;
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!userInfo) {
+    alert('정보를 불러오는 데 실패했습니다.');
+    showDefault();
+    return null;
+  }
   return (
     <Backdrop>
       <div className="relative w-full h-full flex flex-col justify-center items-center gap-[2rem]">
@@ -31,7 +30,7 @@ const ProfileScreen = ({ showDefault }: Props) => {
               <div className="w-[150px] h-[150px] bg-[url('/src/assets/common/profile-frame.png')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
                 <img
                   className="w-[120px] h-[120px]"
-                  src={userInfo?.profileImage}
+                  src={userInfo.profileImage}
                   alt="profile"
                 />
               </div>
@@ -43,14 +42,14 @@ const ProfileScreen = ({ showDefault }: Props) => {
                 NAME
                 <br />
                 <span className="font-[ui-sans-serif] text-[2.5rem] font-extrabold">
-                  {userInfo?.nickName}
+                  {userInfo.nickName}
                 </span>
               </h1>
               <h1 className="text-[.8rem] text-center">
                 EMAIL
                 <br />
                 <span className="text-[.5rem] font-extrabold">
-                  {userInfo?.email}
+                  {userInfo.email}
                 </span>
               </h1>
             </div>

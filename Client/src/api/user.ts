@@ -20,8 +20,3 @@ export const getUserInfo = async (): Promise<UserInfo> => {
   const res = await axios.get('user/test.json');
   return res.data;
 };
-
-export const getUserStatus = async (): Promise<Status[]> => {
-  const res = await axios.get('user/test.json');
-  return res.data.statuses;
-};

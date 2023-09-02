@@ -1,27 +1,26 @@
-import { useEffect, useState } from 'react';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import StatusChart from './StatusChart';
 import StatusListItem from './StatusListItem';
-import { Status, getUserStatus } from '../../api/user';
+import useUserInfo from '../../hooks/useUserInfo';
 
 interface Props {
-  showDefault?: () => void;
+  showDefault: () => void;
 }
 
 const StatusScreen = ({ showDefault }: Props) => {
-  const [status, setStatus] = useState<Status[]>([]);
+  const { userInfoQuery } = useUserInfo();
+  const { isLoading, data } = userInfoQuery;
+  const status = data?.statuses;
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const userStatus = await getUserStatus();
-        setStatus(userStatus);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!status) {
+    alert('정보를 불러오는 데 실패했습니다.');
+    showDefault();
+    return null;
+  }
+
   return (
     <Backdrop>
       <div className="relative w-full h-full flex flex-col justify-center items-center gap-[2rem]">
