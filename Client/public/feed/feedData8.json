@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "feedId": 16,
+      "nickName": "은영",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/16",
+      "statId": 3,
+      "level": 3,
+      "body": "다섯 번째 피드의 내용을 수정하였습니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 19,
+          "body": "수정된태그"
+        }
+      ],
+      "likeCount": 13,
+      "commentCount": 6,
+      "createdAt": "2023-09-14T09:45:32.654321",
+      "modifiedAt": "2023-09-14T09:50:59.111111"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}
