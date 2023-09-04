@@ -8,6 +8,7 @@ import com.codestatus.domain.comment.dto.CommnetPatchDto;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.mapper.CommentMapper;
 import com.codestatus.domain.comment.service.CommentServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @Validated
 @RestController
 @RequestMapping("/comment")
@@ -24,13 +26,6 @@ public class CommentController {
     private final CommentMapper commentMapper;
     private final UserMapper userMapper;
     private final FeedMapper feedMapper;
-
-    public CommentController(CommentServiceImpl commentServiceImpl, CommentMapper commentMapper, UserMapper userMapper, FeedMapper feedMapper) {
-        this.commentServiceImpl = commentServiceImpl;
-        this.commentMapper = commentMapper;
-        this.userMapper = userMapper;
-        this.feedMapper = feedMapper;
-    }
 
     @PostMapping("/{feedId}")
     public ResponseEntity postComment(@PathVariable("feedId") long feedId,
