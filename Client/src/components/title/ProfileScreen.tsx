@@ -2,6 +2,7 @@ import useUserInfo from '../../hooks/useUserInfo';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useState } from 'react';
+import LoadingBar from '../common/LoadingBar';
 
 interface Props {
   showDefault: () => void;
@@ -13,7 +14,12 @@ const ProfileScreen = ({ showDefault }: Props) => {
   const { userInfoQuery } = useUserInfo();
   const { isLoading, data: userInfo } = userInfoQuery;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <Backdrop>
+        <LoadingBar />
+      </Backdrop>
+    );
 
   if (!userInfo) {
     alert('정보를 불러오는 데 실패했습니다.');
