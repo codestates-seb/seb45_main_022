@@ -16,11 +16,11 @@ const router = createBrowserRouter([
     element: <TitlePage />,
   },
   {
-    path: '/map/:statusCode',
+    path: '/map/:statusCodeParam',
     element: <MapPage />,
   },
   {
-    path: '/feed',
+    path: '/feed/:categoryCode',
     element: <FeedPage />,
   },
 ]);
@@ -33,9 +33,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </QueryClientProvider>
   </React.StrictMode>,
 );
-
-// 타이틀 페이지
-// 인증 페이지
-// 프로필 페이지
-// 맵 페이지
-// 피드 조회 페이지

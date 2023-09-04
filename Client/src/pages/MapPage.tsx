@@ -3,35 +3,21 @@ import { useParams } from 'react-router';
 import Backdrop from '../components/common/Backdrop';
 import ModalFrame from '../components/common/ModalFrame';
 import ServerList from '../components/map/ServerList';
-import axios from 'axios';
-
-interface Category {
-  categoryCode: number;
-  categoryName: string;
-}
-
-interface JsonData {
-  statusCode: number;
-  statusName: string;
-  categories: Category[];
-}
+import { getCategoryList } from '../api/category';
 
 const MapPage = () => {
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const [iconNumbers, setIconNumbers] = useState<number[]>([]);
-  const { statusCode } = useParams();
+  const { statusCodeParam } = useParams();
+  const statusCode = Number(statusCodeParam);
 
   useEffect(() => {
     const fetchCategoryData = async () => {
       try {
-        const response = await axios.get<JsonData>(
-          `../../public/categoryList/${statusCode}.json`,
-        );
-        const jsonData = response.data;
-
         const codes: number[] = [];
         const names: string[] = [];
-        jsonData.categories.forEach((category) => {
+        const categoryList = await getCategoryList(statusCode);
+        categoryList.categories.forEach((category) => {
           const { categoryCode, categoryName } = category;
           codes.push(categoryCode);
           names.push(categoryName);

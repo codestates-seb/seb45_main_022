@@ -1,13 +1,15 @@
 import Button from '../common/Button';
-import { icons } from '../../utility/icon';
+import { Link } from 'react-router-dom';
+import { CATEGORY_ICON } from '../../utility/icon';
+import { CategoryCode } from '../../api/category';
 
 interface Props {
   title: string;
-  categoryCode: number;
+  categoryCode: CategoryCode;
 }
 
 const ServerList = ({ title, categoryCode }: Props) => {
-  const icon = icons[categoryCode];
+  const icon = CATEGORY_ICON[categoryCode];
 
   return (
     <div className="flex w-[100%] justify-between items-center cursor-pointer">
@@ -16,7 +18,9 @@ const ServerList = ({ title, categoryCode }: Props) => {
       </div>
       <div className="flex w-[50%] flex-col justify-center items-center gap-3">
         <div className="text-xl font-bold">{title}</div>
-        <Button>Stat Up !</Button>
+        <Link to={`/feed/${categoryCode}`}>
+          <Button>Stat Up !</Button>
+        </Link>
       </div>
     </div>
   );
