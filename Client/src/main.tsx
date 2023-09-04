@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <TitlePage />,
   },
   {
-    path: '/map/:statusCode',
+    path: '/map/:statusCodeParam',
     element: <MapPage />,
   },
   {
