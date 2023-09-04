@@ -1,6 +1,6 @@
-import { titleIcons } from '../../utility/icon';
-import { icons } from '../../utility/icon';
 import { Link } from 'react-router-dom';
+import { STATUS_ICON } from '../../utility/icon';
+import { CATEGORY_ICON } from '../../utility/icon';
 
 const Header = () => {
   return (
@@ -20,9 +20,9 @@ const Header = () => {
         to={`/map/0`}
         className="w-[250px] flex justify-between items-center"
       >
-        <img className="w-[50px] h-[50px]" src={icons[0]} alt="Icon" />
+        <img className="w-[50px] h-[50px]" src={CATEGORY_ICON[0]} alt="Icon" />
         <span className="text-[2rem] font-bold mb-[0.5rem]">헬스</span>
-        <img className="w-[50px] h-[50px]" src={icons[0]} alt="Icon" />
+        <img className="w-[50px] h-[50px]" src={CATEGORY_ICON[0]} alt="Icon" />
       </Link>
 
       {/* 스탯 아이콘, 레벨, 경험치 바 */}
@@ -30,7 +30,7 @@ const Header = () => {
         <div className="flex gap-[1rem]">
           <img
             className="w-[1rem] h-[1rem]"
-            src={titleIcons[0]}
+            src={STATUS_ICON[0]}
             alt="titleIcon"
           />
           <span className="text-[1rem]">Lv.100</span>

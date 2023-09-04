@@ -1,14 +1,15 @@
 import Button from '../common/Button';
-import { icons } from '../../utility/icon';
 import { Link } from 'react-router-dom';
+import { CATEGORY_ICON } from '../../utility/icon';
+import { CategoryCode } from '../../api/category';
 
 interface Props {
   title: string;
-  categoryCode: number;
+  categoryCode: CategoryCode;
 }
 
 const ServerList = ({ title, categoryCode }: Props) => {
-  const icon = icons[categoryCode];
+  const icon = CATEGORY_ICON[categoryCode];
 
   return (
     <div className="flex w-[100%] justify-between items-center cursor-pointer">

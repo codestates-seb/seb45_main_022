@@ -16,32 +16,28 @@ import strengthIcon from '../assets/icons/status-strength.png';
 import studyIcon from '../assets/icons/study.png';
 import travelIcon from '../assets/icons/travel.png';
 import weightIcon from '../assets/icons/weight.png';
+import { CategoryCode, StatusCode } from '../api/category';
 
-interface IconInfo {
-  [categoryCode: number]: string;
-  length: number;
-}
+export const STATUS_ICON: Record<StatusCode, string> = {
+  [StatusCode.STR]: strengthIcon,
+  [StatusCode.DEX]: speedIcon,
+  [StatusCode.INT]: intelligenceIcon,
+  [StatusCode.CHARM]: CharmIcon,
+  [StatusCode.LIVING]: livingIcon,
+};
 
-export const icons: IconInfo = [
-  weightIcon,
-  climbingIcon,
-  ballgameIcon,
-  esportsIcon,
-  joggingIcon,
-  readingIcon,
-  studyIcon,
-  itIcon,
-  beautyIcon,
-  musicIcon,
-  interiorIcon,
-  travelIcon,
-  cookingIcon,
-];
-
-export const titleIcons: IconInfo = [
-  strengthIcon,
-  speedIcon,
-  intelligenceIcon,
-  CharmIcon,
-  livingIcon,
-];
+export const CATEGORY_ICON: Record<CategoryCode, string> = {
+  [CategoryCode.WEIGHT]: weightIcon,
+  [CategoryCode.CLIMBING]: climbingIcon,
+  [CategoryCode.BALLGAME]: ballgameIcon,
+  [CategoryCode.ESPORTS]: esportsIcon,
+  [CategoryCode.JOGGING]: joggingIcon,
+  [CategoryCode.READING]: readingIcon,
+  [CategoryCode.STUDY]: studyIcon,
+  [CategoryCode.IT]: itIcon,
+  [CategoryCode.BEAUTY]: beautyIcon,
+  [CategoryCode.MUSIC]: musicIcon,
+  [CategoryCode.INTERIOR]: interiorIcon,
+  [CategoryCode.TRAVEL]: travelIcon,
+  [CategoryCode.COOKING]: cookingIcon,
+};
