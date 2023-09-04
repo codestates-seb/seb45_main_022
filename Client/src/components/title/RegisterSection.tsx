@@ -75,7 +75,7 @@ const Register = ({ changeSection }: RegisterProps) => {
     isLoading && <h1>Loading...</h1>;
   }
   return (
-    <ModalFrame height={550} width={700}>
+    <ModalFrame height={550} width={780}>
       <form
         onSubmit={handleRegister}
         className="flex flex-col items-center justify-center w-[550px] h-[450px] p-5 relative"

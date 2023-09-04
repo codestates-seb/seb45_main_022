@@ -3,25 +3,19 @@ import TitleScreen from '../components/title/TitleScreen';
 import StatusScreen from '../components/title/StatusScreen';
 import ProfileScreen from '../components/title/ProfileScreen';
 import AuthScreen from '../components/title/AuthScreen';
+import CheckInScreen from '../components/title/CheckInScreen';
 
 enum Screen {
   TITLE,
   STATUS,
   AUTH,
+  CHECKIN,
   PROFILE,
   DEFAULT,
 }
 
 const TitlePage = () => {
   const [screen, setScreen] = useState<Screen>(Screen.TITLE);
-
-  const showDefault = () => {
-    setScreen(Screen.DEFAULT);
-  };
-
-  const showAuth = () => {
-    setScreen(Screen.AUTH);
-  };
 
   return (
     <>
@@ -30,15 +24,40 @@ const TitlePage = () => {
           className="relative bg-title w-[1200px] h-[720px] bg-cover
         bg-no-repeat bg-center"
         >
-          {screen === Screen.TITLE && <TitleScreen onScreenClick={showAuth} />}
+          {screen === Screen.TITLE && (
+            <TitleScreen
+              onScreenClick={() => {
+                setScreen(Screen.AUTH);
+              }}
+            />
+          )}
           {screen === Screen.AUTH && (
-            <AuthScreen onLoginBtnClick={showDefault} />
+            <AuthScreen
+              onLoginBtnClick={() => {
+                setScreen(Screen.CHECKIN);
+              }}
+            />
+          )}
+          {screen === Screen.CHECKIN && (
+            <CheckInScreen
+              closeScreen={() => {
+                setScreen(Screen.DEFAULT);
+              }}
+            />
           )}
           {screen === Screen.STATUS && (
-            <StatusScreen closeScreen={showDefault} />
+            <StatusScreen
+              closeScreen={() => {
+                setScreen(Screen.DEFAULT);
+              }}
+            />
           )}
           {screen === Screen.PROFILE && (
-            <ProfileScreen closeScreen={showDefault} />
+            <ProfileScreen
+              closeScreen={() => {
+                setScreen(Screen.DEFAULT);
+              }}
+            />
           )}
           {screen === Screen.DEFAULT && (
             <>

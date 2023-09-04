@@ -57,11 +57,11 @@ const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
     setTimeout(() => {
       setLoadingScreen(false);
       onLoginBtnClick();
-    }, 2500);
+    }, 1000);
   };
 
   return (
-    <ModalFrame height={550} width={700}>
+    <ModalFrame height={550} width={800}>
       {loadingScreen ? (
         <LoadingBar />
       ) : (
