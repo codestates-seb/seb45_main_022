@@ -3,6 +3,7 @@ import Button from '../common/Button';
 import StatusChart from './StatusChart';
 import StatusListItem from './StatusListItem';
 import useUserInfo from '../../hooks/useUserInfo';
+import LoadingBar from '../common/LoadingBar';
 
 interface Props {
   showDefault: () => void;
@@ -13,7 +14,12 @@ const StatusScreen = ({ showDefault }: Props) => {
   const { isLoading, data } = userInfoQuery;
   const status = data?.statuses;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <Backdrop>
+        <LoadingBar />
+      </Backdrop>
+    );
 
   if (!status) {
     alert('정보를 불러오는 데 실패했습니다.');
