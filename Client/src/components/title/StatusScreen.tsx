@@ -6,10 +6,10 @@ import useUserInfo from '../../hooks/useUserInfo';
 import LoadingBar from '../common/LoadingBar';
 
 interface Props {
-  showDefault: () => void;
+  closeScreen: () => void;
 }
 
-const StatusScreen = ({ showDefault }: Props) => {
+const StatusScreen = ({ closeScreen }: Props) => {
   const { userInfoQuery } = useUserInfo();
   const { isLoading, data } = userInfoQuery;
   const status = data?.statuses;
@@ -23,7 +23,7 @@ const StatusScreen = ({ showDefault }: Props) => {
 
   if (!status) {
     alert('정보를 불러오는 데 실패했습니다.');
-    showDefault();
+    closeScreen();
     return null;
   }
 
@@ -41,7 +41,7 @@ const StatusScreen = ({ showDefault }: Props) => {
             ))}
           </div>
         </div>
-        <Button onClick={showDefault}>Close</Button>
+        <Button onClick={closeScreen}>Close</Button>
       </div>
     </Backdrop>
   );

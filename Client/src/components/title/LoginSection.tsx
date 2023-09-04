@@ -14,14 +14,14 @@ import LoadingBar from '../common/LoadingBar';
 
 interface LoginProps {
   changeSection: () => void;
-  showDefault: () => void;
+  onLoginBtnClick: () => void;
 }
 
 interface TokenData {
   access: string;
   refresh: string;
 }
-const Login = ({ changeSection, showDefault }: LoginProps) => {
+const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loginValidate, setLoginValidate] = useState<boolean>(false);
@@ -56,7 +56,7 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
     setLoadingScreen(true);
     setTimeout(() => {
       setLoadingScreen(false);
-      showDefault();
+      onLoginBtnClick();
     }, 2500);
   };
 

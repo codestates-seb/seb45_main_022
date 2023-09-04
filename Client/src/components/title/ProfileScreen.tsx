@@ -5,10 +5,10 @@ import { useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
 
 interface Props {
-  showDefault: () => void;
+  closeScreen: () => void;
 }
 
-const ProfileScreen = ({ showDefault }: Props) => {
+const ProfileScreen = ({ closeScreen }: Props) => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
 
   const { userInfoQuery } = useUserInfo();
@@ -23,7 +23,7 @@ const ProfileScreen = ({ showDefault }: Props) => {
 
   if (!userInfo) {
     alert('정보를 불러오는 데 실패했습니다.');
-    showDefault();
+    closeScreen();
     return null;
   }
   return (
@@ -47,7 +47,7 @@ const ProfileScreen = ({ showDefault }: Props) => {
               <h1 className="text-[1rem] text-center">
                 NAME
                 <br />
-                <span className="font-[ui-sans-serif] text-[2.5rem] font-extrabold">
+                <span className="font-[Pretendard] text-[2.5rem] font-extrabold">
                   {userInfo.nickName}
                 </span>
               </h1>
@@ -113,7 +113,7 @@ const ProfileScreen = ({ showDefault }: Props) => {
             </div>
           </div>
         </div>
-        <Button onClick={showDefault}>Close</Button>
+        <Button onClick={closeScreen}>Close</Button>
       </div>
     </Backdrop>
   );
