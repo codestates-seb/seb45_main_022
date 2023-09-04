@@ -1,0 +1,72 @@
+{
+  "data": [
+    {
+      "feedId": 10,
+      "nickName": "송민",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/10",
+      "statId": 2,
+      "level": 38,
+      "body": "여섯 번째 피드의 내용을 수정하였습니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 10,
+          "body": "수정된태그"
+        },
+        {
+          "hashTagId": 11,
+          "body": "임의태그"
+        }
+      ],
+      "likeCount": 12,
+      "commentCount": 7,
+      "createdAt": "2023-09-08T08:45:32.654321",
+      "modifiedAt": "2023-09-08T08:50:59.111111"
+    },
+    {
+      "feedId": 11,
+      "nickName": "지우",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/11",
+      "statId": 2,
+      "level": 44,
+      "body": "가랏 피카츄!!!",
+      "feedHashTags": [
+        {
+          "hashTagId": 12,
+          "body": "새로운해시태그"
+        }
+      ],
+      "likeCount": 15,
+      "commentCount": 6,
+      "createdAt": "2023-09-09T17:30:15.987654",
+      "modifiedAt": "2023-09-09T17:35:45.444444"
+    },
+    {
+      "feedId": 12,
+      "nickName": "유진",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/12",
+      "statId": 2,
+      "level": 59,
+      "body": "열두 번째 피드 내용을 공유합니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 13,
+          "body": "새로운태그"
+        },
+        {
+          "hashTagId": 14,
+          "body": "데이터변경"
+        }
+      ],
+      "likeCount": 20,
+      "commentCount": 8,
+      "createdAt": "2023-09-10T21:10:10.101010",
+      "modifiedAt": "2023-09-10T21:15:15.151515"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 3,
+    "totalPages": 1
+  }
+}

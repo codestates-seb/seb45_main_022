@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "feedId": 15,
+      "nickName": "영희",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/15",
+      "statId": 3,
+      "level": 15,
+      "body": "열두 번째 피드 내용을 공유합니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 17,
+          "body": "새로운태그"
+        },
+        {
+          "hashTagId": 18,
+          "body": "데이터변경"
+        }
+      ],
+      "likeCount": 21,
+      "commentCount": 9,
+      "createdAt": "2023-09-13T21:10:10.101010",
+      "modifiedAt": "2023-09-13T21:15:15.151515"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

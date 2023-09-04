@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "feedId": 21,
+      "nickName": "이경영",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/21",
+      "statId": 5,
+      "level": 5,
+      "body": "조와써~!!!!!",
+      "feedHashTags": [
+        {
+          "hashTagId": 25,
+          "body": "카테고리3태그"
+        }
+      ],
+      "likeCount": 23,
+      "commentCount": 8,
+      "createdAt": "2023-09-19T21:10:10.101010",
+      "modifiedAt": "2023-09-19T21:15:15.151515"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

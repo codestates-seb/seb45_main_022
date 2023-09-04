@@ -1,0 +1,63 @@
+{
+  "data": [
+    {
+      "feedId": 7,
+      "nickName": "아리",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/7",
+      "statId": 2,
+      "level": 33,
+      "body": "우리 같이..",
+      "feedHashTags": [
+        {
+          "hashTagId": 7,
+          "body": "새로운해쉬태그"
+        },
+        {
+          "hashTagId": 8,
+          "body": "변경된태그"
+        }
+      ],
+      "likeCount": 7,
+      "commentCount": 4,
+      "createdAt": "2023-09-05T11:55:27.876543",
+      "modifiedAt": "2023-09-05T11:58:32.123456"
+    },
+    {
+      "feedId": 8,
+      "nickName": "지영",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/8",
+      "statId": 2,
+      "level": 27,
+      "body": "다섯 번째 피드의 내용입니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 9,
+          "body": "다섯번째태그"
+        }
+      ],
+      "likeCount": 3,
+      "commentCount": 1,
+      "createdAt": "2023-09-06T15:20:44.987654",
+      "modifiedAt": "2023-09-06T15:25:00.444444"
+    },
+    {
+      "feedId": 9,
+      "nickName": "성우",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/9",
+      "statId": 2,
+      "level": 41,
+      "body": "여섯 번째 피드 내용을 공유합니다.",
+      "feedHashTags": [],
+      "likeCount": 8,
+      "commentCount": 5,
+      "createdAt": "2023-09-07T20:11:11.111111",
+      "modifiedAt": "2023-09-07T20:15:15.555555"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 3,
+    "totalPages": 1
+  }
+}
