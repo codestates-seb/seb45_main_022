@@ -1,18 +1,18 @@
 {
   "statusCode": 2,
-  "statusName": "지력",
+  "statusName": "민첩",
   "categories": [
     {
+      "categoryCode": 3,
+      "categoryName": "구기종목"
+    },
+    {
+      "categoryCode": 4,
+      "categoryName": "e스포츠"
+    },
+    {
       "categoryCode": 5,
-      "categoryName": "독서"
-    },
-    {
-      "categoryCode": 6,
-      "categoryName": "스터디"
-    },
-    {
-      "categoryCode": 7,
-      "categoryName": "IT"
+      "categoryName": "조깅"
     }
   ]
 }

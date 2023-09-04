@@ -1,18 +1,14 @@
 {
   "statusCode": 4,
-  "statusName": "생활력",
+  "statusName": "매력",
   "categories": [
     {
+      "categoryCode": 9,
+      "categoryName": "뷰티"
+    },
+    {
       "categoryCode": 10,
-      "categoryName": "인테리어"
-    },
-    {
-      "categoryCode": 11,
-      "categoryName": "여행"
-    },
-    {
-      "categoryCode": 12,
-      "categoryName": "요리"
+      "categoryName": "음악"
     }
   ]
 }
