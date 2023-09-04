@@ -9,6 +9,7 @@ import com.codestatus.domain.user.service.LevelService;
 import com.codestatus.domain.user.service.UserService;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class LikeService {
     @Value("${exp.like-exp}")
     private int likeExp;
@@ -24,13 +26,6 @@ public class LikeService {
     private final LevelService levelService;
     private final FeedService feedService;
     private final LikeRepository likeRepository;
-
-    public LikeService(UserService userService, LevelService levelService, FeedService feedService, LikeRepository likeRepository) {
-        this.levelService = levelService;
-        this.userService = userService;
-        this.feedService = feedService;
-        this.likeRepository = likeRepository;
-    }
 
     public void feedLikeOrDisLike(long feedId, long userId){
         // user, feed 유효성 검사
