@@ -9,7 +9,6 @@ import com.codestatus.domain.feed.dto.FeedsResponseDto;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.hashTag.dto.HashTagResponseDto;
 import com.codestatus.domain.user.entity.User;
-import com.codestatus.global.auth.dto.PrincipalDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;

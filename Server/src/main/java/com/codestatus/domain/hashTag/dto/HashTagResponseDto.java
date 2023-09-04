@@ -1,7 +1,5 @@
 package com.codestatus.domain.hashTag.dto;
 
-
-import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

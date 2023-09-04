@@ -12,7 +12,6 @@ import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.feed.service.FeedServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @Validated
@@ -48,7 +46,7 @@ public class FeedController {
                 categoryMapper.categoryIdToCategory(categoryId),
                 requestBody,
                 userMapper.userIdToUser(principal.getId())); //피드조립.
-        Feed createdFeed = feedServiceImpl.createAndGetEntity(feed); //피드 생성
+        feedServiceImpl.createEntity(feed); //피드 생성
         hashTagServiceImpl.createEntityByString(feed, requestBody.getHashTag()); //해쉬태그와 피드 연결
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -136,18 +134,19 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
-    @GetMapping("/findByHashTag/{categoryId}")
-    public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") long categoryId,
-                                                    @RequestParam int page,
-                                                    @RequestParam int size,
-                                                    @RequestParam String query) {
-        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, query, page-1, size);
-        List<Feed> feeds = pageFeeds.getContent();
-
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
-    }
+    //HASHTAG검색 구현예정
+//    @GetMapping("/findByHashTag/{categoryId}")
+//    public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") long categoryId,
+//                                                    @RequestParam int page,
+//                                                    @RequestParam int size,
+//                                                    @RequestParam String query) {
+//        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, query, page-1, size);
+//        List<Feed> feeds = pageFeeds.getContent();
+//
+//        return new ResponseEntity<>(
+//                new MultiResponseDto<>(
+//                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+//    }
 
     //피드아이디로 조회하여 피드 바디 수정
     @PatchMapping("/{feedId}")
