@@ -1,12 +1,6 @@
 import { titleIcons } from '../../utility/icon';
 import { Link } from 'react-router-dom';
-
-interface Status {
-  statName: string;
-  statLevel: number;
-  statExp: number;
-  requiredExp: number;
-}
+import { Status } from '../../api/user';
 
 interface Props {
   status: Status;
