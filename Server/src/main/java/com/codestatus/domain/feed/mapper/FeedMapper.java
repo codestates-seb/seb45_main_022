@@ -1,5 +1,6 @@
 package com.codestatus.domain.feed.mapper;
 
+import com.codestatus.domain.category.entity.Category;
 import com.codestatus.domain.comment.dto.CommentResponseDto;
 import com.codestatus.domain.feed.dto.FeedPatchDto;
 import com.codestatus.domain.feed.dto.FeedPostDto;
@@ -7,6 +8,8 @@ import com.codestatus.domain.feed.dto.FeedResponseDto;
 import com.codestatus.domain.feed.dto.FeedsResponseDto;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.hashTag.dto.HashTagResponseDto;
+import com.codestatus.domain.user.entity.User;
+import com.codestatus.global.auth.dto.PrincipalDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -69,11 +72,13 @@ public interface FeedMapper {
                 .collect(Collectors.toList());
 
     }
-    default Feed feedPostDtoToFeed(FeedPostDto feedPostDto){
+    default Feed feedPostDtoToFeed(Category category, FeedPostDto requestBody, User user){
         Feed feed = new Feed();
-        feed.setBody(feedPostDto.getBody());
+        feed.setBody(requestBody.getBody());
+        feed.setCategory(category);
+        feed.setUser(user);
         return feed;
-    };
+    }
 
     Feed feedPatchDtoToFeed(FeedPatchDto feedPatchDto);
     default Feed feedIdToFeed(Long feedId){
