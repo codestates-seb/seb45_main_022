@@ -69,7 +69,7 @@ public class UserService implements BaseService<User> {
 
     // 유저 조회
     public User findEntity(long userId) {
-        User user = findVerifiedUser(userId); // 유저 정보를 가져옴
+        User user = repository.findVerifiedUser(userId); // 유저 정보를 가져옴
         if (user.getUserStatus() == User.UserStatus.USER_ACTIVE) { // 유저가 활성화 상태라면 유저 정보 반환
             return user;
         } else if (user.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 탈퇴 상태라면 예외 발생
@@ -86,7 +86,7 @@ public class UserService implements BaseService<User> {
 
     // 유저 닉네임 수정
     public void updateUserNickName(User user, long loginUserId) {
-        User findUser = findVerifiedUser(loginUserId);
+        User findUser = repository.findVerifiedUser(loginUserId);
 
         if (!findUser.getNickName().equals(user.getNickName())) { // 유저 닉네임이 수정되었다면
             verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사 실행
@@ -97,7 +97,7 @@ public class UserService implements BaseService<User> {
 
     // 비밀번호 변경
     public void updatePassword(User user, long loginUserId) {
-        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        User findUser = repository.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         // 현재 비밀번호와 같다면 에러
         if (passwordEncoder.matches(user.getPassword(), findUser.getPassword())) {
@@ -110,7 +110,7 @@ public class UserService implements BaseService<User> {
 
     // 유저 탈퇴
     public void deleteEntity(long loginUserId, long userId) {
-        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        User findUser = repository.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         if (findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 이미 탈퇴 상태라면 예외 발생
             throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
         }
@@ -120,26 +120,10 @@ public class UserService implements BaseService<User> {
 
     // 프로필 이미지 업로드
     public void uploadProfileImage(MultipartFile imageFile, long loginUserId) {
-        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        User findUser = repository.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         String fileUrl = fileStorageService.storeFile(imageFile); // 파일 업로드
         findUser.setProfileImage(fileUrl); // 유저 프로필 이미지 경로 저장
         repository.save(findUser); // 유저 저장
-    }
-
-    // 가입된 유저인지 조회
-    public User findVerifiedUser(Long userId) {
-        Optional<User> OptionalUser =
-                repository.findById(userId);
-
-        User findUser =
-                OptionalUser.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.USER_NOT_FOUND)); // 유저가 없다면 예외 발생
-
-        if(findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 탈퇴 상태라면 예외 발생
-            throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
-        }
-
-        return findUser;
     }
 
     // 이메일 중복 검사
@@ -194,6 +178,4 @@ public class UserService implements BaseService<User> {
 
         return id;
     }
-
-
 }

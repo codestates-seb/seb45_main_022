@@ -1,4 +1,4 @@
-package com.codestatus.global.utils;
+package com.codestatus.domain.utils;
 
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;

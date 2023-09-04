@@ -19,16 +19,13 @@ public class LevelService {
     private int attendanceExp;
     private final UserRepository userRepository;
     private final ExpTableRepository expTableRepository;
-    private final UserService userService;
-
-    public LevelService(UserRepository userRepository, ExpTableRepository expTableRepository, UserService userService) {
+    public LevelService(UserRepository userRepository, ExpTableRepository expTableRepository) {
         this.userRepository = userRepository;
         this.expTableRepository = expTableRepository;
-        this.userService = userService;
     }
     // 출석체크
     public void checkAttendance(int chosenStat, long loginId) { // chosenStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
-        User findUser = userService.findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        User findUser = userRepository.findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         if(findUser.isAttendance()) { // 이미 출석체크를 했다면 예외 발생
             throw new BusinessLogicException(ExceptionCode.USER_ALREADY_CHECKED_ATTENDANCE);

@@ -2,14 +2,10 @@ package com.codestatus.domain.comment.service;
 
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
-import com.codestatus.domain.feed.entity.Feed;
-import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
-import com.codestatus.domain.user.entity.User;
-import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.service.BaseService;
-import com.codestatus.global.utils.CheckUser;
+import com.codestatus.domain.utils.CheckUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
