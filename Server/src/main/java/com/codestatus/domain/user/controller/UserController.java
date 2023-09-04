@@ -67,9 +67,9 @@ public class UserController {
 
     // 출석체크 컨트롤러
     @PostMapping("/mypage/attendance/{chosenStat}")
-    public ResponseEntity checkAttendance(@PathVariable @Min(0) @Max(4) int chosenStat,
+    public ResponseEntity checkAttendance(@PathVariable @Min(1) @Max(5) int chosenStat,
                                           @AuthenticationPrincipal PrincipalDto principal) {
-        levelServiceImpl.checkAttendance(chosenStat, principal.getId()); // 출석체크 메서드 호출
+        levelServiceImpl.checkAttendance(chosenStat - 1, principal.getId()); // 출석체크 메서드 호출
         return ResponseEntity.status(HttpStatus.OK).body("attendance check success"); // 출석체크 성공 메시지 반환
     }
 

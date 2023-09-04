@@ -24,7 +24,7 @@ public class LevelServiceImpl implements LevelService {
     private final UserService userService;
 
     // 출석체크
-    public void checkAttendance(int chosenStat, long loginId) { // chosenStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
+    public void checkAttendance(int chosenStat, long loginId) { // chosenStat: 1(str), 2(dex), 3(int), 4(charm), 5(vitality)
         User findUser = userService.findVerifiedUser(loginId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         if(findUser.isAttendance()) { // 이미 출석체크를 했다면 예외 발생
@@ -60,9 +60,9 @@ public class LevelServiceImpl implements LevelService {
         userRepository.saveAll(users);
     }
 
-    private void levelUpCheck(User user, int chooseStat) { // chooseStat: 0(str), 1(dex), 2(int), 3(charm), 4(vitality)
-        int currentLevel = user.getStatuses().get(chooseStat).getStatLevel(); // 현재 레벨
-        int currentExp = user.getStatuses().get(chooseStat).getStatExp(); // 현재 경험치
+    private void levelUpCheck(User user, int chosenStat) { // chooseStat: 1(str), 2(dex), 3(int), 4(charm), 5(vitality)
+        int currentLevel = user.getStatuses().get(chosenStat).getStatLevel(); // 현재 레벨
+        int currentExp = user.getStatuses().get(chosenStat).getStatExp(); // 현재 경험치
         int requiredExp = expTableRepository.findById((long) currentLevel).get().getRequired(); // 필요 경험치
         int maxLevel = 100; // 최대 레벨
 
@@ -72,14 +72,14 @@ public class LevelServiceImpl implements LevelService {
 
         if (currentExp >= requiredExp) { // 현재 경험치가 필요 경험치보다 많다면 레벨업
             currentLevel += 1; // 레벨업
-            user.getStatuses().get(chooseStat).setStatLevel(currentLevel); // 레벨 저장
+            user.getStatuses().get(chosenStat).setStatLevel(currentLevel); // 레벨 저장
             currentExp -= requiredExp; // 현재 경험치에서 필요 경험치 차감
-            user.getStatuses().get(chooseStat).setStatExp(currentExp); // 경험치 차감
+            user.getStatuses().get(chosenStat).setStatExp(currentExp); // 경험치 차감
         }
 
         // 현재 레벨에서 다음 레벨까지 필요한 경험치 = 다음 레벨까지 필요한 경험치 - 현재 레벨까지 필요한 경험치 (백분률로 저장)
         int nextLevelRequiredExp = expTableRepository.findById((long) (currentLevel)).get().getRequired() - currentExp;
-        user.getStatuses().get(chooseStat).setRequiredExp(nextLevelRequiredExp); // 다음 레벨까지 필요한 경험치 저장
+        user.getStatuses().get(chosenStat).setRequiredExp(nextLevelRequiredExp); // 다음 레벨까지 필요한 경험치 저장
 
         userRepository.save(user); // 유저 정보 저장
     }
