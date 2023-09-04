@@ -21,12 +21,19 @@ const UserPost = () => {
       nickname: '흑룡',
       text: '나 3대 500임 Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis ratione ipsum et placeat inventore ut excepturi amet quia minima reiciendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, recusandae incidunt? Doloremque voluptatum consequatur ab aliquam. Illo inventore adipisci odio',
     },
+    { id: 4, nickname: '흑룡', text: '나 3대 500임' },
+    { id: 5, nickname: '흑룡', text: '나 3대 500임' },
   ]);
+  const [displayComments, setDisplayComments] = useState(3);
+
+  const expandComments = () => {
+    setDisplayComments(displayComments + 3);
+  };
 
   return (
     // <PostFrame width={1100} height={550}>
-    <div className="p-4 flex flex-col items-center w-[900px] h-[700px] bg-[rgba(0,0,0,0.2)] border-4">
-      <div className="flex bg-[#cbcbe6] ">
+    <div className="p-4 flex flex-col items-center w-[900px] h-[700px] bg-[rgba(111,111,111,0.1)] border-4">
+      <div className="flex ">
         <div className=" border-r-2 py-2 flex flex-col items-center justify-center w-[200px] h-[300px]  ">
           <img src={profileImg} width={90} alt="profile pic" className="mb-2" />
           <span className="font-[Pretendard]">동훈</span>
@@ -47,19 +54,31 @@ const UserPost = () => {
           />
         </div>
       </div>
-      <div className="bg-[#90aa90] h-[280px]  w-[800px]  p-4">
+      <div className="h-[280px]  w-[800px]  p-4 overflow-y-scroll">
         <div className="   flex flex-col justify-evenly  ">
-          {comments &&
-            comments.map((comment) => (
-              <div key={comment.id} className=" h-[35px] mb-1">
-                <span className="w-[180px]  text-xl mr-5 font-bold font-[Pretendard]">
-                  {comment.nickname}
-                </span>
-                <span className="font-[Pretendard]">{comment.text}</span>
-              </div>
-            ))}
+          {comments.slice(0, displayComments).map((comment) => (
+            <div key={comment.id} className=" h-[35px] mb-1">
+              <span className="w-[180px]  text-xl mr-5 font-bold font-[Pretendard]">
+                {comment.nickname}
+              </span>
+              <span className="font-[Pretendard]">{comment.text}</span>
+            </div>
+          ))}
         </div>
       </div>
+      {comments.length > 3 && (
+        <div>
+          <button
+            onClick={expandComments}
+            className="font-[Pretendard] ml-4 bg-white w-[200px]  rounded-xl text-xm"
+          >
+            View More Comments
+          </button>{' '}
+          <button className="font-[Pretendard] ml-4 bg-white w-[200px]  rounded-xl text-xm">
+            Hide Comments
+          </button>{' '}
+        </div>
+      )}
       <div className="flex item-center m-auto">
         <input
           type="text"
@@ -67,7 +86,7 @@ const UserPost = () => {
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <button className="font-[Pretendard] ml-4 bg-white w-[0px] rounded-xl text-xm">
+        <button className="font-[Pretendard] ml-4 bg-white w-[100px] rounded-xl text-xm">
           Submit
         </button>
       </div>
