@@ -7,7 +7,7 @@ import com.codestatus.domain.comment.dto.CommentPostDto;
 import com.codestatus.domain.comment.dto.CommnetPatchDto;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.mapper.CommentMapper;
-import com.codestatus.domain.comment.service.CommentService;
+import com.codestatus.domain.comment.service.CommentServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,13 +20,13 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-    private final CommentService commentService;
+    private final CommentServiceImpl commentServiceImpl;
     private final CommentMapper commentMapper;
     private final UserMapper userMapper;
     private final FeedMapper feedMapper;
 
-    public CommentController(CommentService commentService, CommentMapper commentMapper, UserMapper userMapper, FeedMapper feedMapper) {
-        this.commentService = commentService;
+    public CommentController(CommentServiceImpl commentServiceImpl, CommentMapper commentMapper, UserMapper userMapper, FeedMapper feedMapper) {
+        this.commentServiceImpl = commentServiceImpl;
         this.commentMapper = commentMapper;
         this.userMapper = userMapper;
         this.feedMapper = feedMapper;
@@ -40,7 +40,7 @@ public class CommentController {
         comment.setFeed(feedMapper.feedIdToFeed(feedId));
         comment.setUser(userMapper.userIdToUser(principal.getId()));
 
-        commentService.createEntity(comment);
+        commentServiceImpl.createEntity(comment);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -52,7 +52,7 @@ public class CommentController {
         Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
         comment.setCommentId(commentId);
 
-        commentService.updateEntity(comment, principal.getId());
+        commentServiceImpl.updateEntity(comment, principal.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity deleteComment(@PathVariable("commentId") long commentId,
                                        @AuthenticationPrincipal PrincipalDto principal){
-        commentService.deleteEntity(commentId, principal.getId());
+        commentServiceImpl.deleteEntity(commentId, principal.getId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

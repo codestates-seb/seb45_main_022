@@ -3,8 +3,8 @@ package com.codestatus.domain.user.controller;
 import com.codestatus.domain.user.dto.UserDto;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.mapper.UserMapper;
-import com.codestatus.domain.user.service.LevelService;
-import com.codestatus.domain.user.service.UserService;
+import com.codestatus.domain.user.service.LevelServiceImpl;
+import com.codestatus.domain.user.service.UserServiceImpl;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,13 @@ import javax.validation.constraints.Min;
 @RequestMapping("/user")
 public class UserController {
     private final UserMapper userMapper;
-    private final UserService service;
-    private final LevelService levelService;
+    private final UserServiceImpl service;
+    private final LevelServiceImpl levelServiceImpl;
 
-    public UserController(UserMapper userMapper, UserService service, LevelService levelService) {
+    public UserController(UserMapper userMapper, UserServiceImpl service, LevelServiceImpl levelServiceImpl) {
         this.userMapper = userMapper;
         this.service = service;
-        this.levelService = levelService;
+        this.levelServiceImpl = levelServiceImpl;
     }
 
     // 유저 가입 컨트롤러
@@ -69,7 +69,7 @@ public class UserController {
     @PostMapping("/mypage/attendance/{chosenStat}")
     public ResponseEntity checkAttendance(@PathVariable @Min(0) @Max(4) int chosenStat,
                                           @AuthenticationPrincipal PrincipalDto principal) {
-        levelService.checkAttendance(chosenStat, principal.getId()); // 출석체크 메서드 호출
+        levelServiceImpl.checkAttendance(chosenStat, principal.getId()); // 출석체크 메서드 호출
         return ResponseEntity.status(HttpStatus.OK).body("attendance check success"); // 출석체크 성공 메시지 반환
     }
 
