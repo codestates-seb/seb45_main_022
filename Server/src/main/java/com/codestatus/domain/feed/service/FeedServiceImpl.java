@@ -1,13 +1,20 @@
 package com.codestatus.domain.feed.service;
 
+import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.service.CommentService;
+import com.codestatus.domain.feed.dto.FeedPostDto;
+import com.codestatus.domain.feed.mapper.FeedMapper;
+import com.codestatus.domain.hashTag.service.HashTagService;
+import com.codestatus.domain.user.mapper.UserMapper;
+import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.global.utils.CheckUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +24,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,26 +33,49 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
-
     private final FeedRepository feedRepository;
+
     private final CommentService commentService;
+
+    private final FeedMapper feedMapper;
+
+    private final CategoryMapper categoryMapper;
+
+    private final UserMapper userMapper;
+
+    private final HashTagService hashTagService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public void createEntity(Feed feed) {
         feedRepository.save(feed);
     }
 
+    public Feed createAndGetEntity(Feed feed) {
+        return feedRepository.save(feed);
+    }
+
     //해당하는 카테고리 ID와 피드 ID로 삭제되지 않은 피드 하나 조회
     @Transactional(readOnly = true)
-    public Feed findFeedByCategoryAndFeedId(long categoryId, long feedId){
-        Optional<Feed> optionalFeed = feedRepository.findFeedByCategoryIdAndFeedIdAndDeletedIsFalse(categoryId, feedId);
-
-        return optionalFeed.orElseThrow(()-> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
+    public Feed findVerifiedFeed(long feedId){
+        Optional<Feed> optionalFeed = feedRepository.findFeedByFeedIdAndDeletedIsFalse(feedId);
+        return optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
     }
 
     //일주일 안에 작성된 피드를 좋아요 순으로 정렬해서 조회
     @Transactional(readOnly = true)
+    public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(categoryId, pageable);
+    }
+
+    //카테고리 내 피드리스트 조회
+    @Transactional(readOnly = true)
     public Page<Feed> findWeeklyBestFeeds(int page, int size) {
+
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
         Sort sort = Sort.by(Sort.Direction.DESC, "likes"); // likes 내림차순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -59,18 +90,28 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.findByBodyAndDeletedIsFalse(text, pageable);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(categoryId, pageable);
-    }
-
+    //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 바디 가지고 있는 피드목록 조회
     @Transactional(readOnly = true)
     public Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCategoryAndBodyAndDeleted(categoryId, text, pageable);
+        return feedRepository.findAllByCategory_CategoryIdAndBodyContainingAndDeletedIsFalse(categoryId, text, pageable);
+    }
+
+    //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 유저가 쓴 피드목록 조회
+    @Transactional(readOnly = true)
+    public Page<Feed> findFeedByUserAndCategory(long categoryId, String text, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findByUserAndDeleted(categoryId, text, pageable);
+    }
+
+    //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
+    @Transactional(readOnly = true)
+    public Page<Feed> findFeedByHashTagAndCategory(long categoryId, String text, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findByHashTagAndDeleted(categoryId, text, pageable);
     }
 
     //삭제되지않은 피드목록 조회
@@ -87,9 +128,9 @@ public class FeedServiceImpl implements FeedService {
         PageRequest pageRequest = PageRequest.of(page, size);
         return feedRepository.findAll(pageRequest);
     }
-
     // feed가 존재하는지, 요청한 유저와 리소스의 주인이 일치하는지 검사하고,
     // body값의 null 판별을 통해 수정
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void updateEntity(Feed feed, long userId){
@@ -101,8 +142,8 @@ public class FeedServiceImpl implements FeedService {
 
         feedRepository.save(findFeed);
     }
-
     //db에서 완전 삭제가 아닌 deleted=true 로 수정
+
     @Override
     public void deleteEntity(long feedId, long userId){
         Feed findFeed = findVerifiedFeed(feedId);
@@ -113,12 +154,5 @@ public class FeedServiceImpl implements FeedService {
         List<Comment> comments = findFeed.getComments();
         commentService.deleteComment(comments);
 
-    }
-
-    // feed가 존재하는지 검사
-    @Transactional(readOnly = true)
-    public Feed findVerifiedFeed(long feedId){
-        Optional<Feed> optionalFeed = feedRepository.findFeedByFeedIdAndDeletedIsFalse(feedId);
-        return optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
     }
 }
