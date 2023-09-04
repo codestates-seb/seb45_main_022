@@ -1,6 +1,7 @@
 package com.codestatus.domain.feed.dto;
 
 import com.codestatus.domain.hashTag.dto.HashTagResponseDto;
+import com.codestatus.domain.status.entity.Stat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,8 @@ public class FeedsResponseDto {
     private String nickName;
 
     private String profileImage;
+
+    private String statName;
 
     private int level;
 

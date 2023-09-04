@@ -79,7 +79,7 @@ public class FeedController {
 
     //해당 카테고리 내의 피드목록 조회
     @GetMapping("/{categoryId}")
-    public ResponseEntity getFeedsByCategory(@PathVariable("categoryId") long categoryId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity getFeedsByCategory(@PathVariable long categoryId, @RequestParam int page, @RequestParam int size) {
         Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByCategory(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
 

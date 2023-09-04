@@ -20,6 +20,8 @@ public class FeedResponseDto {
 
     private String profileImage;
 
+    private String statName;
+
     private int level;
 
     private String body;

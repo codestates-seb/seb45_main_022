@@ -39,6 +39,6 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
 
     Page<Feed> findAllByDeletedIsFalse(Pageable pageable);
 
-
+    Page<Feed> findAllByDeletedIsFalseAndCategoryCategoryId(long categoryId, Pageable pageable);
 
 }

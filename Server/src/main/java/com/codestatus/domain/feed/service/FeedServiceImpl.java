@@ -63,7 +63,7 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllFeedByCategory(categoryId, pageable);
+        return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(categoryId, pageable);
     }
 
     @Transactional(readOnly = true)

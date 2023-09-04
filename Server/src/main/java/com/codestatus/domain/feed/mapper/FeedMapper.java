@@ -20,7 +20,8 @@ public interface FeedMapper {
                 .feedId(feed.getFeedId())
                 .nickName(feed.getUser().getNickName())
                 .profileImage(feed.getUser().getProfileImage())
-                .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue()).getStatLevel())
+                .statName(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatName())
+                .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
                 .body(feed.getBody())
                 .feedHashTags(feed.getFeedHashTags().stream()
                         .map(feedHashTag -> HashTagResponseDto.builder()
@@ -51,7 +52,8 @@ public interface FeedMapper {
                         .feedId(feed.getFeedId())
                         .nickName(feed.getUser().getNickName())
                         .profileImage(feed.getUser().getProfileImage())
-                        .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue()).getStatLevel())
+                        .statName(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatName())
+                        .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
                         .body(feed.getBody())
                         .feedHashTags(feed.getFeedHashTags().stream()
                                 .map(feedHashTag -> HashTagResponseDto.builder()
@@ -62,6 +64,7 @@ public interface FeedMapper {
                         .likeCount(feed.getLikes().size())
                         .commentCount(feed.getComments().size())
                         .createdAt(feed.getCreatedAt())
+                        .modifiedAt(feed.getModifiedAt())
                         .build())
                 .collect(Collectors.toList());
 
