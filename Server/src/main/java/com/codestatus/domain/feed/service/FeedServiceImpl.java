@@ -3,18 +3,15 @@ package com.codestatus.domain.feed.service;
 import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.service.CommentService;
-import com.codestatus.domain.feed.dto.FeedPostDto;
 import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.hashTag.service.HashTagService;
 import com.codestatus.domain.user.mapper.UserMapper;
-import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.global.utils.CheckUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,16 +40,9 @@ public class FeedServiceImpl implements FeedService {
 
     private final HashTagService hashTagService;
 
-    @Autowired
-    private EntityManager entityManager;
-
     @Override
     public void createEntity(Feed feed) {
         feedRepository.save(feed);
-    }
-
-    public Feed createAndGetEntity(Feed feed) {
-        return feedRepository.save(feed);
     }
 
     //해당하는 카테고리 ID와 피드 ID로 삭제되지 않은 피드 하나 조회
@@ -106,13 +94,8 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.findByUserAndDeleted(categoryId, text, pageable);
     }
 
-    //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
-    @Transactional(readOnly = true)
-    public Page<Feed> findFeedByHashTagAndCategory(long categoryId, String text, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByHashTagAndDeleted(categoryId, text, pageable);
-    }
+    //(구현예정)(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
+
 
     //삭제되지않은 피드목록 조회
     @Transactional(readOnly = true)
