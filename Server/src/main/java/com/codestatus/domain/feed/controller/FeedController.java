@@ -11,6 +11,7 @@ import com.codestatus.domain.feed.dto.FeedResponseDto;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.feed.service.FeedServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Validated
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/feed")
 public class FeedController {
     @Autowired
@@ -38,15 +40,6 @@ public class FeedController {
     private final CategoryMapper categoryMapper;
 
     private final UserMapper userMapper;
-
-
-    public FeedController(FeedServiceImpl feedServiceImpl, HashTagServiceImpl hashTagServiceImpl, FeedMapper feedMapper, CategoryMapper categoryMapper, UserMapper userMapper) {
-        this.feedServiceImpl = feedServiceImpl;
-        this.hashTagServiceImpl = hashTagServiceImpl;
-        this.feedMapper = feedMapper;
-        this.categoryMapper = categoryMapper;
-        this.userMapper = userMapper;
-    }
 
     //해당하는 카테고리에 피드 작성
     @PostMapping("/{categoryId}")
