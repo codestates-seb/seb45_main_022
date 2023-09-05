@@ -3,7 +3,7 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useState } from 'react';
 import 'cropperjs/dist/cropper.css';
-import ImageCropperModal from './ImageCropperModal';
+import ImageCropperModal from './ImageUploadModal';
 
 interface Props {
   showDefault: () => void;
