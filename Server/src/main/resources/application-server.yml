@@ -73,3 +73,6 @@ jwt:
 exp:
   attendance-exp: 10
   like-exp: 10
+
+report:
+  feed-alarm-count: 5

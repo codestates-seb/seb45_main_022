@@ -21,7 +21,8 @@ public enum ExceptionCode {
     COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
     FORBIDDEN_REQUEST(403, "해당 리소스에 접근이 불가능합니다."),
     STAT_NOT_FOUND(404, "스탯을 찾을 수 없습니다."),
-    LIKE_BAD_REQUEST(400, "자신의 게시물은 좋아요를 할 수 없습니다.");
+    LIKE_BAD_REQUEST(400, "자신의 게시물은 좋아요를 할 수 없습니다."),
+    DUPLICATE_REPORT_EXCEPTION(400, "신고는 한 번만 가능합니다.");
 
 //    NOT_IMPLEMENTATION(501, "해당 기능은 구현되지 않았습니다.");
 
