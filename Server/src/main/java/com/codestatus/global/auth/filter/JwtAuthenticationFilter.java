@@ -4,6 +4,7 @@ import com.codestatus.global.auth.dto.LoginDto;
 import com.codestatus.global.auth.utils.JwtResponseUtil;
 import com.codestatus.domain.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,17 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final ObjectMapper objectMapper;
     private final JwtResponseUtil jwtResponseUtil;
-
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper, JwtResponseUtil jwtResponseUtil) {
-        this.authenticationManager = authenticationManager;
-        this.objectMapper = objectMapper;
-        this.jwtResponseUtil = jwtResponseUtil;
-    }
 
     @SneakyThrows
     @Override
