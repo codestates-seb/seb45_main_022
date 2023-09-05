@@ -51,7 +51,7 @@ public class UserMapper {
 
             Stat stat = status.getStat();
             if (stat != null) {
-                statusResponse.setStatName(stat.getStatName());
+                statusResponse.setStatId(stat.getStatId().intValue());
             }
 
             statusResponse.setStatLevel(status.getStatLevel());
