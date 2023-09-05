@@ -4,6 +4,7 @@ import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.service.CommentService;
 import com.codestatus.domain.feed.mapper.FeedMapper;
+import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import com.codestatus.domain.hashTag.service.HashTagService;
 import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.exception.BusinessLogicException;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -83,7 +85,7 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByCategory_CategoryIdAndBodyContainingAndDeletedIsFalse(categoryId, text, pageable);
+        return feedRepository.findAllByCategory_CategoryIdAndBodyLikeAndDeletedIsFalse(categoryId, text, pageable);
     }
 
     //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 유저가 쓴 피드목록 조회
@@ -94,7 +96,14 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.findByUserAndDeleted(categoryId, text, pageable);
     }
 
-    //(구현예정)(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
+    //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
+    @Transactional(readOnly = true)
+    public Page<Feed> findFeedByHashTagAndCategory(long categoryId, long hashTagId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findByCategory_CategoryIdAndFeedHashTags_HashTag_HashTagId(categoryId, hashTagId, pageable);
+    }
+
 
 
     //삭제되지않은 피드목록 조회
@@ -111,9 +120,9 @@ public class FeedServiceImpl implements FeedService {
         PageRequest pageRequest = PageRequest.of(page, size);
         return feedRepository.findAll(pageRequest);
     }
+
     // feed가 존재하는지, 요청한 유저와 리소스의 주인이 일치하는지 검사하고,
     // body값의 null 판별을 통해 수정
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void updateEntity(Feed feed, long userId){
@@ -125,8 +134,8 @@ public class FeedServiceImpl implements FeedService {
 
         feedRepository.save(findFeed);
     }
-    //db에서 완전 삭제가 아닌 deleted=true 로 수정
 
+    //db에서 완전 삭제가 아닌 deleted=true 로 수정
     @Override
     public void deleteEntity(long feedId, long userId){
         Feed findFeed = findVerifiedFeed(feedId);
@@ -136,6 +145,11 @@ public class FeedServiceImpl implements FeedService {
 
         List<Comment> comments = findFeed.getComments();
         commentService.deleteComment(comments);
+
+        hashTagService.deleteHashTag(findFeed.getFeedHashTags()
+                .stream().map(FeedHashTag::getHashTag)
+                .collect(Collectors.toList()));
+
 
     }
 }

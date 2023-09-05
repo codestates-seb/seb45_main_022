@@ -122,6 +122,8 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
+
+    // 유저 닉네임을 통해 유저 검색
     @GetMapping("/findByUser/{categoryId}")
     public ResponseEntity getFeedsByUserAndCategory(@PathVariable("categoryId") long categoryId,
                                                     @RequestParam int page,
@@ -134,19 +136,19 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
-    //HASHTAG검색 구현예정
-//    @GetMapping("/findByHashTag/{categoryId}")
-//    public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") long categoryId,
-//                                                    @RequestParam int page,
-//                                                    @RequestParam int size,
-//                                                    @RequestParam String query) {
-//        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, query, page-1, size);
-//        List<Feed> feeds = pageFeeds.getContent();
-//
-//        return new ResponseEntity<>(
-//                new MultiResponseDto<>(
-//                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
-//    }
+    //    HashTagID로 검색
+    @GetMapping("/findByHashTag/{categoryId}")
+    public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") long categoryId,
+                                                    @RequestParam int page,
+                                                    @RequestParam int size,
+                                                    @RequestParam long hashTagId) {
+        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
+        List<Feed> feeds = pageFeeds.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+    }
 
     //피드아이디로 조회하여 피드 바디 수정
     @PatchMapping("/{feedId}")

@@ -13,6 +13,8 @@ public class HashTagResponseDto {
 
     private long hashTagId;
 
+    private int count;
+
     private String body;
 
 
