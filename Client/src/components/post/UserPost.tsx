@@ -4,12 +4,14 @@
 import { useState } from 'react';
 import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/weight.png';
+import Comments from './Comments';
 
 interface Comment {
   id: number;
   nickname: string;
   label: string;
   text: string;
+  timeCreated: string;
 }
 
 const UserPost = () => {
@@ -19,56 +21,66 @@ const UserPost = () => {
       nickname: '하이',
       label: 'Lv. 01',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '1h',
     },
     {
       id: 2,
       nickname: '바이',
       label: 'Lv. 03',
-      text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto, consequuntur?',
+      text: 'Lorem ipsum dolor sit, amet cons ectetur adipisicing el ectetur adipisicing elit. Iusto, consequuntur?',
+      timeCreated: '5h',
     },
     {
       id: 3,
       nickname: 'React',
       label: 'Lv. 05',
       text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto, consequuntur?',
+      timeCreated: '1min',
     },
     {
       id: 4,
       nickname: 'Redux',
       label: 'Lv. 08',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '5min',
     },
     {
       id: 5,
       nickname: 'Redux',
       label: 'Lv. 08',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '2 day',
     },
     {
       id: 6,
       nickname: 'Redux',
       label: 'Lv. 08',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '3 day',
     },
     {
       id: 7,
       nickname: 'Redux',
       label: 'Lv. 08',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '12h',
     },
     {
       id: 9,
       nickname: 'Redux',
       label: 'Lv. 08',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '5h',
     },
     {
       id: 9,
       nickname: 'Redux',
       label: 'Lv. 08',
       text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      timeCreated: '1 day',
     },
   ]);
+
   const [displayComments, setDisplayComments] = useState(3);
 
   const expandComments = () => {
@@ -125,13 +137,13 @@ const UserPost = () => {
       <div className="border border-solid border-black w-[800px] ">
         <div className="   flex flex-col justify-evenly  ">
           {comments.slice(0, displayComments).map((comment) => (
-            <div className="flex items-center justify-start p-2 mb-1  text-xl mr-5 font-bold">
-              <ul key={comment.id} className="">
-                <li className="font-[Pretendard]">
-                  {comment.nickname} ({comment.label}) : {comment.text}
-                </li>
-              </ul>
-            </div>
+            <Comments
+              key={comment.id}
+              nickname={comment.nickname}
+              label={comment.label}
+              text={comment.text}
+              timeCreated={comment.timeCreated}
+            />
           ))}
         </div>
       </div>
