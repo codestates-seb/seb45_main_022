@@ -2,6 +2,7 @@ package com.codestatus.domain.comment.service;
 
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
+import com.codestatus.domain.feed.service.FeedService;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.global.utils.CheckUser;
@@ -18,9 +19,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
+    private final FeedService feedService;
 
     @Override
     public void createEntity(Comment comment) {
+        feedService.findVerifiedFeed(comment.getFeed().getFeedId());
         commentRepository.save(comment);
     }
 
@@ -51,11 +54,5 @@ public class CommentServiceImpl implements CommentService {
     public Comment findVerifiedComment(long commentId){
         Optional<Comment> optionalComment = commentRepository.findCommentByCommentIdAndDeleted(commentId, false);
         return optionalComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteComment(List<Comment> comments) {
-        comments.forEach(comment -> comment.setDeleted(true));
-        commentRepository.saveAll(comments);
     }
 }

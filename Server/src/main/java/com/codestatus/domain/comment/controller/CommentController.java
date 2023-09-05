@@ -31,9 +31,10 @@ public class CommentController {
     public ResponseEntity postComment(@PathVariable("feedId") long feedId,
                                       @Valid @RequestBody CommentPostDto requestBody,
                                       @AuthenticationPrincipal PrincipalDto principal) {
-        Comment comment = commentMapper.commentPostDtoToComment(requestBody);
-        comment.setFeed(feedMapper.feedIdToFeed(feedId));
-        comment.setUser(userMapper.userIdToUser(principal.getId()));
+        Comment comment = commentMapper.commentPostDtoToComment(
+                requestBody,
+                feedMapper.feedIdToFeed(feedId),
+                userMapper.userIdToUser(principal.getId()));
 
         commentServiceImpl.createEntity(comment);
 
@@ -44,8 +45,7 @@ public class CommentController {
     public ResponseEntity patchComment(@PathVariable("commentId") long commentId,
                                        @Valid @RequestBody CommnetPatchDto requestBody,
                                        @AuthenticationPrincipal PrincipalDto principal){
-        Comment comment = commentMapper.commentPatchDtoToComment(requestBody);
-        comment.setCommentId(commentId);
+        Comment comment = commentMapper.commentPatchDtoToComment(requestBody, commentId);
 
         commentServiceImpl.updateEntity(comment, principal.getId());
 

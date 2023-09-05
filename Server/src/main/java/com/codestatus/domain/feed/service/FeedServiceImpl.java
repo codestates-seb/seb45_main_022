@@ -2,6 +2,7 @@ package com.codestatus.domain.feed.service;
 
 import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.domain.comment.entity.Comment;
+import com.codestatus.domain.comment.repository.CommentRepository;
 import com.codestatus.domain.comment.service.CommentService;
 import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.hashTag.entity.FeedHashTag;
@@ -32,13 +33,7 @@ import java.util.stream.Collectors;
 public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
 
-    private final CommentService commentService;
-
-    private final FeedMapper feedMapper;
-
-    private final CategoryMapper categoryMapper;
-
-    private final UserMapper userMapper;
+    private final CommentRepository commentRepository;
 
     private final HashTagService hashTagService;
 
@@ -144,12 +139,17 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(findFeed);
 
         List<Comment> comments = findFeed.getComments();
-        commentService.deleteComment(comments);
+        deleteComments(comments);
 
         hashTagService.deleteHashTag(findFeed.getFeedHashTags()
                 .stream().map(FeedHashTag::getHashTag)
                 .collect(Collectors.toList()));
 
 
+    }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    private void deleteComments(List<Comment> comments) {
+        comments.forEach(comment -> comment.setDeleted(true));
+        commentRepository.saveAll(comments);
     }
 }
