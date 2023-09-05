@@ -18,7 +18,7 @@ public class FeedsResponseDto {
 
     private String profileImage;
 
-    private String statName;
+    private int statId;
 
     private int level;
 
