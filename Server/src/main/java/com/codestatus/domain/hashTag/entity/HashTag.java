@@ -26,7 +26,7 @@ public class HashTag {
     @Column
     private boolean deleted = false;
 
-    @OneToMany(mappedBy = "hashTag")
+    @OneToMany(mappedBy = "hashTag",cascade = CascadeType.REMOVE)
     private List<FeedHashTag> feedHashTags = new ArrayList<>();
 
 
