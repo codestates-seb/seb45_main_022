@@ -19,6 +19,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Validated
@@ -39,7 +41,7 @@ public class FeedController {
 
     //해당하는 카테고리에 피드 작성
     @PostMapping("/{categoryId}")
-    public ResponseEntity postFeed(@PathVariable("categoryId") long categoryId,
+    public ResponseEntity postFeed(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
                                    @RequestBody FeedPostDto requestBody,
                                    @AuthenticationPrincipal PrincipalDto principal) {
         Feed feed = feedMapper.feedPostDtoToFeed(
@@ -65,7 +67,7 @@ public class FeedController {
 
     //해당 카테고리 내의 피드목록 조회
     @GetMapping("/get/{categoryId}")
-    public ResponseEntity getFeedsByCategory(@PathVariable long categoryId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity getFeedsByCategory(@PathVariable @Min(0) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size) {
         Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByCategory(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
 
@@ -111,7 +113,7 @@ public class FeedController {
 
     //해당하는 카테고리 내에서 쿼리를 바디로 검색하여 피드목록 조회
     @GetMapping("/findByBody/{categoryId}")
-    public ResponseEntity getFeedsByBodyAndCategory(@PathVariable("categoryId") long categoryId,
+    public ResponseEntity getFeedsByBodyAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                          @RequestParam int size,
                                          @RequestParam String query) {
@@ -122,8 +124,10 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
+
+    // 유저 닉네임을 통해 유저 검색
     @GetMapping("/findByUser/{categoryId}")
-    public ResponseEntity getFeedsByUserAndCategory(@PathVariable("categoryId") long categoryId,
+    public ResponseEntity getFeedsByUserAndCategory(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                                     @RequestParam int size,
                                                     @RequestParam String query) {
@@ -134,19 +138,19 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
-    //HASHTAG검색 구현예정
-//    @GetMapping("/findByHashTag/{categoryId}")
-//    public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") long categoryId,
-//                                                    @RequestParam int page,
-//                                                    @RequestParam int size,
-//                                                    @RequestParam String query) {
-//        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, query, page-1, size);
-//        List<Feed> feeds = pageFeeds.getContent();
-//
-//        return new ResponseEntity<>(
-//                new MultiResponseDto<>(
-//                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
-//    }
+    //    HashTagID로 검색
+    @GetMapping("/findByHashTag/{categoryId}")
+    public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
+                                                    @RequestParam int page,
+                                                    @RequestParam int size,
+                                                    @RequestParam long hashTagId) {
+        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
+        List<Feed> feeds = pageFeeds.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+    }
 
     //피드아이디로 조회하여 피드 바디 수정
     @PatchMapping("/{feedId}")

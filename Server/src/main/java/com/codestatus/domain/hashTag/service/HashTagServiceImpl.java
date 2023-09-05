@@ -8,6 +8,10 @@ import com.codestatus.domain.hashTag.repository.FeedHashTagRepository;
 import com.codestatus.domain.hashTag.repository.HashTagRepository;
 import com.codestatus.global.service.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +43,7 @@ public class HashTagServiceImpl implements HashTagService {
         List<FeedHashTag> feedHashTags = new ArrayList<>();  //기존에 없던 HashTag를 넣어주기 위해 임시 리스트 생성
         for (String hashTagStr : hashTags) {  //리스트 내의 해쉬태그를 하나씩 확인
             HashTag hashTag = findOrCreateHashTag(hashTagStr); //하나씩 받아서 객체로 생성
+            hashTag.setCount(hashTag.getCount()+1); // 해쉬태그 카운트 1 증가
             FeedHashTag feedHashTag = new FeedHashTag(feed, hashTag); //피드해시태그로 만들어 매핑
             feedHashTags.add(feedHashTag); //생성한 해쉬태그를 임시 리스트에 추가
         }
@@ -63,6 +68,13 @@ public class HashTagServiceImpl implements HashTagService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public Page<HashTag> findHashTagByBody(String text, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "body"); //바디를 가나다순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return hashTagRepository.findHashTagByBodyLike(text, pageable);
+    }
+
     public HashTag findByString(String hashTag) {
         Optional<HashTag> optionalHashTag = hashTagRepository.findHashTagByBody(hashTag);
 
@@ -76,6 +88,16 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public void deleteEntity(long entityId, long userId) {
+
+    }
+
+    @Override
+    public void deleteHashTag(List<HashTag> hashTags) {
+        hashTags.forEach(hashTag ->{
+            if(hashTag.getCount() > 1) {
+                hashTag.setCount(hashTag.getCount() - 1);
+            } else hashTagRepository.delete(hashTag);
+        });
 
     }
 }
