@@ -3,18 +3,19 @@ package com.codestatus.global.utils;
 import com.codestatus.domain.user.entity.Exp;
 import com.codestatus.domain.user.repository.ExpTableRepository;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 //@Component
-// @EnableScheduling
+//@EnableScheduling
 public class ExpTableGenerator {
-//    private final ExpTableRepository;
+//    private final ExpTableRepository expTableRepository;
 //
 //    public ExpTableGenerator(ExpTableRepository expTableRepository) {
 //        this.expTableRepository = expTableRepository;
 //    }
 //
-//    // @Scheduled(initialDelay = 60000, fixedDelay = Long.MAX_VALUE)
+//    @Scheduled(initialDelay = 10000, fixedDelay = Long.MAX_VALUE)
 //    public void expTable () {
 //        int baseExp = 100;
 //        int maxLevel = 100;
