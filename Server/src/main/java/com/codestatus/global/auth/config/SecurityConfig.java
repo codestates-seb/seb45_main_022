@@ -76,8 +76,14 @@ public class SecurityConfig {
 
 
                         // feed 권한 부여
-
-
+                        .antMatchers(HttpMethod.POST, "/feed/**").hasRole("USER") // feed 작성은 USER 권한 필요
+                        .antMatchers(HttpMethod.GET, "/feed/{feedId}").hasRole("USER") // feed 상세 조회는 USER 권한 필요
+                        .antMatchers(HttpMethod.GET, "/feed/get/{categoryId}").permitAll() // feed 목록 조회는 누구나 가능
+                        .antMatchers(HttpMethod.GET, "/feed/weeklybest").permitAll() // weeklybest 목록 조회는 누구나 가능
+                        .antMatchers(HttpMethod.GET, "/feed/findByBody/{categoryId}").permitAll() // 쿼리로 검색한 feed 목록 조회는 누구나 가능
+                        .antMatchers(HttpMethod.GET, "feed/findByUser/{categoryId}").permitAll() // user 로 검색한 feed 목록 조회는 누구나 가능
+                        .antMatchers(HttpMethod.PATCH, "/feed/{feedId}").hasRole("USER") // feed 수정은 USER 권한 필요
+                        .antMatchers(HttpMethod.DELETE, "/feed/{feedId}").hasRole("USER") // feed 삭제는 USER 권한 필요
 
                         // comment 권한 부여
                         .antMatchers(HttpMethod.POST, "/comment/**").hasRole("USER")
