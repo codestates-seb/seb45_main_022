@@ -55,10 +55,4 @@ public class CommentServiceImpl implements CommentService {
         Optional<Comment> optionalComment = commentRepository.findCommentByCommentIdAndDeleted(commentId, false);
         return optionalComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteComment(List<Comment> comments) {
-        comments.forEach(comment -> comment.setDeleted(true));
-        commentRepository.saveAll(comments);
-    }
 }
