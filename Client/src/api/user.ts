@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { StatusCode } from './category';
 
 export interface Status {
-  statName: string;
+  statId: StatusCode;
   statLevel: number;
   statExp: number;
   requiredExp: number;
