@@ -172,6 +172,7 @@ public class UserServiceImpl implements UserService {
             status.setStat(stat);
             status.setStatLevel(1);
             status.setStatExp(0);
+            status.setRequiredExp(100); // level1 -> level2 초기 필요 경험치
             statusList.add(status);
         }
         statusRepository.saveAll(statusList);
