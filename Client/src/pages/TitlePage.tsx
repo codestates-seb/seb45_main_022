@@ -30,7 +30,7 @@ const TitlePage = () => {
           className="relative bg-title w-[1200px] h-[720px] bg-cover
         bg-no-repeat bg-center"
         >
-          {screen === Screen.TITLE && <TitleScreen showAuth={showAuth} />}
+          {screen === Screen.TITLE && <TitleScreen showAuth={showDefault} />}
           {screen === Screen.AUTH && <AuthScreen showDefault={showDefault} />}
           {screen === Screen.STATUS && (
             <StatusScreen showDefault={showDefault} />
