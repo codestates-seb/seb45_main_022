@@ -2,6 +2,7 @@ package com.codestatus.domain.comment.service;
 
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
+import com.codestatus.domain.feed.service.FeedService;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.global.utils.CheckUser;
@@ -18,9 +19,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
+    private final FeedService feedService;
 
     @Override
     public void createEntity(Comment comment) {
+        feedService.findVerifiedFeed(comment.getFeed().getFeedId());
         commentRepository.save(comment);
     }
 
