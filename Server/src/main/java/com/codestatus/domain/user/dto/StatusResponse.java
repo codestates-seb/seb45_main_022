@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StatusResponse {
-    private String statName;
+    private int statId;
     private int statLevel;
     private int statExp;
     private int requiredExp;
