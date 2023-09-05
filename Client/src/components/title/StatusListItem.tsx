@@ -1,26 +1,26 @@
 import { Link } from 'react-router-dom';
 import { Status } from '../../api/user';
-import { StatusCode } from '../../api/category';
-import { STATUS_ICON } from '../../utility/status';
+import { STATUS_ICON, STATUS_NAME } from '../../utility/status';
 
 interface Props {
   status: Status;
-  statusCode: StatusCode;
 }
 
-const StatusListItem = ({ status, statusCode }: Props) => {
-  const { statName, statLevel, statExp, requiredExp } = status;
+const StatusListItem = ({ status }: Props) => {
+  const { statId, statLevel, statExp, requiredExp } = status;
   return (
-    <Link to={`/map/${statusCode}`}>
+    <Link to={`/map/${statId}`}>
       <div className="p-3 flex flex-col justify-center items-center gap-2 bg-[#fee1b8] hover:brightness-90 rounded-md duration-300 cursor-pointer shadow-lg">
         {/* 스탯 아이콘, 이름, 레벨 */}
         <div className="flex flex-row justify-center items-end gap-3">
           <img
             className="w-[30px] h-[30px]"
-            src={STATUS_ICON[statusCode]}
+            src={STATUS_ICON[statId]}
             alt="icon"
           />
-          <span className="text-[1.5rem] font-bold leading-10">{statName}</span>{' '}
+          <span className="text-[1.5rem] font-bold leading-10">
+            {STATUS_NAME[statId]}
+          </span>{' '}
           <span className="leading-7">{`Lv.${statLevel}`}</span>
         </div>
         {/* 경험치 바 */}
@@ -28,11 +28,11 @@ const StatusListItem = ({ status, statusCode }: Props) => {
           <div
             className="h-full bg-yellow-500 rounded-full"
             style={{
-              width: `${(statExp / requiredExp) * 100}%`,
+              width: `${(statExp / (requiredExp + statExp)) * 100}%`,
             }}
           ></div>
           <span className="absolute left-3 text-xs text-gray-400">
-            {`${statExp} / ${requiredExp}`}
+            {`${statExp} / ${requiredExp + statExp}`}
           </span>
         </div>
       </div>

@@ -45,18 +45,18 @@ export const CATEGORY_NAME: Record<CategoryCode, string> = {
   [CategoryCode.COOKING]: '요리',
 };
 
-export const CATEGORY_STATUS_MAP: Record<CategoryCode, StatusCode[]> = {
-  [CategoryCode.WEIGHT]: [StatusCode.STR],
-  [CategoryCode.CLIMBING]: [StatusCode.STR],
-  [CategoryCode.BALLGAME]: [StatusCode.DEX],
-  [CategoryCode.ESPORTS]: [StatusCode.DEX],
-  [CategoryCode.JOGGING]: [StatusCode.DEX],
-  [CategoryCode.READING]: [StatusCode.INT],
-  [CategoryCode.STUDY]: [StatusCode.INT],
-  [CategoryCode.IT]: [StatusCode.INT],
-  [CategoryCode.BEAUTY]: [StatusCode.CHARM],
-  [CategoryCode.MUSIC]: [StatusCode.CHARM],
-  [CategoryCode.INTERIOR]: [StatusCode.LIVING],
-  [CategoryCode.TRAVEL]: [StatusCode.LIVING],
-  [CategoryCode.COOKING]: [StatusCode.LIVING],
+export const CATEGORY_STATUS_MAP: Record<CategoryCode, StatusCode> = {
+  [CategoryCode.WEIGHT]: StatusCode.STR,
+  [CategoryCode.CLIMBING]: StatusCode.STR,
+  [CategoryCode.BALLGAME]: StatusCode.DEX,
+  [CategoryCode.ESPORTS]: StatusCode.DEX,
+  [CategoryCode.JOGGING]: StatusCode.DEX,
+  [CategoryCode.READING]: StatusCode.INT,
+  [CategoryCode.STUDY]: StatusCode.INT,
+  [CategoryCode.IT]: StatusCode.INT,
+  [CategoryCode.BEAUTY]: StatusCode.CHARM,
+  [CategoryCode.MUSIC]: StatusCode.CHARM,
+  [CategoryCode.INTERIOR]: StatusCode.LIVING,
+  [CategoryCode.TRAVEL]: StatusCode.LIVING,
+  [CategoryCode.COOKING]: StatusCode.LIVING,
 };
