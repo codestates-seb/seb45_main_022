@@ -129,7 +129,7 @@ const UserPost = () => {
           />
         </div>
       </div>
-      <div className=" flex items-center justify-between m-2 p-2 border-b border-solid border-gray-400 w-full ">
+      <div className=" flex items-center justify-between  p-4 border-b border-solid border-gray-400 w-full ">
         <p className="font-[Pretendard]">Total Comments {comments.length}</p>
         <div>
           {' '}
@@ -144,6 +144,19 @@ const UserPost = () => {
           </span>{' '}
         </div>
       </div>
+      <div className="flex items-center justify-center  p-4 border-b border-solid border-gray-400 w-full">
+        <input
+          type="search"
+          className=" border border-solid border-gray-400 rounded-lg  p-2 font-[Pretendard] w-[400px]"
+        />
+        <button
+          onClick={expandComments}
+          className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-2 font-semibold  font-[Pretendard] ml-4 bg-white w-[200px]  rounded-xl text-xm"
+        >
+          Add a comment
+        </button>
+      </div>
+
       <div className=" w-[800px] ">
         <div className="   flex flex-col justify-evenly  ">
           {comments.slice(0, displayComments).map((comment) => (
