@@ -35,7 +35,7 @@ const FeedPage = () => {
       <Backdrop>
         <div className=" w-[1080px] h-[720px] p-[42px]" style={sectionStyle}>
           <Header categoryCode={categoryCode} />
-          <Main feedList={feedList} />
+          <Main feedList={feedList} categoryCode={categoryCode} />
         </div>
       </Backdrop>
     </div>

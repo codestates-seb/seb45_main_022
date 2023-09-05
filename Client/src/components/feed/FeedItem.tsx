@@ -1,27 +1,26 @@
 import feedItem from '../../assets/feed/feedItem.png';
 import likeButton from '../../assets/feed/likeButton.png';
 import commentButton from '../../assets/feed/commentButton.png';
+import { CategoryCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
+import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
-import { StatusCode } from '../../api/category';
 
 interface FeedItemProps {
   feed: Feed;
+  categoryCode: CategoryCode;
 }
 
-const FeedItem = ({ feed }: FeedItemProps) => {
+const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   const {
     nickName,
     profileImage,
     level,
-    statId,
     body,
     likeCount,
     commentCount,
     createdAt,
   } = feed;
-
-  const typeStatId: StatusCode = statId;
 
   const FeedBoard = {
     backgroundImage: `url(${feedItem})`,
@@ -48,7 +47,10 @@ const FeedItem = ({ feed }: FeedItemProps) => {
           </div>
           <div className="w-full flex justify-start items-center -mt-1">
             <div className="w-[10px]">
-              <img src={STATUS_ICON[typeStatId]} alt="스탯 아이콘" />
+              <img
+                src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
+                alt="스탯 아이콘"
+              />
             </div>
             <div className="text-[10px]">Lv_{level}</div>
           </div>
