@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { STATUS_ICON } from '../../utility/icon';
-import { CATEGORY_ICON } from '../../utility/icon';
+import { STATUS_ICON } from '../../utility/status';
+import { CATEGORY_ICON } from '../../utility/category';
 
 const Header = () => {
   return (

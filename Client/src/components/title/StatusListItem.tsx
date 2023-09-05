@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Status } from '../../api/user';
 import { StatusCode } from '../../api/category';
-import { STATUS_ICON } from '../../utility/icon';
+import { STATUS_ICON } from '../../utility/status';
 
 interface Props {
   status: Status;

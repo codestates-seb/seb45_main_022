@@ -1,6 +1,6 @@
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
-import { CATEGORY_ICON } from '../../utility/icon';
+import { CATEGORY_ICON } from '../../utility/category';
 import { CategoryCode } from '../../api/category';
 
 interface Props {

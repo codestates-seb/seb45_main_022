@@ -8,23 +8,10 @@ import itIcon from '../assets/icons/it.png';
 import joggingIcon from '../assets/icons/jogging.png';
 import musicIcon from '../assets/icons/music.png';
 import readingIcon from '../assets/icons/reading.png';
-import CharmIcon from '../assets/icons/status-charm.png';
-import intelligenceIcon from '../assets/icons/status-intelligence.png';
-import livingIcon from '../assets/icons/status-living.png';
-import speedIcon from '../assets/icons/status-speed.png';
-import strengthIcon from '../assets/icons/status-strength.png';
 import studyIcon from '../assets/icons/study.png';
 import travelIcon from '../assets/icons/travel.png';
 import weightIcon from '../assets/icons/weight.png';
 import { CategoryCode, StatusCode } from '../api/category';
-
-export const STATUS_ICON: Record<StatusCode, string> = {
-  [StatusCode.STR]: strengthIcon,
-  [StatusCode.DEX]: speedIcon,
-  [StatusCode.INT]: intelligenceIcon,
-  [StatusCode.CHARM]: CharmIcon,
-  [StatusCode.LIVING]: livingIcon,
-};
 
 export const CATEGORY_ICON: Record<CategoryCode, string> = {
   [CategoryCode.WEIGHT]: weightIcon,
@@ -40,4 +27,36 @@ export const CATEGORY_ICON: Record<CategoryCode, string> = {
   [CategoryCode.INTERIOR]: interiorIcon,
   [CategoryCode.TRAVEL]: travelIcon,
   [CategoryCode.COOKING]: cookingIcon,
+};
+
+export const CATEGORY_NAME: Record<CategoryCode, string> = {
+  [CategoryCode.WEIGHT]: '헬스',
+  [CategoryCode.CLIMBING]: '등산',
+  [CategoryCode.BALLGAME]: '구기종목',
+  [CategoryCode.ESPORTS]: 'e스포츠',
+  [CategoryCode.JOGGING]: '조깅',
+  [CategoryCode.READING]: '독서',
+  [CategoryCode.STUDY]: '공부',
+  [CategoryCode.IT]: 'IT',
+  [CategoryCode.BEAUTY]: '미용',
+  [CategoryCode.MUSIC]: '음악',
+  [CategoryCode.INTERIOR]: '인테리어',
+  [CategoryCode.TRAVEL]: '여행',
+  [CategoryCode.COOKING]: '요리',
+};
+
+export const CATEGORY_STATUS_MAP: Record<CategoryCode, StatusCode[]> = {
+  [CategoryCode.WEIGHT]: [StatusCode.STR],
+  [CategoryCode.CLIMBING]: [StatusCode.STR],
+  [CategoryCode.BALLGAME]: [StatusCode.DEX],
+  [CategoryCode.ESPORTS]: [StatusCode.DEX],
+  [CategoryCode.JOGGING]: [StatusCode.DEX],
+  [CategoryCode.READING]: [StatusCode.INT],
+  [CategoryCode.STUDY]: [StatusCode.INT],
+  [CategoryCode.IT]: [StatusCode.INT],
+  [CategoryCode.BEAUTY]: [StatusCode.CHARM],
+  [CategoryCode.MUSIC]: [StatusCode.CHARM],
+  [CategoryCode.INTERIOR]: [StatusCode.LIVING],
+  [CategoryCode.TRAVEL]: [StatusCode.LIVING],
+  [CategoryCode.COOKING]: [StatusCode.LIVING],
 };
