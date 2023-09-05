@@ -1,29 +1,20 @@
 package com.codestatus.global.mail.service;
 
 import com.codestatus.global.mail.entity.Email;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import com.codestatus.global.utils.CustomMailSender;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@RequiredArgsConstructor
 @Service
 public class EmailService {
-    private final JavaMailSender javaMailSender;
-
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+    private final CustomMailSender customMailSender;
 
     public Email sendJoinCode(Email email) {
         String code = randomCodeGenerator(); // 인증번호 생성
-
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email.getAddress()); // 수신자 주소
-        simpleMailMessage.setSubject("CodeStatus 회원가입 인증 메일입니다."); // 메일 제목
-        simpleMailMessage.setText("인증번호는 " + code + " 입니다."); // 메일 본문
-        javaMailSender.send(simpleMailMessage); // 메일 전송
-
+        customMailSender.sendAuthenticationCode(code, email.getAddress());
         email.setCode(code); // 인증번호 저장
 
         return email;
