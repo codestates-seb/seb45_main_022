@@ -3,7 +3,7 @@
 // 코멘트 갯수
 import { useState } from 'react';
 import profileImg from '../../assets/common/profile.png';
-import icon from '../../assets/icons/weight.png';
+import icon from '../../assets/icons/status-strength.png';
 import Comments from './Comments';
 
 interface Comment {
@@ -91,6 +91,7 @@ const UserPost = () => {
   ]);
 
   const [displayComments, setDisplayComments] = useState(3);
+  const [likeCount, setLikeCount] = useState(3);
 
   const expandComments = () => {
     setDisplayComments(displayComments + 3);
@@ -100,11 +101,15 @@ const UserPost = () => {
     setDisplayComments(3);
   };
 
+  const handleLikePost = () => {
+    setLikeCount(likeCount + 1);
+  };
+
   return (
     // <PostFrame width={1100} height={550}>
-    <div className="   p-4 flex flex-col items-center w-[900px] border border-solid border-black ">
+    <div className=" relative  top-0 right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border border-solid border-black ">
       <div className="flex p-6  ">
-        <div className=" border border-solid border-black py-2 flex flex-col items-center justify-center w-[200px]  ">
+        <div className=" p-2 flex flex-col items-center  ">
           <img src={profileImg} width={90} alt="profile pic" className="mb-2" />
           <span className="font-[Pretendard]">동훈</span>
           <div className="flex items-center justify-around w-[100px]">
@@ -124,9 +129,21 @@ const UserPost = () => {
           />
         </div>
       </div>
-      <p className="font-[Pretendard] m-2 p-2 border-b border-solid border-gray-400 w-full text-right">
-        Total Comments {comments.length}
-      </p>
+      <div className=" flex items-center justify-between m-2 p-2 border-b border-solid border-gray-400 w-full ">
+        <p className="font-[Pretendard]">Total Comments {comments.length}</p>
+        <div>
+          {' '}
+          <button
+            onClick={handleLikePost}
+            className=" hover:brightness-110 duration-300  py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold font-[Pretendard]"
+          >
+            Like Post
+          </button>
+          <span className=" ml-1 text-sm text-gray-500 font-semibold font-[Pretendard]">
+            {likeCount}
+          </span>{' '}
+        </div>
+      </div>
       <div className=" w-[800px] ">
         <div className="   flex flex-col justify-evenly  ">
           {comments.slice(0, displayComments).map((comment) => (

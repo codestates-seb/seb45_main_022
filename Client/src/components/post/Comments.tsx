@@ -15,7 +15,7 @@ const Comments = ({
 }: CommentProps) => {
   return (
     <div className="border-b border-solid border-gray-400  py-2 flex p-4 ">
-      <div className="flex flex-col items-center w-20">
+      <div className="flex flex-col items-center justify-center w-20">
         <img src={profileImg} alt="profile image" width={45} />
         <span className="font-[Pretendard] font-semibold">{nickname}</span>
         <span className="font-[Pretendard] ">{label}</span>
