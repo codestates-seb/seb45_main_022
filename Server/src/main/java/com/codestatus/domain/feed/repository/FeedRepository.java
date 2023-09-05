@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface FeedRepository extends JpaRepository <Feed, Long> {
@@ -33,4 +34,6 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     Page<Feed> findAllByDeletedIsFalse(Pageable pageable);
 
     Page<Feed> findAllByDeletedIsFalseAndCategoryCategoryId(long categoryId, Pageable pageable);
+
+    List<Feed> findAllByUser_UserIdAndDeletedIsFalse(long userId);
 }

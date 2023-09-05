@@ -1,5 +1,11 @@
 package com.codestatus.domain.user.service;
 
+import com.codestatus.domain.comment.entity.Comment;
+import com.codestatus.domain.comment.repository.CommentRepository;
+import com.codestatus.domain.feed.entity.Feed;
+import com.codestatus.domain.feed.repository.FeedRepository;
+import com.codestatus.domain.hashTag.entity.FeedHashTag;
+import com.codestatus.domain.hashTag.service.HashTagService;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.aws.FileStorageService;
@@ -24,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -33,6 +40,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final StatRepository statRepository;
     private final StatusRepository statusRepository;
+    private final FeedRepository feedRepository;
+    private final CommentRepository commentRepository;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
@@ -108,6 +117,19 @@ public class UserServiceImpl implements UserService {
             throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
         }
         findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
+
+        List<Feed> feedList = feedRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
+        for (Feed feed : feedList) {
+            feed.setDeleted(true);
+        }
+
+        List<Comment> commentList = commentRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
+        for (Comment comment : commentList) {
+            comment.setDeleted(true);
+        }
+
+        commentRepository.saveAll(commentList);
+        feedRepository.saveAll(feedList);
         repository.save(findUser);
     }
 
