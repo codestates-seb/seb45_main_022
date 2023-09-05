@@ -1,13 +1,14 @@
-// 코멘트 내용, 작성자 레벨, 작성자, 작성 시간, 프로필 이미지
-// 작성자 이름 클릭 시, 프로필 상세 페이지로 이동 (팝업?)
-// 코멘트 갯수
 import { useState } from 'react';
 import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/status-strength.png';
 import Comments from './Comments';
+import { getPostInfo } from '../../api/post';
+import { useQuery } from 'react-query';
+import PostFrame from '../common/PostFrame';
 
 interface Comment {
   id: number;
+  profileImg: string;
   nickname: string;
   label: string;
   text: string;
@@ -92,6 +93,7 @@ const UserPost = () => {
 
   const [displayComments, setDisplayComments] = useState(3);
   const [likeCount, setLikeCount] = useState(3);
+  const [addComment, setAddComment] = useState('');
 
   const expandComments = () => {
     setDisplayComments(displayComments + 3);
@@ -105,11 +107,14 @@ const UserPost = () => {
     setLikeCount(likeCount + 1);
   };
 
+  // 명세서 나오면 추가 예정
+  // const { isLoading, data: userPost } = useQuery(['postInfo'], getPostInfo);
+  // if (isLoading) return <div>Loading...</div>;
+
   return (
-    // <PostFrame width={1100} height={550}>
-    <div className=" relative  top-0 right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border border-solid border-black ">
+    <div className=" relative right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border-[40px] border-solid border-[#161c4f] ">
       <div className="flex p-6  ">
-        <div className=" p-2 flex flex-col items-center  ">
+        <div className=" px-4 flex flex-col items-center border-r border-solid border-gray-400">
           <img src={profileImg} width={90} alt="profile pic" className="mb-2" />
           <span className="font-[Pretendard]">동훈</span>
           <div className="flex items-center justify-around w-[100px]">
@@ -135,11 +140,11 @@ const UserPost = () => {
           {' '}
           <button
             onClick={handleLikePost}
-            className=" hover:brightness-110 duration-300  py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold font-[Pretendard]"
+            className=" hover:brightness-110 duration-300  py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold "
           >
             Like Post
           </button>
-          <span className=" ml-1 text-sm text-gray-500 font-semibold font-[Pretendard]">
+          <span className=" ml-2 text-m text-gray-500 font-semibold ">
             {likeCount}
           </span>{' '}
         </div>
@@ -147,12 +152,11 @@ const UserPost = () => {
       <div className="flex items-center justify-center  p-4 border-b border-solid border-gray-400 w-full">
         <input
           type="search"
+          onChange={(e) => setAddComment(e.target.value)}
+          value={addComment}
           className=" border border-solid border-gray-400 rounded-lg  p-2 font-[Pretendard] w-[400px]"
         />
-        <button
-          onClick={expandComments}
-          className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-2 font-semibold  font-[Pretendard] ml-4 bg-white w-[200px]  rounded-xl text-xm"
-        >
+        <button className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-3  text-sm font-semibold  ml-4  w-[200px]  rounded-xl">
           Add a comment
         </button>
       </div>
@@ -175,7 +179,7 @@ const UserPost = () => {
         {comments.length > 3 && (
           <button
             onClick={expandComments}
-            className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-2 font-semibold  font-[Pretendard] ml-4 bg-white w-[200px]  rounded-xl text-xm"
+            className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
           >
             View More Comments
           </button>
@@ -184,7 +188,7 @@ const UserPost = () => {
         {displayComments > 3 && (
           <button
             onClick={hideComments}
-            className="hover:brightness-110 duration-300 cursor-pointer border border-solid  bg-red-400 text-white p-2 font-semibold  font-[Pretendard] ml-4 w-[200px]  rounded-xl text-xm"
+            className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
           >
             Hide Comments
           </button>
@@ -197,8 +201,6 @@ const UserPost = () => {
     //   </span>
     //   <span className="font-[Pretendard]">{comment.text}</span>
     // </div>
-
-    // </PostFrame>
   );
 };
 
