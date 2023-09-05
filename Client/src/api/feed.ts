@@ -5,6 +5,7 @@ export interface Feed {
   feedId: number;
   nickName: string;
   profileImage: string;
+  statId: number;
   level: number;
   body: string;
   statName: string;
