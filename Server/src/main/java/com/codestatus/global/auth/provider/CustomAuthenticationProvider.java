@@ -2,8 +2,6 @@ package com.codestatus.global.auth.provider;
 
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.global.auth.userdetails.UsersDetailService;
-import com.codestatus.global.exception.BusinessLogicException;
-import com.codestatus.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

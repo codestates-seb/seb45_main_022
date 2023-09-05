@@ -8,6 +8,7 @@ import com.codestatus.global.auth.userdetails.UsersDetailService;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.auth.utils.JwtResponseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
     private final JwtTokenizer jwtTokenizer;
@@ -31,13 +33,6 @@ public class SecurityConfig {
     private final UsersDetailService userService;
     private final JwtResponseUtil jwtResponseUtil;
     private String s3 = ""; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
-
-    public SecurityConfig(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, UsersDetailService userService, JwtResponseUtil jwtResponseUtil) {
-        this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
-        this.userService = userService;
-        this.jwtResponseUtil = jwtResponseUtil;
-    }
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {

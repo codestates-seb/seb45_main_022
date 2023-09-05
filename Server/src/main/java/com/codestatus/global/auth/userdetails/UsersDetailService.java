@@ -3,6 +3,7 @@ package com.codestatus.global.auth.userdetails;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,15 +13,11 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class UsersDetailService implements UserDetailsService {
     private final UserRepository userRepository;
     private final CustomAuthorityUtils authorityUtils;
-
-    public UsersDetailService(UserRepository userRepository, CustomAuthorityUtils authorityUtils) {
-        this.userRepository = userRepository;
-        this.authorityUtils = authorityUtils;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
