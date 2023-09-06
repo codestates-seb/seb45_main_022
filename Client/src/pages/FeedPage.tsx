@@ -5,7 +5,7 @@ import Main from '../components/feed/Main';
 import { useEffect, useState } from 'react';
 import { getFeedList } from '../api/feed';
 import { Feed } from '../api/feed';
-import { useParams } from 'react-router';
+import { Outlet, useParams } from 'react-router';
 
 const FeedPage = () => {
   const [feedList, setFeedList] = useState<Feed[]>([]);
@@ -38,6 +38,7 @@ const FeedPage = () => {
           <Main feedList={feedList} categoryCode={categoryCode} />
         </div>
       </Backdrop>
+      <Outlet />
     </div>
   );
 };
