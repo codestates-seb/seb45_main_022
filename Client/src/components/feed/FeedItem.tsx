@@ -14,7 +14,6 @@ interface FeedItemProps {
 }
 
 const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
-  const [displayPost, setDisplayPost] = useState(false);
   const {
     nickName,
     profileImage,
@@ -25,14 +24,20 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     createdAt,
   } = feed;
 
+  const [openFeedItem, setOpenFeedItem] = useState(false);
+
+  const handleShowPost = () => {
+    setOpenFeedItem(true);
+  };
+
+  const handleCloseScreen = () => {
+    setOpenFeedItem(false);
+  };
+
   const FeedBoard = {
     backgroundImage: `url(${feedItem})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-  };
-
-  const handleShowPost = () => {
-    setDisplayPost(true);
   };
 
   return (
@@ -41,7 +46,7 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
       className="w-[295px] h-[137px] "
       style={FeedBoard}
     >
-      {displayPost && <UserPost />}
+      {/* {displayPost && <UserPost setOpenFeedItem={setOpenFeedItem} />} */}
       <div className="w-full h-full p-7 flex">
         {/* 왼쪽 구간 (전체 너비 1/3) */}
         <div className="w-[70px] h-full flex flex-col justify-between items-start gap-1 cursor-pointer">
@@ -94,6 +99,7 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
           </div>
         </div>
       </div>
+      {openFeedItem && <UserPost handleCloseScreen={handleCloseScreen} />}
     </div>
   );
 };

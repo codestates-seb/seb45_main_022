@@ -15,7 +15,7 @@ interface Comment {
   timeCreated: string;
 }
 
-const UserPost = () => {
+const UserPost = ({ handleCloseScreen }) => {
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
@@ -112,87 +112,97 @@ const UserPost = () => {
   // if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className=" relative right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border-[40px] border-solid border-[#161c4f] ">
-      <div className="flex p-6  ">
-        <div className=" px-4 flex flex-col items-center border-r border-solid border-gray-400">
-          <img src={profileImg} width={90} alt="profile pic" className="mb-2" />
-          <span className="font-[Pretendard]">동훈</span>
-          <div className="flex items-center justify-around w-[100px]">
-            <img src={icon} alt="muscle icon" width={35} />
-            <span className="font-[Pretendard]">Lv. 01</span>
+    <div
+      onClick={handleCloseScreen}
+      className="z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
+    >
+      <div className="bg-white relative right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border-[40px] border-solid border-[#161c4f] ">
+        <div className="flex p-6  ">
+          <div className=" px-4 flex flex-col items-center border-r border-solid border-gray-400">
+            <img
+              src={profileImg}
+              width={90}
+              alt="profile pic"
+              className="mb-2"
+            />
+            <span className="font-[Pretendard]">동훈</span>
+            <div className="flex items-center justify-around w-[100px]">
+              <img src={icon} alt="muscle icon" width={35} />
+              <span className="font-[Pretendard]">Lv. 01</span>
+            </div>
+          </div>
+          <div className="flex flex-col items-center py-2 w-[600px] ">
+            <p className="font-[Pretendard] p-6 font-semibold ">
+              솔직히 3대 200도 못들면 헬스 접는게 맞음 ㄹㅇ ㅋㅋ 벤치 40에 스쾃
+              80 데드 80만 들어도 3대 ㅋㅋ
+            </p>
+            <img
+              width={150}
+              src="https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/1648545238/B.jpg?597000000"
+              alt=""
+            />
           </div>
         </div>
-        <div className="flex flex-col items-center py-2 w-[600px] ">
-          <p className="font-[Pretendard] p-6 font-semibold ">
-            솔직히 3대 200도 못들면 헬스 접는게 맞음 ㄹㅇ ㅋㅋ 벤치 40에 스쾃 80
-            데드 80만 들어도 3대 ㅋㅋ
-          </p>
-          <img
-            width={150}
-            src="https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/1648545238/B.jpg?597000000"
-            alt=""
+        <div className=" flex items-center justify-between  p-4 border-b border-solid border-gray-400 w-full ">
+          <p className="font-[Pretendard]">Total Comments {comments.length}</p>
+          <div>
+            {' '}
+            <button
+              onClick={handleLikePost}
+              className=" hover:brightness-110 duration-300  py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold "
+            >
+              Like Post
+            </button>
+            <span className=" ml-2 text-m text-gray-500 font-semibold ">
+              {likeCount}
+            </span>{' '}
+          </div>
+        </div>
+        <div className="flex items-center justify-center  p-4 border-b border-solid border-gray-400 w-full">
+          <input
+            type="search"
+            onChange={(e) => setAddComment(e.target.value)}
+            value={addComment}
+            className=" border border-solid border-gray-400 rounded-lg  p-2 font-[Pretendard] w-[400px]"
           />
-        </div>
-      </div>
-      <div className=" flex items-center justify-between  p-4 border-b border-solid border-gray-400 w-full ">
-        <p className="font-[Pretendard]">Total Comments {comments.length}</p>
-        <div>
-          {' '}
-          <button
-            onClick={handleLikePost}
-            className=" hover:brightness-110 duration-300  py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold "
-          >
-            Like Post
+          <button className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-3  text-sm font-semibold  ml-4  w-[200px]  rounded-xl">
+            Add a comment
           </button>
-          <span className=" ml-2 text-m text-gray-500 font-semibold ">
-            {likeCount}
-          </span>{' '}
         </div>
-      </div>
-      <div className="flex items-center justify-center  p-4 border-b border-solid border-gray-400 w-full">
-        <input
-          type="search"
-          onChange={(e) => setAddComment(e.target.value)}
-          value={addComment}
-          className=" border border-solid border-gray-400 rounded-lg  p-2 font-[Pretendard] w-[400px]"
-        />
-        <button className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-3  text-sm font-semibold  ml-4  w-[200px]  rounded-xl">
-          Add a comment
-        </button>
-      </div>
 
-      <div className=" w-[800px] ">
-        <div className="   flex flex-col justify-evenly  ">
-          {comments.slice(0, displayComments).map((comment) => (
-            <Comments
-              key={comment.id}
-              profileImg={comment.profileImg}
-              nickname={comment.nickname}
-              label={comment.label}
-              text={comment.text}
-              timeCreated={comment.timeCreated}
-            />
-          ))}
+        <div className=" w-[800px] ">
+          <div className="   flex flex-col justify-evenly  ">
+            {comments.slice(0, displayComments).map((comment) => (
+              <Comments
+                key={comment.id}
+                profileImg={comment.profileImg}
+                nickname={comment.nickname}
+                label={comment.label}
+                text={comment.text}
+                timeCreated={comment.timeCreated}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="mt-5">
-        {comments.length > 3 && (
-          <button
-            onClick={expandComments}
-            className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
-          >
-            View More Comments
-          </button>
-        )}
+        <div className="mt-5">
+          {comments.length > 3 && (
+            <button
+              onClick={expandComments}
+              className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
+            >
+              View More Comments
+            </button>
+          )}
 
-        {displayComments > 3 && (
-          <button
-            onClick={hideComments}
-            className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
-          >
-            Hide Comments
-          </button>
-        )}
+          {displayComments > 3 && (
+            <button
+              onClick={hideComments}
+              className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
+            >
+              Hide Comments
+            </button>
+          )}
+        </div>
       </div>
     </div>
 

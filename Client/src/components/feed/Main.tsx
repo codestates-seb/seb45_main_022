@@ -3,7 +3,6 @@ import SearchBar from './SearchBar';
 import FeedItem from './FeedItem';
 import { Feed } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
-import UserPost from '../post/UserPost';
 
 interface Props {
   feedList: Feed[];
