@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "feedId": 20,
+      "nickName": "한도석",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/20",
+      "statId": 5,
+      "level": 4,
+      "body": "지원님. 아무리 코딩이 재밌어도 식사는 하세요.",
+      "feedHashTags": [
+        {
+          "hashTagId": 24,
+          "body": "카테고리2태그"
+        }
+      ],
+      "likeCount": 20,
+      "commentCount": 5,
+      "createdAt": "2023-09-18T17:30:15.987654",
+      "modifiedAt": "2023-09-18T17:35:45.444444"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

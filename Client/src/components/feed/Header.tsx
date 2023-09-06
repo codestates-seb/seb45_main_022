@@ -1,40 +1,62 @@
-import { Link } from 'react-router-dom';
 import { STATUS_ICON } from '../../utility/status';
-import { CATEGORY_ICON } from '../../utility/category';
+import {
+  CATEGORY_ICON,
+  CATEGORY_NAME,
+  CATEGORY_STATUS_MAP,
+} from '../../utility/category';
+import { useNavigate } from 'react-router-dom';
+import { CategoryCode } from '../../api/category';
 
-const Header = () => {
+interface Props {
+  categoryCode: CategoryCode;
+}
+
+const Header = ({ categoryCode }: Props) => {
+  const nav = useNavigate();
+
   return (
     <div
       className={`w-full h-[60px] flex justify-center items-center gap-[220px]`}
     >
       {/* 닉네임 */}
       <p
-        className=" text-[1.5rem] font-bold mt-[100px]"
+        className=" text-[1.5rem] font-bold mt-[100px] cursor-pointer"
         style={{ fontFamily: 'Pretendard' }}
       >
         ⚔️ 헬창용사님
       </p>
 
       {/* 아이콘, 카테고리 이름 */}
-      <Link
-        to={`/map/0`}
-        className="w-[250px] flex justify-between items-center"
+      <div
+        className="w-[250px] flex justify-between items-center cursor-pointer"
+        onClick={() => nav(-1)}
       >
-        <img className="w-[50px] h-[50px]" src={CATEGORY_ICON[0]} alt="Icon" />
-        <span className="text-[2rem] font-bold mb-[0.5rem]">헬스</span>
-        <img className="w-[50px] h-[50px]" src={CATEGORY_ICON[0]} alt="Icon" />
-      </Link>
+        <img
+          className="w-[50px] h-[50px]"
+          src={CATEGORY_ICON[categoryCode]}
+          alt="Icon"
+        />
+        <span className="text-[2rem] font-bold mb-[0.5rem]">
+          {CATEGORY_NAME[categoryCode]}
+        </span>
+        <img
+          className="w-[50px] h-[50px]"
+          src={CATEGORY_ICON[categoryCode]}
+          alt="Icon"
+        />
+      </div>
 
       {/* 스탯 아이콘, 레벨, 경험치 바 */}
       <div className="flex flex-col justify-center items-end gap-[0.5rem] cursor-pointer mt-[100px]">
         <div className="flex gap-[1rem]">
           <img
             className="w-[1rem] h-[1rem]"
-            src={STATUS_ICON[0]}
+            src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
             alt="titleIcon"
           />
           <span className="text-[1rem]">Lv.100</span>
         </div>
+
         <div className="flex">
           <div className="relative w-[10rem] h-[1rem] p-[0.5rem] bg-gray-300 rounded-full overflow-hidden flex justify-start items-center">
             <div

@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "feedId": 14,
+      "nickName": "민지",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/14",
+      "statId": 3,
+      "level": 4,
+      "body": "새로운 카테고리의 피드 내용입니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 16,
+          "body": "새로운해시태그"
+        }
+      ],
+      "likeCount": 17,
+      "commentCount": 6,
+      "createdAt": "2023-09-12T17:30:15.987654",
+      "modifiedAt": "2023-09-12T17:35:45.444444"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

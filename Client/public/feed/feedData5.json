@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "feedId": 13,
+      "nickName": "이지원",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/13",
+      "statId": 2,
+      "level": 83,
+      "body": "🧸",
+      "feedHashTags": [
+        {
+          "hashTagId": 15,
+          "body": "수정된태그"
+        }
+      ],
+      "likeCount": 14,
+      "commentCount": 7,
+      "createdAt": "2023-09-11T09:45:32.654321",
+      "modifiedAt": "2023-09-11T09:50:59.111111"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

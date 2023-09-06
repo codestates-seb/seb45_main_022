@@ -1,0 +1,67 @@
+{
+  "data": [
+    {
+      "feedId": 3,
+      "nickName": "흑룡",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/1",
+      "statId": 1,
+      "level": 30,
+      "body": "준비됐어 백?",
+      "feedHashTags": [],
+      "likeCount": 0,
+      "commentCount": 0,
+      "createdAt": "2023-09-01T10:17:40.02449",
+      "modifiedAt": "2023-09-01T10:17:40.03549"
+    },
+    {
+      "feedId": 2,
+      "nickName": "백룡",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/2",
+      "statId": 1,
+      "level": 13,
+      "body": "물론이지 흑.",
+      "feedHashTags": [
+        {
+          "hashTagId": 4,
+          "body": "태그1"
+        }
+      ],
+      "likeCount": 0,
+      "commentCount": 0,
+      "createdAt": "2023-09-01T10:17:19.037077",
+      "modifiedAt": "2023-09-01T10:17:19.128578"
+    },
+    {
+      "feedId": 1,
+      "nickName": "강석",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/3",
+      "statId": 1,
+      "level": 16,
+      "body": "3대 500은 기본입니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 1,
+          "body": "해쉬"
+        },
+        {
+          "hashTagId": 2,
+          "body": "태그"
+        },
+        {
+          "hashTagId": 3,
+          "body": "가즈아"
+        }
+      ],
+      "likeCount": 1,
+      "commentCount": 1,
+      "createdAt": "2023-08-31T21:07:51.632101",
+      "modifiedAt": "2023-08-31T21:07:51.748105"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 3,
+    "totalPages": 1
+  }
+}
