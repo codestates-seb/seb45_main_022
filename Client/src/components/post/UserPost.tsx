@@ -107,6 +107,11 @@ const UserPost = ({ handleCloseScreen }) => {
     setLikeCount(likeCount + 1);
   };
 
+  // 게시글 컴포넌트 클릭했을 때는 닫힘하지 않기
+  const handleContainerClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.stopPropagation();
+  };
+
   // 명세서 나오면 추가 예정
   // const { isLoading, data: userPost } = useQuery(['postInfo'], getPostInfo);
   // if (isLoading) return <div>Loading...</div>;
@@ -116,7 +121,10 @@ const UserPost = ({ handleCloseScreen }) => {
       onClick={handleCloseScreen}
       className="z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
     >
-      <div className="bg-white relative right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border-[40px] border-solid border-[#161c4f] ">
+      <div
+        onClick={handleContainerClick}
+        className="bg-white relative right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border-[40px] border-solid border-[#161c4f] "
+      >
         <div className="flex p-6  ">
           <div className=" px-4 flex flex-col items-center border-r border-solid border-gray-400">
             <img
