@@ -29,7 +29,7 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     @Query("SELECT f FROM Feed f WHERE f.category.categoryId = :categoryId AND f.deleted = false ")
     Page<Feed> findAllFeedByCategory(long categoryId, Pageable pageable);
 
-    Page<Feed> findAllByCategory_CategoryIdAndBodyLikeAndDeletedIsFalse(long categoryId, String body, Pageable pageable);
+    Page<Feed> findAllByCategory_CategoryIdAndBodyContainingAndDeletedIsFalse(long categoryId, String body, Pageable pageable);
 
     Page<Feed> findAllByDeletedIsFalse(Pageable pageable);
 

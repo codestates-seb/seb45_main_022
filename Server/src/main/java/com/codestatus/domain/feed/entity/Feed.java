@@ -27,6 +27,9 @@ public class Feed extends Auditable {
     @Column(nullable = false)
     private String body;
 
+    @Column(nullable = false)
+    private String data;
+
     @Column
     private boolean deleted = false;
 
