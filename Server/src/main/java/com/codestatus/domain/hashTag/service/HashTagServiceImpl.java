@@ -43,7 +43,6 @@ public class HashTagServiceImpl implements HashTagService {
         List<FeedHashTag> feedHashTags = new ArrayList<>();  //기존에 없던 HashTag를 넣어주기 위해 임시 리스트 생성
         for (String hashTagStr : hashTags) {  //리스트 내의 해쉬태그를 하나씩 확인
             HashTag hashTag = findOrCreateHashTag(hashTagStr); //하나씩 받아서 객체로 생성
-            hashTag.setCount(hashTag.getCount()+1); // 해쉬태그 카운트 1 증가
             FeedHashTag feedHashTag = new FeedHashTag(feed, hashTag); //피드해시태그로 만들어 매핑
             feedHashTags.add(feedHashTag); //생성한 해쉬태그를 임시 리스트에 추가
         }
@@ -60,7 +59,6 @@ public class HashTagServiceImpl implements HashTagService {
         } else {
             HashTag newHashTag = new HashTag();
             newHashTag.setBody(hashTagStr);
-            newHashTag.setCount(0);
             newHashTag.setDeleted(false);
 
             hashTagRepository.save(newHashTag); // 새로운 해시태그 저장
@@ -93,12 +91,7 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public void deleteHashTag(List<HashTag> hashTags) {
-        hashTags.forEach(hashTag ->{
-            if(hashTag.getCount() > 1) {
-                hashTag.setCount(hashTag.getCount() - 1);
-            } else hashTagRepository.delete(hashTag);
-        });
-
+        hashTagRepository.deleteAll(hashTags);
     }
 }
 

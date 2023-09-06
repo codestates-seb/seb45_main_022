@@ -99,8 +99,6 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.findByCategory_CategoryIdAndFeedHashTags_HashTag_HashTagId(categoryId, hashTagId, pageable);
     }
 
-
-
     //삭제되지않은 피드목록 조회
     @Transactional(readOnly = true)
     public Page<Feed> findAllFeedByDeleted(int page, int size) {
@@ -144,7 +142,6 @@ public class FeedServiceImpl implements FeedService {
         hashTagService.deleteHashTag(findFeed.getFeedHashTags()
                 .stream().map(FeedHashTag::getHashTag)
                 .collect(Collectors.toList()));
-
 
     }
     @Transactional(propagation = Propagation.REQUIRES_NEW)
