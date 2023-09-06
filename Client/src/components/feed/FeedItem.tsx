@@ -5,6 +5,8 @@ import { CategoryCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
+import UserPost from '../post/UserPost';
+import { useState } from 'react';
 
 interface FeedItemProps {
   feed: Feed;
@@ -12,6 +14,7 @@ interface FeedItemProps {
 }
 
 const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
+  const [displayPost, setDisplayPost] = useState(false);
   const {
     nickName,
     profileImage,
@@ -28,8 +31,17 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     backgroundPosition: 'center',
   };
 
+  const handleShowPost = () => {
+    setDisplayPost(true);
+  };
+
   return (
-    <div className="w-[295px] h-[137px]" style={FeedBoard}>
+    <div
+      onClick={handleShowPost}
+      className="w-[295px] h-[137px] "
+      style={FeedBoard}
+    >
+      {displayPost && <UserPost />}
       <div className="w-full h-full p-7 flex">
         {/* 왼쪽 구간 (전체 너비 1/3) */}
         <div className="w-[70px] h-full flex flex-col justify-between items-start gap-1 cursor-pointer">

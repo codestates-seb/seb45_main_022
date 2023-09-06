@@ -3,6 +3,7 @@ import SearchBar from './SearchBar';
 import FeedItem from './FeedItem';
 import { Feed } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
+import UserPost from '../post/UserPost';
 
 interface Props {
   feedList: Feed[];
@@ -16,7 +17,7 @@ const Main = ({ feedList, categoryCode }: Props) => {
         <FilterButton />
         <SearchBar />
       </div>
-      <div className="flex flex-wrap justify-center gap-4 p-3">
+      <div className="flex items-center justify-around  gap-4 p-3  w-full ">
         {feedList !== null ? (
           feedList.map((feed, index) => (
             <FeedItem key={index} feed={feed} categoryCode={categoryCode} />
