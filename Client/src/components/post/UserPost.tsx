@@ -108,7 +108,7 @@ const UserPost = ({ handleCloseScreen }) => {
   };
 
   // 게시글 컴포넌트 클릭했을 때는 닫힘하지 않기
-  const handleContainerClick = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContainerClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
   };
 
@@ -119,14 +119,20 @@ const UserPost = ({ handleCloseScreen }) => {
   return (
     <div
       onClick={handleCloseScreen}
-      className="z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
+      className=" overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
     >
       <div
         onClick={handleContainerClick}
-        className="bg-white relative right-0 bottom-0 left-0  m-auto  p-4 flex flex-col items-center w-[900px] border-[40px] border-solid border-[#161c4f] "
+        className="bg-white relative top-10 right-0 bottom-10 left-0 mx-auto p-4 flex flex-col items-center w-[800px] border-[40px] border-solid border-[#3e3c2095]"
       >
-        <div className="flex p-6  ">
-          <div className=" px-4 flex flex-col items-center border-r border-solid border-gray-400">
+        <button
+          onClick={handleCloseScreen}
+          className="absolute top-4 right-4 text-3xl "
+        >
+          X
+        </button>
+        <div className="flex  p-6 ">
+          <div className="  px-4 flex flex-col items-center border-r border-solid border-gray-400">
             <img
               src={profileImg}
               width={90}
@@ -139,10 +145,11 @@ const UserPost = ({ handleCloseScreen }) => {
               <span className="font-[Pretendard]">Lv. 01</span>
             </div>
           </div>
-          <div className="flex flex-col items-center py-2 w-[600px] ">
-            <p className="font-[Pretendard] p-6 font-semibold ">
+          <div className="flex flex-col items-center justify-center  py-2 w-[500px]">
+            <p className="font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis">
               솔직히 3대 200도 못들면 헬스 접는게 맞음 ㄹㅇ ㅋㅋ 벤치 40에 스쾃
-              80 데드 80만 들어도 3대 ㅋㅋ
+              80 데드 80만 들어도 3대 ㅋㅋ 솔직히 3대 200도 못들면 헬스 접는게
+              맞음 ㄹㅇ ㅋㅋ 벤치 40에 스쾃 80 데드 80만 들어도 3대 ㅋㅋ
             </p>
             <img
               width={150}
@@ -151,35 +158,34 @@ const UserPost = ({ handleCloseScreen }) => {
             />
           </div>
         </div>
-        <div className=" flex items-center justify-between  p-4 border-b border-solid border-gray-400 w-full ">
+        <div className="flex items-center justify-between p-4 border-b border-solid border-gray-400 w-full">
           <p className="font-[Pretendard]">Total Comments {comments.length}</p>
           <div>
-            {' '}
             <button
               onClick={handleLikePost}
-              className=" hover:brightness-110 duration-300  py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold "
+              className="hover:brightness-110 duration-300 py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold"
             >
               Like Post
             </button>
-            <span className=" ml-2 text-m text-gray-500 font-semibold ">
+            <span className="ml-2 text-m text-gray-500 font-semibold">
               {likeCount}
-            </span>{' '}
+            </span>
           </div>
         </div>
-        <div className="flex items-center justify-center  p-4 border-b border-solid border-gray-400 w-full">
+        <div className="flex items-center justify-center p-4 border-b border-solid border-gray-400 w-full">
           <input
             type="search"
             onChange={(e) => setAddComment(e.target.value)}
             value={addComment}
-            className=" border border-solid border-gray-400 rounded-lg  p-2 font-[Pretendard] w-[400px]"
+            className="border border-solid border-gray-400 rounded-lg p-2 font-[Pretendard] w-[400px]"
           />
-          <button className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-3  text-sm font-semibold  ml-4  w-[200px]  rounded-xl">
+          <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-3 text-sm font-semibold ml-4 w-[200px] rounded-xl">
             Add a comment
           </button>
         </div>
 
-        <div className=" w-[800px] ">
-          <div className="   flex flex-col justify-evenly  ">
+        <div className="max-w-[800px] w-full">
+          <div className="flex flex-col justify-evenly">
             {comments.slice(0, displayComments).map((comment) => (
               <Comments
                 key={comment.id}
@@ -196,7 +202,7 @@ const UserPost = ({ handleCloseScreen }) => {
           {comments.length > 3 && (
             <button
               onClick={expandComments}
-              className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
+              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
             >
               View More Comments
             </button>
@@ -205,7 +211,7 @@ const UserPost = ({ handleCloseScreen }) => {
           {displayComments > 3 && (
             <button
               onClick={hideComments}
-              className="  hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold   text-sm ml-4 w-[200px]  rounded-xl "
+              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
             >
               Hide Comments
             </button>
