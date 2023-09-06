@@ -3,7 +3,7 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import ModalFrame from '../common/ModalFrame';
 import { StatusCode } from '../../api/category';
-import { STATUS_ICON } from '../../utility/icon';
+import { STATUS_ICON } from '../../utility/status';
 
 interface Props {
   closeScreen: () => void;
