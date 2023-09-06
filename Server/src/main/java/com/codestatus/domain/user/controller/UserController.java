@@ -3,9 +3,9 @@ package com.codestatus.domain.user.controller;
 import com.codestatus.domain.user.dto.UserDto;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.mapper.UserMapper;
-import com.codestatus.domain.user.service.LevelServiceImpl;
 import com.codestatus.domain.user.service.UserServiceImpl;
 import com.codestatus.global.auth.dto.PrincipalDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,18 +18,12 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Validated
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserMapper userMapper;
     private final UserServiceImpl service;
-    private final LevelServiceImpl levelServiceImpl;
-
-    public UserController(UserMapper userMapper, UserServiceImpl service, LevelServiceImpl levelServiceImpl) {
-        this.userMapper = userMapper;
-        this.service = service;
-        this.levelServiceImpl = levelServiceImpl;
-    }
 
     // 유저 가입 컨트롤러
     @PostMapping("/signup")
@@ -63,14 +57,6 @@ public class UserController {
         User user = userMapper.userPatchPasswordToUser(requestBody); // PatchDto -> Entity
         service.updatePassword(user, principal.getId()); // 유저 비밀번호 수정 메서드 호출
         return ResponseEntity.status(HttpStatus.OK).body("password patch success"); // 비밀번호 수정 성공 메시지 반환
-    }
-
-    // 출석체크 컨트롤러
-    @PostMapping("/mypage/attendance/{chosenStat}")
-    public ResponseEntity checkAttendance(@PathVariable @Min(1) @Max(5) int chosenStat,
-                                          @AuthenticationPrincipal PrincipalDto principal) {
-        levelServiceImpl.checkAttendance(chosenStat - 1, principal.getId()); // 출석체크 메서드 호출
-        return ResponseEntity.status(HttpStatus.OK).body("attendance check success"); // 출석체크 성공 메시지 반환
     }
 
     // 프로필 이미지 업로드
