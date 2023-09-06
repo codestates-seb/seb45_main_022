@@ -58,7 +58,6 @@ public interface FeedMapper {
                         .statId(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatId().intValue())
                         .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
                         .body(feed.getBody())
-                        .data(feed.getData())
                         .feedHashTags(feed.getFeedHashTags().stream()
                                 .map(feedHashTag -> HashTagResponseDto.builder()
                                         .hashTagId(feedHashTag.getHashTag().getHashTagId())

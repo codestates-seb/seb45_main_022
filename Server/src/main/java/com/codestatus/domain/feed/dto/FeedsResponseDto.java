@@ -24,8 +24,6 @@ public class FeedsResponseDto {
 
     private String body;
 
-    private String data;
-
     private List<HashTagResponseDto> feedHashTags;
 
     private int likeCount;
