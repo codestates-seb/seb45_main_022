@@ -5,6 +5,7 @@ import com.codestatus.domain.comment.repository.CommentRepository;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.domain.hashTag.entity.FeedHashTag;
+import com.codestatus.domain.hashTag.repository.FeedHashTagRepository;
 import com.codestatus.domain.hashTag.service.HashTagService;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final StatusRepository statusRepository;
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
+    private final FeedHashTagRepository feedHashTagRepository;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
@@ -119,14 +121,13 @@ public class UserServiceImpl implements UserService {
         findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
 
         List<Feed> feedList = feedRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
-        for (Feed feed : feedList) {
+        feedList.forEach(feed -> {
             feed.setDeleted(true);
-        }
+            feedHashTagRepository.deleteAll(feed.getFeedHashTags());
+        });
 
         List<Comment> commentList = commentRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
-        for (Comment comment : commentList) {
-            comment.setDeleted(true);
-        }
+        commentList.forEach(comment -> comment.setDeleted(true));
 
         commentRepository.saveAll(commentList);
         feedRepository.saveAll(feedList);
