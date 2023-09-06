@@ -16,5 +16,7 @@ public class FeedPostDto {
     @NotBlank
     private String body;
 
+    private String data;
+
     private List<String> hashTag;
 }

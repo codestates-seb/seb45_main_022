@@ -80,7 +80,7 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByCategory_CategoryIdAndBodyLikeAndDeletedIsFalse(categoryId, text, pageable);
+        return feedRepository.findAllByCategory_CategoryIdAndBodyContainingAndDeletedIsFalse(categoryId, text, pageable);
     }
 
     //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 유저가 쓴 피드목록 조회
@@ -124,6 +124,8 @@ public class FeedServiceImpl implements FeedService {
 
         Optional.ofNullable(feed.getBody())
                 .ifPresent(findFeed::setBody);
+        Optional.ofNullable(feed.getData())
+                .ifPresent(findFeed::setData);
 
         feedRepository.save(findFeed);
     }

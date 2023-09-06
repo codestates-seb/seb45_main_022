@@ -24,7 +24,9 @@ public class FeedResponseDto {
 
     private int level;
 
-    private String body;
+    // private String body;
+
+    private String data;
 
     private List<HashTagResponseDto> feedHashTags;
 

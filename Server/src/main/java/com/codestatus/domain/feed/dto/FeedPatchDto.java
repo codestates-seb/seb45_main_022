@@ -12,4 +12,5 @@ public class FeedPatchDto {
     private long id;
 
     private String body;
+    private String data;
 }

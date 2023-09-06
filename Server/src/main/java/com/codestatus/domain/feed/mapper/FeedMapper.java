@@ -24,7 +24,7 @@ public interface FeedMapper {
                 .profileImage(feed.getUser().getProfileImage())
                 .statId(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatId().intValue())
                 .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
-                .body(feed.getBody())
+                .data(feed.getData())
                 .feedHashTags(feed.getFeedHashTags().stream()
                         .map(feedHashTag -> HashTagResponseDto.builder()
                                 .hashTagId(feedHashTag.getHashTag().getHashTagId())
@@ -58,6 +58,7 @@ public interface FeedMapper {
                         .statId(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatId().intValue())
                         .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
                         .body(feed.getBody())
+                        .data(feed.getData())
                         .feedHashTags(feed.getFeedHashTags().stream()
                                 .map(feedHashTag -> HashTagResponseDto.builder()
                                         .hashTagId(feedHashTag.getHashTag().getHashTagId())
@@ -77,6 +78,7 @@ public interface FeedMapper {
     default Feed feedPostDtoToFeed(Category category, FeedPostDto requestBody, User user){
         Feed feed = new Feed();
         feed.setBody(requestBody.getBody());
+        feed.setData(requestBody.getData());
         feed.setCategory(category);
         feed.setUser(user);
         return feed;
