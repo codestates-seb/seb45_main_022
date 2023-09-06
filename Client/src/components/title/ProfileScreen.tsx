@@ -3,6 +3,8 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
+import 'cropperjs/dist/cropper.css';
+import ImageCropperModal from './ImageUploadModal';
 
 interface Props {
   closeScreen: () => void;
@@ -10,6 +12,7 @@ interface Props {
 
 const ProfileScreen = ({ closeScreen }: Props) => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const { userInfoQuery } = useUserInfo();
   const { isLoading, data: userInfo } = userInfoQuery;
@@ -29,7 +32,7 @@ const ProfileScreen = ({ closeScreen }: Props) => {
   return (
     <Backdrop>
       <div className="relative w-full h-full flex flex-col justify-center items-center gap-[2rem]">
-        <div className="w-[500px] h-[600px] p-[40px] bg-[url('/src/assets/common/modal-frame-paper.png')] bg-center bg-cover bg-no-repeat flex flex-col justify-between">
+        <div className="relative w-[500px] h-[600px] p-[40px] bg-[url('/src/assets/common/modal-frame-paper.png')] bg-center bg-cover bg-no-repeat flex flex-col justify-between">
           <div className="flex flex-row justify-between items-start">
             {/* 프로필 사진 액자 */}
             <div className="flex flex-col gap-2">
@@ -40,7 +43,14 @@ const ProfileScreen = ({ closeScreen }: Props) => {
                   alt="profile"
                 />
               </div>
-              <Button size="medium">Change Image</Button>
+              <Button
+                size="medium"
+                onClick={() => {
+                  setShowImageModal(true);
+                }}
+              >
+                Change Image
+              </Button>
             </div>
             {/* 닉네임 */}
             <div className="w-[300px] h-[200px] flex flex-col justify-center items-center gap-3">
@@ -60,6 +70,13 @@ const ProfileScreen = ({ closeScreen }: Props) => {
               </h1>
             </div>
           </div>
+          {showImageModal && (
+            <ImageCropperModal
+              onCloseBtnClick={() => {
+                setShowImageModal(false);
+              }}
+            />
+          )}
           {/* 탭 메뉴 */}
           <div className="w-[400px] h-[310px]">
             {/* 탭 버튼 */}

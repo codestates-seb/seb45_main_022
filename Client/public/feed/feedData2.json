@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "feedId": 4,
+      "nickName": "강성일",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/4",
+      "statId": 1,
+      "level": 57,
+      "body": "저는 재가 되어버리고 말았어요 🥹",
+      "feedHashTags": [
+        {
+          "hashTagId": 5,
+          "body": "새로운태그"
+        }
+      ],
+      "likeCount": 1,
+      "commentCount": 3,
+      "createdAt": "2023-09-02T14:25:18.123456",
+      "modifiedAt": "2023-09-02T14:30:45.678901"
+    },
+    {
+      "feedId": 5,
+      "nickName": "김동훈",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/5",
+      "statId": 1,
+      "level": 73,
+      "body": "도적이 되고 싶은 자는 나에게로..",
+      "feedHashTags": [],
+      "likeCount": 5,
+      "commentCount": 2,
+      "createdAt": "2023-09-03T09:42:55.987654",
+      "modifiedAt": "2023-09-03T09:45:33.333333"
+    },
+    {
+      "feedId": 6,
+      "nickName": "윤호",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/6",
+      "statId": 1,
+      "level": 11,
+      "body": "암벽등반",
+      "feedHashTags": [
+        {
+          "hashTagId": 6,
+          "body": "리팩토링"
+        }
+      ],
+      "likeCount": 10,
+      "commentCount": 8,
+      "createdAt": "2023-09-04T18:09:27.444444",
+      "modifiedAt": "2023-09-04T18:11:55.555555"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 3,
+    "totalPages": 1
+  }
+}

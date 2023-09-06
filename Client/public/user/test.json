@@ -2,40 +2,40 @@
   "id": 1,
   "email": "black@dragon.luv",
   "nickName": "흑룡",
-  "profileImage": "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
+  "profileImage": "https://codestatus.s3.ap-northeast-2.amazonaws.com/1693231015736_test.jpg",
   "attendance": false,
   "statuses": [
     {
-      "statName": "힘",
-      "statLevel": 6,
-      "statExp": 10,
-      "requiredExp": 100
+      "statId": 1,
+      "statLevel": 3,
+      "statExp": 120,
+      "requiredExp": 3
     },
     {
-      "statName": "민첩",
+      "statId": 2,
       "statLevel": 2,
-      "statExp": 2,
-      "requiredExp": 100
+      "statExp": 70,
+      "requiredExp": 41
     },
     {
-      "statName": "지능",
-      "statLevel": 24,
-      "statExp": 69,
-      "requiredExp": 100
+      "statId": 3,
+      "statLevel": 2,
+      "statExp": 50,
+      "requiredExp": 61
     },
     {
-      "statName": "매력",
+      "statId": 4,
       "statLevel": 1,
-      "statExp": 0,
-      "requiredExp": 100
+      "statExp": 40,
+      "requiredExp": 60
     },
     {
-      "statName": "생활력",
+      "statId": 5,
       "statLevel": 1,
-      "statExp": 0,
-      "requiredExp": 100
+      "statExp": 30,
+      "requiredExp": 70
     }
   ],
   "createDate": "2023-08-28T20:29:17.611235",
-  "modifiedDate": "2023-08-28T21:36:36.822127"
+  "modifiedDate": "2023-09-04T19:43:23.545325"
 }

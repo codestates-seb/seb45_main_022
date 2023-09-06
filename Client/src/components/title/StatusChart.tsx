@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Status } from '../../api/user';
+import { STATUS_NAME } from '../../utility/status';
 
 ChartJS.register(
   RadialLinearScale,
@@ -29,7 +30,7 @@ const StatusChart = ({ status }: Props) => {
   const [statusLevels, setStatusLevels] = useState<number[]>([]);
 
   useEffect(() => {
-    const statusNameArray = status.map((stat) => stat.statName);
+    const statusNameArray = status.map((stat) => STATUS_NAME[stat.statId]);
     const statusLevelArray = status.map((stat) => stat.statLevel);
     setStatusNames(statusNameArray);
     setStatusLevels(statusLevelArray);

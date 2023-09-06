@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "feedId": 17,
+      "nickName": "손민수",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/17",
+      "statId": 4,
+      "level": 4,
+      "body": "새로운 카테고리의 피드 내용입니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 20,
+          "body": "새로운해시태그"
+        }
+      ],
+      "likeCount": 18,
+      "commentCount": 5,
+      "createdAt": "2023-09-15T17:30:15.987654",
+      "modifiedAt": "2023-09-15T17:35:45.444444"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

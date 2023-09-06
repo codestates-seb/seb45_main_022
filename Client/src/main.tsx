@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <MapPage />,
   },
   {
-    path: '/feed/:categoryCode',
+    path: '/feed/:categoryCodeParam',
     element: <FeedPage />,
   },
 ]);
