@@ -5,7 +5,8 @@ import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import Button from '../common/Button';
 import { loginAuth } from '../../api/auth';
-import loading from '../../assets/common/loadinng.gif';
+import LoadingBar from '../common/LoadingBar';
+
 // import userData from '../../../public/user/users.json';
 
 // const loader =
@@ -13,14 +14,14 @@ import loading from '../../assets/common/loadinng.gif';
 
 interface LoginProps {
   changeSection: () => void;
-  showDefault: () => void;
+  onLoginBtnClick: () => void;
 }
 
 interface TokenData {
   access: string;
   refresh: string;
 }
-const Login = ({ changeSection, showDefault }: LoginProps) => {
+const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loginValidate, setLoginValidate] = useState<boolean>(false);
@@ -55,16 +56,14 @@ const Login = ({ changeSection, showDefault }: LoginProps) => {
     setLoadingScreen(true);
     setTimeout(() => {
       setLoadingScreen(false);
-      showDefault();
-    }, 2500);
+      onLoginBtnClick();
+    }, 1000);
   };
 
   return (
-    <ModalFrame height={550} width={700}>
+    <ModalFrame height={550} width={800}>
       {loadingScreen ? (
-        <div className="flex items-center justify-center ">
-          <img src={loading} alt="loading" width={260} />
-        </div>
+        <LoadingBar />
       ) : (
         <>
           <form
