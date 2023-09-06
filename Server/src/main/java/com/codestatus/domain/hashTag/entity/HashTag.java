@@ -18,9 +18,6 @@ public class HashTag {
     private long hashTagId;
 
     @Column
-    private int count;
-
-    @Column
     private String body;
 
     @Column

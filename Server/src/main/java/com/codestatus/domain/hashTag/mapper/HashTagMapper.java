@@ -15,7 +15,6 @@ public interface HashTagMapper {
                 .map(hashTag -> HashTagResponseDto
                         .builder()
                         .hashTagId(hashTag.getHashTagId())
-                        .count(hashTag.getCount())
                         .body(hashTag.getBody())
                         .build())
                 .collect(Collectors.toList());
