@@ -1,3 +1,5 @@
+import icon from '../../assets/icons/status-strength.png';
+
 interface CommentProps {
   profileImg: string;
   nickname: string;
@@ -18,7 +20,11 @@ const Comments = ({
       <div className="flex flex-col items-center justify-center w-20">
         <img src={profileImg} alt="profile image" width={45} />
         <span className="font-[Pretendard] font-semibold">{nickname}</span>
-        <span className="font-[Pretendard] ">{label}</span>
+
+        <div className="flex mt-1 items-center justify-around w-[100%]">
+          <img src={icon} alt="muscle icon" width={15} />
+          <span className="font-[Pretendard] text-sm">{label}</span>
+        </div>
       </div>
       <div className="flex text-sm   w-full p-4">
         <span className="font-[Pretendard] font-normal">{text}</span>
