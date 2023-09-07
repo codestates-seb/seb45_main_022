@@ -2,13 +2,12 @@ import Backdrop from '../components/common/Backdrop';
 import Header from '../components/feed/Header';
 import board from '../assets/feed/board.png';
 import Main from '../components/feed/Main';
-import { useEffect, useState } from 'react';
-import { getFeedList } from '../api/feed';
-import { Feed } from '../api/feed';
 import { useParams } from 'react-router';
+import useFeedList from '../hooks/useFeedList';
+import LoadingBar from '../components/common/LoadingBar';
+import { Feed } from '../api/feed';
 
 const FeedPage = () => {
-  const [feedList, setFeedList] = useState<Feed[]>([]);
   const { categoryCodeParam } = useParams();
   const categoryCode = Number(categoryCodeParam);
 
@@ -18,17 +17,27 @@ const FeedPage = () => {
     backgroundPosition: 'center',
   };
 
-  useEffect(() => {
-    const fetchFeedData = async () => {
-      try {
-        const feedList = await getFeedList(categoryCode);
-        setFeedList(feedList);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchFeedData();
-  }, [categoryCode]);
+  const { feedListQuery } = useFeedList(categoryCode);
+  const {
+    data: feedList,
+    isLoading,
+    isError,
+  } = feedListQuery as {
+    data: Feed[];
+    isLoading: boolean;
+    isError: boolean;
+  };
+
+  if (isLoading)
+    return (
+      <Backdrop>
+        <LoadingBar />
+      </Backdrop>
+    );
+
+  if (isError) {
+    return <p>{isError.toString()}</p>;
+  }
 
   return (
     <div className="flex flex-col justify-center items-center w-screen h-screen bg-feed bg-center bg-cover">
