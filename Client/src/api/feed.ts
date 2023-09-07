@@ -37,3 +37,18 @@ export const getFeedList = async (categoryCode: CategoryCode) => {
 
   return feedList;
 };
+
+export const getFilterdFeedList = async (
+  categoryCode: CategoryCode,
+  keyword: string,
+) => {
+  const response = await axios.get<FeedApiData>(
+    `${
+      import.meta.env.VITE_APP_BASE_URL
+    }/feed/findByBody/${categoryCode}?page=1&size=10&query=${keyword}`,
+  );
+  const feedList = response.data.data;
+  console.log(categoryCode);
+
+  return feedList;
+};
