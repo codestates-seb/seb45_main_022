@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import TitlePage from './pages/TitlePage';
 import FeedPage from './pages/FeedPage';
 import MapPage from './pages/MapPage';
+import PostScreen from './components/feed/PostScreen';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,12 @@ const router = createBrowserRouter([
   {
     path: '/feed/:categoryCodeParam',
     element: <FeedPage />,
+    children: [
+      {
+        path: 'post',
+        element: <PostScreen />,
+      },
+    ],
   },
 ]);
 

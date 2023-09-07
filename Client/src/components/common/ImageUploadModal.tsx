@@ -1,15 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
-import Backdrop from '../common/Backdrop';
-import Button from '../common/Button';
+import Backdrop from './Backdrop';
+import Button from './Button';
 
 interface Props {
   onCloseBtnClick: () => void;
+  onConfirmBtnClick: (imageURL?: string) => void;
 }
 
 type StepType = 'upload' | 'crop' | 'preview';
 
-const ImageCropperModal = ({ onCloseBtnClick }: Props) => {
+const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
   const cropperRef = useRef<ReactCropperElement>(null);
   const [step, setStep] = useState<StepType>('upload');
   const [inputImage, setInputImage] = useState('');
@@ -31,7 +32,7 @@ const ImageCropperModal = ({ onCloseBtnClick }: Props) => {
     <Backdrop>
       <div className="w-screen h-screen flex flex-col justify-center items-center gap-5">
         <div className="w-[450px] h-[600px] bg-[url('/src/assets/common/modal-frame-cropper.png')] bg-no-repeat bg-cover flex flex-col justify-center items-center">
-          <div className="flex flex-col justify-center items-center gap-10">
+          <div className="flex flex-col h-[400px] justify-between items-center">
             {step === 'upload' && (
               <>
                 <div className="w-[260px] h-[260px] bg-[url('/src/assets/common/no-image.png')] bg-no-repeat bg-cover p-[15px] shadow-[0_0_10px_#000]"></div>
@@ -57,7 +58,7 @@ const ImageCropperModal = ({ onCloseBtnClick }: Props) => {
             )}
             {step === 'crop' && (
               <>
-                <div className="w-[260px] h-[260px] bg-[url('/src/assets/common/no-image.png')] bg-no-repeat bg-cover p-[15px] shadow-[0_0_10px_#000]">
+                <div className="w-[260px] h-[260px] bg-[url('/src/assets/common/loading-image.png')] bg-no-repeat bg-cover p-[15px] shadow-[0_0_10px_#000]">
                   <Cropper
                     src={inputImage}
                     crop={onCrop}
@@ -96,7 +97,13 @@ const ImageCropperModal = ({ onCloseBtnClick }: Props) => {
                 />
                 <div className="flex flex-col gap-3">
                   <Button onClick={() => setStep('crop')}>Back</Button>
-                  <Button onClick={onCloseBtnClick}>Confirm</Button>
+                  <Button
+                    onClick={() => {
+                      onConfirmBtnClick(croppedImage);
+                    }}
+                  >
+                    Confirm
+                  </Button>
                 </div>
               </>
             )}
@@ -108,4 +115,4 @@ const ImageCropperModal = ({ onCloseBtnClick }: Props) => {
   );
 };
 
-export default ImageCropperModal;
+export default ImageUploadModal;
