@@ -28,7 +28,7 @@ const Main = ({ feedList, categoryCode }: Props) => {
   const filterFeedListWithin1Week = (list: Feed[]) => {
     const currentDate = new Date();
     currentDate.setUTCHours(0, 0, 0, 0);
-    currentDate.setHours(currentDate.getHours() + 9); // KTZ 타임존
+    currentDate.setHours(currentDate.getHours() + 9); // 코리안 타임존
 
     const yesterday = new Date(currentDate);
     yesterday.setDate(currentDate.getDate() - 1);
@@ -57,6 +57,7 @@ const Main = ({ feedList, categoryCode }: Props) => {
       <div className="flex items-center justify-around w-[1000px] flex-wrap p-3  overflow-y-scroll ">
         {sortByNewest &&
           feedList
+            //아이로 생성순 정렬
             .sort((a, b) => b.feedId - a.feedId)
             .map((feed, index) => (
               <FeedItem key={index} feed={feed} categoryCode={categoryCode} />
