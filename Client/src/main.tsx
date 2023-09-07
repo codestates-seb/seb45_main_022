@@ -9,6 +9,13 @@ import FeedPage from './pages/FeedPage';
 import MapPage from './pages/MapPage';
 import SearchPage from './pages/SearchPage';
 import PostScreen from './components/feed/PostScreen';
+import AuthPage from './pages/AuthPage';
+import LoginSection from './components/auth/LoginSection';
+import RegisterSection from './components/auth/RegisterSection';
+import MainPage from './pages/MainPage';
+import CheckInScreen from './components/main/CheckInScreen';
+import ProfileScreen from './components/main/ProfileScreen';
+import StatusScreen from './components/main/StatusScreen';
 
 const queryClient = new QueryClient();
 
@@ -17,6 +24,39 @@ const router = createBrowserRouter([
     path: '/',
     element: <TitlePage />,
   },
+  {
+    path: '/auth',
+    element: <AuthPage />,
+    children: [
+      {
+        path: 'login',
+        element: <LoginSection />,
+      },
+      {
+        path: 'register',
+        element: <RegisterSection />,
+      },
+    ],
+  },
+  {
+    path: '/main',
+    element: <MainPage />,
+    children: [
+      {
+        path: 'checkin',
+        element: <CheckInScreen />,
+      },
+      {
+        path: 'profile',
+        element: <ProfileScreen />,
+      },
+      {
+        path: 'status',
+        element: <StatusScreen />,
+      },
+    ],
+  },
+
   {
     path: '/map/:statusCodeParam',
     element: <MapPage />,

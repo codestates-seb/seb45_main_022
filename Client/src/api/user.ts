@@ -18,6 +18,6 @@ export interface UserInfo {
 }
 
 export const getUserInfo = async (): Promise<UserInfo> => {
-  const res = await axios.get('user/test.json');
+  const res = await axios.get('/user/test.json');
   return res.data;
 };

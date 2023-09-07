@@ -1,15 +1,17 @@
 import Backdrop from '../common/Backdrop';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  onScreenClick: () => void;
-}
+const TitleScreen = () => {
+  const navigate = useNavigate();
 
-const TitleScreen = ({ onScreenClick }: Props) => {
+  const handleScreenClick = () => {
+    navigate('/auth/login');
+  };
   return (
     <Backdrop>
       <div
         className="w-full h-full flex flex-col justify-center items-center gap-[15rem]"
-        onClick={onScreenClick}
+        onClick={handleScreenClick}
       >
         <h1 className="text-white font-extrabold font-default text-[8rem] tracking-wide drop-shadow-[10px_10px_2px_#000] pointer-events-none">
           STAT & US
