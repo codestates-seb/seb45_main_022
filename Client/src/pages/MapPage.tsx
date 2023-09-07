@@ -40,7 +40,7 @@ const MapPage = () => {
             Servers
           </div>
           <div className="w-full h-px bg-gray-600"></div>
-          <div className="w-[800px] h-[480px] flex flex-col  justify-around items-center p-10 gap-4">
+          <div className="w-[800px] h-[480px] flex flex-col  justify-around items-center p-10 gap-4 ">
             {categoryList.map((categoryName, index) => (
               <ServerList
                 key={index}

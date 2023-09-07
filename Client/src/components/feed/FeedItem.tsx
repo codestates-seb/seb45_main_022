@@ -57,7 +57,7 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
 
       <div
         onClick={handleShowPost}
-        className="w-[295px] h-[137px] hover:cursor-pointer "
+        className="w-[295px] h-[137px] hover:cursor-pointer m-3"
         style={FeedBoard}
       >
         {/* {displayPost && <UserPost setOpenFeedItem={setOpenFeedItem} />} */}
