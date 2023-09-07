@@ -54,7 +54,7 @@ const Main = ({ feedList, categoryCode }: Props) => {
           sortByBest={sortByBest}
           handleFilterByBest={handleFilterByBest}
         />
-        <SearchBar />
+        <SearchBar categoryCode={categoryCode}/>
       </div>
       <div className="flex items-center justify-around w-[1000px] flex-wrap p-3  overflow-y-scroll ">
         {sortByNewest &&
