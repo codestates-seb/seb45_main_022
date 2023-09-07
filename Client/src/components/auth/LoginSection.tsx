@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import ModalFrame from '../common/ModalFrame';
-import { useMutation } from 'react-query';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import Button from '../common/Button';
-import { loginAuth } from '../../api/auth';
 import LoadingBar from '../common/LoadingBar';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import useLogin from '../../hooks/useLogin';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,29 +17,28 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  //기본적으로 react query에서 5분동안 캐시 지원해줌,  시간설정 변경 가능
-  const { isLoading, mutate: login } = useMutation(loginAuth, {
-    onSuccess: (data) => {
-      console.log(data);
-      if (data.status === 200) {
-        const token = data.data.token;
-        localStorage.setItem('token', token);
-        navigate('/main');
-        return;
-      }
-      alert('User authentication error');
-    },
-    onError: (err) => {
-      console.log('Login fail', err);
-      if (axios.isAxiosError(err)) {
-        if (err.response?.status === 401) {
-          setShowLoginErrMsg(true);
-        }
-        return;
-      }
-      alert('User authentication error');
-    },
-  });
+  const onLoginSuccess = (data: AxiosResponse) => {
+    console.log(data);
+    if (data.status === 200) {
+      const token = data.data.token;
+      localStorage.setItem('token', token);
+      navigate('/main');
+      return;
+    }
+    alert('User authentication error');
+  };
+
+  const onLoginError = (err: AxiosError) => {
+    console.log('Login fail', err);
+    if (err.response?.status === 401) {
+      setShowLoginErrMsg(true);
+      return;
+    }
+    alert('User authentication error');
+  };
+  const { loginMutation } = useLogin(onLoginSuccess, onLoginError);
+
+  const { isLoading, mutate: login } = loginMutation;
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
