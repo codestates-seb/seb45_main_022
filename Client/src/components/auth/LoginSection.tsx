@@ -7,20 +7,12 @@ import Button from '../common/Button';
 import { loginAuth } from '../../api/auth';
 import LoadingBar from '../common/LoadingBar';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
 
-// import userData from '../../../public/user/users.json';
-
-// const loader =
-//   'https://media4.giphy.com/media/XH8aAiiVNuTaPVBLKd/giphy.gif?cid=ecf05e47wrbyn76phn4xf6yjk2og9rh70qx98fmftesikepy&ep=v1_stickers_search&rid=giphy.gif&ct=s';
-
-interface TokenData {
-  access: string;
-  refresh: string;
-}
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loginValidate, setLoginValidate] = useState<boolean>(false);
+  const [showLoginErrMsg, setShowLoginErrMsg] = useState<boolean>(false);
   const [emailFocus, setEmailFocus] = useState<boolean>(false);
   const [passFocus, setPassFocus] = useState<boolean>(false);
   const [loadingScreen, setLoadingScreen] = useState<boolean>(false);
@@ -31,10 +23,10 @@ const Login = () => {
   const { mutate: login } = useMutation(loginAuth, {
     onSuccess: (data) => {
       console.log(data);
+      setLoadingScreen(false);
       if (data.status === 200) {
         console.log(data);
-        setLoginValidate(false);
-
+        setShowLoginErrMsg(false);
         const token = data.data.token;
         localStorage.setItem('token', token);
         navigate('/main');
@@ -42,21 +34,19 @@ const Login = () => {
     },
     onError: (err) => {
       console.log('Login fail', err);
-      if (err.status === 401) {
-        setLoginValidate(true);
+      setLoadingScreen(false);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          setShowLoginErrMsg(true);
+        }
       }
     },
   });
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setLoadingScreen(true);
     login({ email, password });
-
-    // setLoadingScreen(true);
-    // setTimeout(() => {
-    //   setLoadingScreen(false);
-    // }, 1000);
   };
 
   return (
@@ -69,7 +59,7 @@ const Login = () => {
             onSubmit={handleLogin}
             className="flex flex-col items-center justify-center w-[500px]  p-3"
           >
-            {loginValidate && (
+            {showLoginErrMsg && (
               <p className="text-[10px] my-1 text-red-500">
                 Please check email or password
               </p>
