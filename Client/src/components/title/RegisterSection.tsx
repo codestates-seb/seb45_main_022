@@ -32,40 +32,39 @@ const Register = ({ changeSection }: RegisterProps) => {
   };
 
   const { isLoading, mutate: register } = useMutation(registerAuth, {
-    //서버에서 데이터 받으면 성공
-    // 서버 status에 따라 실행되는 조건문 걸면 좋을 듯
     onSuccess: (data) => {
-      if (data.status === 200) {
+      console.log(data);
+      if (data.status === 201) {
         console.log(data);
         setExistingEmail(false);
-        //
+        setExistingNickname(false);
         //로그인 창으로 전환
-        // changeSection();
-      } else if (
-        data.status === 409 &&
-        data.message === '사용중인 이메일 입니다.'
-      ) {
+        changeSection();
+      }
+    },
+    onError: (err: any) => {
+      console.log(err, 'onError Catched');
+
+      console.log('ERORRRR');
+      if (err.status === 409 && err.message === '사용중인 이메일 입니다.') {
         console.log('Existing Email');
         setExistingEmail(true);
       } else if (
-        data.status === 409 &&
-        data.message === '사용중인 닉네임 입니다.'
+        err.status === 409 &&
+        err.message === '사용중인 닉네임 입니다.'
       ) {
         console.log('Existing Nickname');
         setExistingNickname(true);
-      } else if (data.status === 400) {
+      } else if (err.status === 400) {
         console.log('User authentication error');
       }
-    },
-    onError: (err) => {
-      console.log(err);
     },
   });
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    register({ email, password, nickname });
+    register({ email, nickName: nickname, password });
     validateEmail(email, setEmailErr);
     validatePass(password, setPasswordErr);
     validateNickname(nickname, setNicknameErr);
