@@ -119,11 +119,11 @@ const UserPost = ({ handleCloseScreen }) => {
   return (
     <div
       onClick={handleCloseScreen}
-      className=" overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
+      className=" overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)] "
     >
       <div
         onClick={handleContainerClick}
-        className="bg-white relative top-10 right-0 bottom-10 left-0 mx-auto p-4 flex flex-col items-center w-[800px] border-[40px] border-solid border-[#3e3c2095]"
+        className=" bg-white relative top-10 right-0 bottom-10 left-0 mx-auto p-4 flex flex-col items-center w-[800px] rounded-xl border-[20px] border-solid border-[#444657]"
       >
         <button
           onClick={handleCloseScreen}
@@ -159,27 +159,34 @@ const UserPost = ({ handleCloseScreen }) => {
           </div>
         </div>
         <div className="flex items-center justify-between p-4 border-b border-solid border-gray-400 w-full">
-          <p className="font-[Pretendard]">Total Comments {comments.length}</p>
+          <div>
+            <span className="border border-solid bg-yellow-700 text-white text-sm font-semibold  rounded-xl p-3">
+              Total Comments
+            </span>
+            <span className="ml-4 text-m text-gray-500 font-semibold">
+              {comments.length}
+            </span>
+          </div>
           <div>
             <button
               onClick={handleLikePost}
-              className="hover:brightness-110 duration-300 py-1 px-3 rounded text-white bg-green-500 text-sm font-semibold"
+              className="hover:brightness-110 duration-300 rounded-xl text-white bg-green-500 font-semibold p-2"
             >
               Like Post
             </button>
-            <span className="ml-2 text-m text-gray-500 font-semibold">
+            <span className="ml-4 text-m text-gray-500 font-semibold">
               {likeCount}
             </span>
           </div>
         </div>
-        <div className="flex items-center justify-center p-4 border-b border-solid border-gray-400 w-full">
+        <div className="flex items-center justify-center  border-b border-solid border-gray-400 w-full py-4">
           <input
             type="search"
             onChange={(e) => setAddComment(e.target.value)}
             value={addComment}
-            className="border border-solid border-gray-400 rounded-lg p-2 font-[Pretendard] w-[400px]"
+            className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[400px]"
           />
-          <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-blue-500 text-white p-3 text-sm font-semibold ml-4 w-[200px] rounded-xl">
+          <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white py-2 px-3 text-sm font-semibold ml-4 w-[200px] rounded-xl">
             Add a comment
           </button>
         </div>
@@ -202,7 +209,7 @@ const UserPost = ({ handleCloseScreen }) => {
           {comments.length > 3 && (
             <button
               onClick={expandComments}
-              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-green-400 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
+              className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
             >
               View More Comments
             </button>
