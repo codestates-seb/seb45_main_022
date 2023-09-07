@@ -1,13 +1,9 @@
 package com.codestatus.domain.feed.service;
 
-import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
-import com.codestatus.domain.comment.service.CommentService;
-import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import com.codestatus.domain.hashTag.service.HashTagService;
-import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.feed.entity.Feed;
@@ -22,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +49,7 @@ public class FeedServiceImpl implements FeedService {
     //카테고리 내 피드리스트 조회
     @Transactional(readOnly = true)
     public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "feedId"); //최신순 정렬
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
         return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(categoryId, pageable);
     }
@@ -61,7 +58,7 @@ public class FeedServiceImpl implements FeedService {
     @Transactional(readOnly = true)
     public Page<Feed> findWeeklyBestFeeds(long categoryId, int page, int size) {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-        Sort sort = Sort.by(Sort.Direction.DESC, "feedId"); //최신순 정렬
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
         return feedRepository.findFeedsByCategoryAndCreatedAtAndSortLikes(categoryId, oneWeekAgo, pageable);
     }
