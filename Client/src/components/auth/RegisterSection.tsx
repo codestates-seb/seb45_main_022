@@ -3,8 +3,6 @@ import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
 import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { registerAuth } from '../../api/auth';
 import { useNavigate } from 'react-router';
 import {
   validateEmail,
@@ -12,7 +10,8 @@ import {
   validatePassword,
 } from '../../utility/validation';
 import LoadingBar from '../common/LoadingBar';
-import axios from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
+import useRegister, { ErrorResponseDataType } from '../../hooks/useRegister';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -30,35 +29,38 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const { isLoading, mutate: register } = useMutation(registerAuth, {
-    onSuccess: (data) => {
-      console.log(data);
-      if (data?.status === 201) {
-        navigate('/auth/login');
+  const onRegisterSuccess = (data: AxiosResponse) => {
+    console.log(data);
+    if (data?.status === 201) {
+      alert('Register success');
+      navigate('/auth/login');
+      return;
+    }
+    alert('User authentication error');
+    console.log('User authentication error');
+  };
+
+  const onRegisterError = (err: AxiosError<ErrorResponseDataType>) => {
+    console.log(err, 'onError Catched');
+    if (err.response?.data.status === 409) {
+      if (err.response?.data.message === '사용중인 이메일 입니다.') {
+        console.log('Existing Email');
+        setIsExistingEmail(true);
         return;
       }
-      alert('User authentication error');
-      console.log('User authentication error');
-    },
-    onError: (err) => {
-      console.log(err, 'onError Catched');
-      if (axios.isAxiosError(err)) {
-        if (err.response?.data.status === 409) {
-          if (err.response?.data.message === '사용중인 이메일 입니다.') {
-            console.log('Existing Email');
-            setIsExistingEmail(true);
-          }
-          if (err.response?.data.message === '사용중인 닉네임 입니다.') {
-            console.log('Existing Nickname');
-            setIsExistingNickname(true);
-          }
-          return;
-        }
+      if (err.response?.data.message === '사용중인 닉네임 입니다.') {
+        console.log('Existing Nickname');
+        setIsExistingNickname(true);
+        return;
       }
-      alert('User authentication error');
-      console.log('User authentication error');
-    },
-  });
+    }
+    alert('User authentication error');
+    console.log('User authentication error');
+  };
+
+  const { registerMutation } = useRegister(onRegisterSuccess, onRegisterError);
+
+  const { isLoading, mutate: register } = registerMutation;
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
