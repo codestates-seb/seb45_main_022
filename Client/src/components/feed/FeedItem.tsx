@@ -19,17 +19,12 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     profileImage,
     level,
     body,
-
+    likeCount,
     commentCount,
     createdAt,
   } = feed;
 
   const [openFeedItem, setOpenFeedItem] = useState(false);
-  const [likeCount, setLikeCount] = useState(3);
-
-  const handleLikePost = () => {
-    setLikeCount(likeCount + 1);
-  };
 
   const handleShowPost = () => {
     setOpenFeedItem(true);
@@ -47,13 +42,7 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
 
   return (
     <>
-      {openFeedItem && (
-        <UserPost
-          handleCloseScreen={handleCloseScreen}
-          handleLikePost={handleLikePost}
-          likeCount={likeCount}
-        />
-      )}
+      {openFeedItem && <UserPost handleCloseScreen={handleCloseScreen} />}
 
       <div
         onClick={handleShowPost}

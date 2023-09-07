@@ -2,10 +2,9 @@ import { useState } from 'react';
 import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/status-strength.png';
 import Comments from './Comments';
-import { getPostInfo } from '../../api/post';
-import { useQuery } from 'react-query';
-import PostFrame from '../common/PostFrame';
-
+// import { getPostInfo } from '../../api/post';
+// import { useQuery } from 'react-query';
+// import PostFrame from '../common/PostFrame';
 interface Comment {
   id: number;
   profileImg: string;
@@ -15,82 +14,87 @@ interface Comment {
   timeCreated: string;
 }
 
-const UserPost = ({ handleCloseScreen, handleLikePost, likeCount }) => {
+const UserPost = ({ handleCloseScreen }) => {
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
       profileImg: profileImg,
-      nickname: '하이',
+      nickname: 'code',
       label: 'Lv. 01',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: '중간 출석!!',
       timeCreated: '1H',
     },
     {
       id: 2,
       profileImg: profileImg,
-      nickname: '바이',
+      nickname: 'states',
       label: 'Lv. 03',
-      text: 'Lorem ipsum dolor sit, psum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturpsum dolor sit, amet cons ectetur adipisicing el ecteturamet cons ectetur adipisicing el ectetur adipisicing elit. Iusto, consequuntur?',
+      text: 'QR 입실/퇴실 해주세요',
       timeCreated: '5H',
     },
     {
       id: 3,
       profileImg: profileImg,
-      nickname: 'React',
+      nickname: '지원',
       label: 'Lv. 05',
-      text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto, consequuntur?',
+      text: '✨ Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?',
       timeCreated: '1M',
     },
     {
       id: 4,
       profileImg: profileImg,
-      nickname: 'Redux',
+      nickname: '연성',
       label: 'Lv. 08',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo exercitationem rerum voluptates? Molestiae ratione fuga vel dolor ad sed blanditiis culpa, tempore voluptates velit sequi mollitia voluptatem vero recusandae deleniti! Deserunt delectus, mollitia optio facere recusandae possimus vitae obcaecati iure!',
       timeCreated: '5M',
     },
     {
       id: 5,
       profileImg: profileImg,
-      nickname: 'Redux',
+      nickname: '흑룡',
       label: 'Lv. 08',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: '용요선생 🍻',
       timeCreated: '2D',
     },
     {
       id: 6,
       profileImg: profileImg,
-      nickname: 'Redux',
+      nickname: '도석',
       label: 'Lv. 08',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: '용요선생 🍻',
       timeCreated: '3D',
     },
     {
       id: 7,
       profileImg: profileImg,
-      nickname: 'Redux',
+      nickname: '동쿤',
       label: 'Lv. 08',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: '내가 이겼다',
       timeCreated: '12H',
     },
     {
       id: 9,
       profileImg: profileImg,
-      nickname: 'Redux',
+      nickname: '성일',
       label: 'Lv. 08',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: '최고',
       timeCreated: '5h',
     },
     {
       id: 9,
       profileImg: profileImg,
-      nickname: 'Redux',
+      nickname: '강석',
       label: 'Lv. 08',
-      text: '클럽 땡기네 ㅋㅋ 헬스클럽',
+      text: 'github: kangsuck',
       timeCreated: '1D',
     },
   ]);
 
+  const [likeCount, setLikeCount] = useState(3);
+
+  const handleLikePost = () => {
+    setLikeCount(likeCount + 1);
+  };
   const [displayComments, setDisplayComments] = useState(3);
   const [addComment, setAddComment] = useState('');
 
@@ -126,17 +130,17 @@ const UserPost = ({ handleCloseScreen, handleLikePost, likeCount }) => {
         >
           X
         </button>
-        <div className="flex  p-6 ">
-          <div className="  px-4 flex flex-col items-center border-r border-solid border-gray-400">
+        <div className="flex  justify-between  py-4 ">
+          <div className="  px-4 flex flex-col items-center border-r border-solid border-gray-400 ">
             <img
               src={profileImg}
               width={90}
               alt="profile pic"
               className="mb-2"
             />
-            <span className="font-[Pretendard]">동훈</span>
-            <div className="flex items-center justify-around w-[100px]">
-              <img src={icon} alt="muscle icon" width={35} />
+            <span className="font-[Pretendard] font-semibold">동훈</span>
+            <div className="flex mt-1 items-center justify-around w-[100%]">
+              <img src={icon} alt="muscle icon" width={25} />
               <span className="font-[Pretendard]">Lv. 01</span>
             </div>
           </div>
