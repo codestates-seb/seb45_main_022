@@ -5,17 +5,15 @@ import view from '../../assets/icons/view.png';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { registerAuth } from '../../api/auth';
+import { useNavigate } from 'react-router';
 import {
   validateEmail,
   validateNickname,
   validatePass,
 } from '../../hooks/validation';
+import LoadingBar from '../common/LoadingBar';
 
-interface RegisterProps {
-  changeSection: () => void;
-}
-
-const Register = ({ changeSection }: RegisterProps) => {
+const Register = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
@@ -31,20 +29,20 @@ const Register = ({ changeSection }: RegisterProps) => {
     setPasswordVisible(!passwordVisible);
   };
 
+  const navigate = useNavigate();
+
   const { isLoading, mutate: register } = useMutation(registerAuth, {
     onSuccess: (data) => {
       console.log(data);
-      if (data.status === 201) {
+      if (data?.status === 201) {
         console.log(data);
         setExistingEmail(false);
         setExistingNickname(false);
-        //로그인 창으로 전환
-        changeSection();
+        navigate('/auth/login');
       }
     },
     onError: (err: any) => {
       console.log(err, 'onError Catched');
-
       console.log('ERORRRR');
       if (err.status === 409 && err.message === '사용중인 이메일 입니다.') {
         console.log('Existing Email');
@@ -70,9 +68,8 @@ const Register = ({ changeSection }: RegisterProps) => {
     validateNickname(nickname, setNicknameErr);
   };
 
-  {
-    isLoading && <h1>Loading...</h1>;
-  }
+  if (isLoading) return <LoadingBar />;
+
   return (
     <ModalFrame height={550} width={780}>
       <form
@@ -146,7 +143,7 @@ const Register = ({ changeSection }: RegisterProps) => {
           <span className="text-neutral-500">Already a user?</span>
           <span
             onClick={() => {
-              changeSection();
+              navigate('/auth/login');
             }}
             className="text-neutral-100 ml-4 hover:cursor-pointer"
           >

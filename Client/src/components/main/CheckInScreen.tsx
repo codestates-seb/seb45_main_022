@@ -4,12 +4,9 @@ import Button from '../common/Button';
 import ModalFrame from '../common/ModalFrame';
 import { StatusCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
+import { Link } from 'react-router-dom';
 
-interface Props {
-  closeScreen: () => void;
-}
-
-const CheckInScreen = ({ closeScreen }: Props) => {
+const CheckInScreen = () => {
   const [step, setStep] = useState<'select' | 'confirm'>('select');
   const [selectedStatusCode, setSelectedStatusCode] =
     useState<StatusCode | null>(null);
@@ -63,7 +60,9 @@ const CheckInScreen = ({ closeScreen }: Props) => {
                 </div>
                 <h1 className="text-[2rem]">Status EXP Up!</h1>
               </div>
-              <Button onClick={closeScreen}>Confirm</Button>
+              <Link to="/main">
+                <Button>Confirm</Button>
+              </Link>
             </div>
           )}
         </ModalFrame>

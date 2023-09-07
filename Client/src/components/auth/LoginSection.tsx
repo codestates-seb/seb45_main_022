@@ -6,22 +6,18 @@ import shield from '../../assets/common/shield.png';
 import Button from '../common/Button';
 import { loginAuth } from '../../api/auth';
 import LoadingBar from '../common/LoadingBar';
+import { useNavigate } from 'react-router';
 
 // import userData from '../../../public/user/users.json';
 
 // const loader =
 //   'https://media4.giphy.com/media/XH8aAiiVNuTaPVBLKd/giphy.gif?cid=ecf05e47wrbyn76phn4xf6yjk2og9rh70qx98fmftesikepy&ep=v1_stickers_search&rid=giphy.gif&ct=s';
 
-interface LoginProps {
-  changeSection: () => void;
-  onLoginBtnClick: () => void;
-}
-
 interface TokenData {
   access: string;
   refresh: string;
 }
-const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
+const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loginValidate, setLoginValidate] = useState<boolean>(false);
@@ -29,18 +25,19 @@ const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
   const [passFocus, setPassFocus] = useState<boolean>(false);
   const [loadingScreen, setLoadingScreen] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   //기본적으로 react query에서 5분동안 캐시 지원해줌,  시간설정 변경 가능
   const { mutate: login } = useMutation(loginAuth, {
     onSuccess: (data) => {
       console.log(data);
-
       if (data.status === 200) {
         console.log(data);
         setLoginValidate(false);
 
         const token = data.data.token;
         localStorage.setItem('token', token);
-        changeSection();
+        navigate('/main');
       }
     },
     onError: (err) => {
@@ -56,15 +53,14 @@ const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
 
     login({ email, password });
 
-    setLoadingScreen(true);
-    setTimeout(() => {
-      setLoadingScreen(false);
-      onLoginBtnClick();
-    }, 1000);
+    // setLoadingScreen(true);
+    // setTimeout(() => {
+    //   setLoadingScreen(false);
+    // }, 1000);
   };
 
   return (
-    <ModalFrame height={550} width={800}>
+    <ModalFrame height={550} width={780}>
       {loadingScreen ? (
         <LoadingBar />
       ) : (
@@ -147,7 +143,9 @@ const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
             <span className="text-neutral-500">Don't have an account yet?</span>
             <span
               className="text-neutral-100 hover:cursor-pointer"
-              onClick={changeSection}
+              onClick={() => {
+                navigate('/auth/register');
+              }}
             >
               Sign up!
             </span>

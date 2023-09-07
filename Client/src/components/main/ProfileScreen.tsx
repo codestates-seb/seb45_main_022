@@ -5,17 +5,16 @@ import { useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
 import 'cropperjs/dist/cropper.css';
 import ImageUploadModal from '../common/ImageUploadModal';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface Props {
-  closeScreen: () => void;
-}
-
-const ProfileScreen = ({ closeScreen }: Props) => {
+const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
   const [showImageModal, setShowImageModal] = useState(false);
 
   const { userInfoQuery } = useUserInfo();
   const { isLoading, data: userInfo } = userInfoQuery;
+
+  const navigate = useNavigate();
 
   if (isLoading)
     return (
@@ -26,8 +25,8 @@ const ProfileScreen = ({ closeScreen }: Props) => {
 
   if (!userInfo) {
     alert('정보를 불러오는 데 실패했습니다.');
-    closeScreen();
-    return null;
+    navigate('/main');
+    return;
   }
   return (
     <Backdrop>
@@ -133,7 +132,9 @@ const ProfileScreen = ({ closeScreen }: Props) => {
             </div>
           </div>
         </div>
-        <Button onClick={closeScreen}>Close</Button>
+        <Link to="/main">
+          <Button>Close</Button>
+        </Link>
       </div>
     </Backdrop>
   );

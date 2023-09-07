@@ -4,15 +4,14 @@ import StatusChart from './StatusChart';
 import StatusListItem from './StatusListItem';
 import useUserInfo from '../../hooks/useUserInfo';
 import LoadingBar from '../common/LoadingBar';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface Props {
-  closeScreen: () => void;
-}
-
-const StatusScreen = ({ closeScreen }: Props) => {
+const StatusScreen = () => {
   const { userInfoQuery } = useUserInfo();
   const { isLoading, data } = userInfoQuery;
   const statusData = data?.statuses;
+
+  const navigate = useNavigate();
 
   if (isLoading)
     return (
@@ -23,8 +22,8 @@ const StatusScreen = ({ closeScreen }: Props) => {
 
   if (!statusData) {
     alert('정보를 불러오는 데 실패했습니다.');
-    closeScreen();
-    return null;
+    navigate('/main');
+    return;
   }
 
   return (
@@ -41,7 +40,9 @@ const StatusScreen = ({ closeScreen }: Props) => {
             ))}
           </div>
         </div>
-        <Button onClick={closeScreen}>Close</Button>
+        <Link to="/main">
+          <Button>Close</Button>
+        </Link>
       </div>
     </Backdrop>
   );

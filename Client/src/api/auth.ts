@@ -1,8 +1,6 @@
 import axios from 'axios';
 const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
-
-
 interface LoginUserData {
   email: string;
   password: string;
@@ -17,11 +15,10 @@ interface NewUserData {
 export const registerAuth = async (userData: NewUserData) => {
   try {
     const response = await axios.post(`${baseUrl}user/signup`, userData);
-    console.log(response)
-    return response
+    console.log(response);
+    return response;
   } catch (err) {
     console.error('Error registering user:', err);
-
   }
 };
 
