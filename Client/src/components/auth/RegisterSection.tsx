@@ -9,24 +9,23 @@ import { useNavigate } from 'react-router';
 import {
   validateEmail,
   validateNickname,
-  validatePass,
+  validatePassword,
 } from '../../hooks/validation';
 import LoadingBar from '../common/LoadingBar';
+import axios from 'axios';
 
 const Register = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [nickname, setNickname] = useState<string>('');
-  const [emailErr, setEmailErr] = useState<boolean>(false);
-  const [passwordErr, setPasswordErr] = useState<boolean>(false);
-  const [nicknameErr, setNicknameErr] = useState<boolean>(false);
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [checkExistingEmail, setExistingEmail] = useState<boolean>(false);
-  const [checkExistingNickname, setExistingNickname] = useState<boolean>(false);
-  // const [emailState, setEmailState] = useState<boolean>(false);
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+  const [isInvalidPassword, setIsInvalidPassword] = useState(false);
+  const [isInvalidNickname, setIsInvalidNickname] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isExistingEmail, setIsExistingEmail] = useState(false);
+  const [isExistingNickname, setIsExistingNickname] = useState(false);
   const toggleViewPassword = () => {
-    setPasswordVisible(!passwordVisible);
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   const navigate = useNavigate();
@@ -35,37 +34,39 @@ const Register = () => {
     onSuccess: (data) => {
       console.log(data);
       if (data?.status === 201) {
-        console.log(data);
-        setExistingEmail(false);
-        setExistingNickname(false);
         navigate('/auth/login');
+        return;
       }
+      alert('User authentication error');
+      console.log('User authentication error');
     },
-    onError: (err: any) => {
+    onError: (err) => {
       console.log(err, 'onError Catched');
-      console.log('ERORRRR');
-      if (err.status === 409 && err.message === '사용중인 이메일 입니다.') {
-        console.log('Existing Email');
-        setExistingEmail(true);
-      } else if (
-        err.status === 409 &&
-        err.message === '사용중인 닉네임 입니다.'
-      ) {
-        console.log('Existing Nickname');
-        setExistingNickname(true);
-      } else if (err.status === 400) {
-        console.log('User authentication error');
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data.status === 409) {
+          if (err.response?.data.message === '사용중인 이메일 입니다.') {
+            console.log('Existing Email');
+            setIsExistingEmail(true);
+          }
+          if (err.response?.data.message === '사용중인 닉네임 입니다.') {
+            console.log('Existing Nickname');
+            setIsExistingNickname(true);
+          }
+          return;
+        }
       }
+      alert('User authentication error');
+      console.log('User authentication error');
     },
   });
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsInvalidEmail(!validateEmail(email));
+    setIsInvalidPassword(!validatePassword(password));
+    setIsInvalidNickname(!validateNickname(nickname));
+    if (isInvalidEmail || isInvalidPassword || isInvalidNickname) return; // 하나라도 유효하지 않은 값인 경우 회원 가입 요청 보내지 않음
     register({ email, nickName: nickname, password });
-    validateEmail(email, setEmailErr);
-    validatePass(password, setPasswordErr);
-    validateNickname(nickname, setNicknameErr);
   };
 
   if (isLoading) return <LoadingBar />;
@@ -84,32 +85,42 @@ const Register = () => {
             className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            onBlur={() => validateEmail(email, setEmailErr)}
+            onFocus={() => {
+              setIsInvalidEmail(false);
+              setIsExistingEmail(false);
+            }}
+            onBlur={() => setIsInvalidEmail(!validateEmail(email))}
           />
         </div>
 
-        {emailErr && (
+        {isInvalidEmail && (
           <p className="text-[10px]  text-red-500">Please check email format</p>
+        )}
+        {isExistingEmail && (
+          <p className="text-[10px]  text-red-500">Existing Email</p>
         )}
 
         <div className="flex items-center relative ">
           <input
             placeholder="Password"
-            type={passwordVisible ? 'text' : 'password'}
+            type={isPasswordVisible ? 'text' : 'password'}
             className="border-solid border-2 border-000 p-2 rounded-lg my-4 w-full "
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            onBlur={() => validatePass(password, setPasswordErr)}
+            onFocus={() => {
+              setIsInvalidPassword(false);
+            }}
+            onBlur={() => setIsInvalidPassword(!validatePassword(password))}
           />
           <img
-            src={!passwordVisible ? hide : view}
+            src={!isPasswordVisible ? hide : view}
             alt="view icon"
             width={40}
             onClick={toggleViewPassword}
             className="absolute right-2 cursor-pointer"
           />
         </div>
-        {passwordErr && (
+        {isInvalidPassword && (
           <p className="text-[10px]  text-red-500 text-center">
             8-16 characters, lowercase & uppercase, numbers, and characters
           </p>
@@ -122,17 +133,21 @@ const Register = () => {
             className="border-solid border-2 border-000 p-2 rounded-lg my-4"
             onChange={(e) => setNickname(e.target.value)}
             value={nickname}
-            onBlur={() => validateNickname(nickname, setNicknameErr)}
+            onFocus={() => {
+              setIsInvalidNickname(false);
+              setIsExistingNickname(false);
+            }}
+            onBlur={() => setIsInvalidNickname(!validateNickname(nickname))}
           />
-          {/* <button className="bg-white  h-[32px] w-20 ml-2 rounded text-sm ">
-            Check
-          </button> */}
         </div>
 
-        {nicknameErr && (
+        {isInvalidNickname && (
           <p className="text-[10px]  text-red-500">
             2-6 characters, Korean or English
           </p>
+        )}
+        {isExistingNickname && (
+          <p className="text-[10px]  text-red-500">Existing Nickname</p>
         )}
 
         <button className="my-4 text-sm">
