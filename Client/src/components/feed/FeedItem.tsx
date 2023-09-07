@@ -83,13 +83,14 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
             </div>
             <div className="w-full flex justify-end items-center gap-1.5">
               <div className="text-[10px] font-[Pretendard]">
-                {new Date(createdAt).toLocaleTimeString('ko-KR', {
+                {/* {new Date(createdAt).toLocaleTimeString('ko-KR', {
                   year: '2-digit',
                   month: '2-digit',
                   day: '2-digit',
                   hour: '2-digit',
                   minute: '2-digit',
-                })}
+                })} */}
+                {createdAt.slice(5, 10)}
               </div>
               <div className="flex gap-1 text-[10px] cursor-pointer">
                 <img src={likeButton} alt="좋아요 아이콘" width={15} />
