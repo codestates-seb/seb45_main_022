@@ -12,8 +12,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showLoginErrMsg, setShowLoginErrMsg] = useState(false);
-  const [emailFocus, setEmailFocus] = useState(false);
-  const [passFocus, setPassFocus] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   const navigate = useNavigate();
 
@@ -60,7 +60,7 @@ const Login = () => {
         )}
         <h1 className="my-4 text-2xl">Login</h1>
         <div className="flex items-center  relative ">
-          {emailFocus && (
+          {isEmailFocused && (
             <img src={sword} alt="sword icon" className="absolute right-2" />
           )}
           <input
@@ -72,15 +72,15 @@ const Login = () => {
             required
             autoComplete="off"
             onFocus={() => {
-              setEmailFocus(true);
+              setIsEmailFocused(true);
             }}
             onBlur={() => {
-              setEmailFocus(false);
+              setIsEmailFocused(false);
             }}
           />
         </div>
         <div className="flex items-center relative">
-          {passFocus && (
+          {isPasswordFocused && (
             <img src={shield} alt="shield icon" className="right-2 absolute" />
           )}
           <input
@@ -92,10 +92,10 @@ const Login = () => {
             required
             autoComplete="off"
             onFocus={() => {
-              setPassFocus(true);
+              setIsPasswordFocused(true);
             }}
             onBlur={() => {
-              setPassFocus(false);
+              setIsPasswordFocused(false);
             }}
           />
         </div>
