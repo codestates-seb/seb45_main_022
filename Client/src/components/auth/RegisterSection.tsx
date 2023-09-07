@@ -10,7 +10,7 @@ import {
   validateEmail,
   validateNickname,
   validatePassword,
-} from '../../hooks/validation';
+} from '../../utility/validation';
 import LoadingBar from '../common/LoadingBar';
 import axios from 'axios';
 
