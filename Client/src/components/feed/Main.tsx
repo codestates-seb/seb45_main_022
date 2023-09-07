@@ -14,7 +14,7 @@ const Main = ({ feedList, categoryCode }: Props) => {
     <div className="w-full h-[31.25rem] flex flex-col justify-start items-center mt-[55px] ml-1">
       <div className="w-full h-[3rem] flex justify-around items-center bg-[#f8d8ae] gap-[20rem]">
         <FilterButton />
-        <SearchBar />
+        <SearchBar categoryCode={categoryCode} />
       </div>
       <div className="flex flex-wrap justify-center gap-4 p-3">
         {feedList !== null ? (

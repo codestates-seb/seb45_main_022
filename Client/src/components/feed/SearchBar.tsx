@@ -1,7 +1,12 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router';
+import { CategoryCode } from '../../api/category';
 
-const SearchBar: React.FC = () => {
+interface Props {
+  categoryCode: CategoryCode;
+}
+
+const SearchBar = ({ categoryCode }: Props) => {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState<string>('');
 
@@ -13,7 +18,7 @@ const SearchBar: React.FC = () => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (keyword === '') return;
-    navigate(`/feed/find/${keyword}`);
+    navigate(`/feed/${categoryCode}/search/${keyword}`);
   };
 
   return (
