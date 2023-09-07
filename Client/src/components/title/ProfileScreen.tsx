@@ -4,7 +4,7 @@ import Button from '../common/Button';
 import { useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
 import 'cropperjs/dist/cropper.css';
-import ImageCropperModal from './ImageUploadModal';
+import ImageUploadModal from '../common/ImageUploadModal';
 
 interface Props {
   closeScreen: () => void;
@@ -71,8 +71,11 @@ const ProfileScreen = ({ closeScreen }: Props) => {
             </div>
           </div>
           {showImageModal && (
-            <ImageCropperModal
+            <ImageUploadModal
               onCloseBtnClick={() => {
+                setShowImageModal(false);
+              }}
+              onConfirmBtnClick={() => {
                 setShowImageModal(false);
               }}
             />

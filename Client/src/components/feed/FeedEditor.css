@@ -1,0 +1,17 @@
+.quill {
+  width: 430px;
+  height: 500px;
+}
+.ql-toolbar.ql-snow {
+  height: 60px;
+  border: none;
+  background-color: #f2b888;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 5px 5px #f2b888;
+}
+.ql-container.ql-snow {
+  height: 440px;
+  border: none;
+  border-radius: 0 0 10px 10px;
+  background-color: rgba(242, 184, 136, 0.3);
+}

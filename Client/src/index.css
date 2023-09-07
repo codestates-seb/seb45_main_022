@@ -28,6 +28,15 @@
   padding: 0;
   border: 0px;
   box-sizing: border-box;
+}
+
+a,
+a:visited,
+a:active {
+  text-decoration: none;
+}
+
+body {
   font-family:
     'Press Start 2P',
     Pretendard,
@@ -41,10 +50,4 @@
     'Noto Sans KR',
     'Malgun Gothic',
     sans-serif;
-}
-
-a,
-a:visited,
-a:active {
-  text-decoration: none;
 }
