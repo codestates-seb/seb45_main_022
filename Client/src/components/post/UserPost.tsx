@@ -15,7 +15,7 @@ interface Comment {
   timeCreated: string;
 }
 
-const UserPost = ({ handleCloseScreen }) => {
+const UserPost = ({ handleCloseScreen, handleLikePost, likeCount }) => {
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
@@ -92,7 +92,6 @@ const UserPost = ({ handleCloseScreen }) => {
   ]);
 
   const [displayComments, setDisplayComments] = useState(3);
-  const [likeCount, setLikeCount] = useState(3);
   const [addComment, setAddComment] = useState('');
 
   const expandComments = () => {
@@ -101,10 +100,6 @@ const UserPost = ({ handleCloseScreen }) => {
 
   const hideComments = () => {
     setDisplayComments(3);
-  };
-
-  const handleLikePost = () => {
-    setLikeCount(likeCount + 1);
   };
 
   // 게시글 컴포넌트 클릭했을 때는 닫힘하지 않기
