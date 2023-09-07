@@ -32,19 +32,22 @@ const Login = ({ changeSection, onLoginBtnClick }: LoginProps) => {
   //기본적으로 react query에서 5분동안 캐시 지원해줌,  시간설정 변경 가능
   const { mutate: login } = useMutation(loginAuth, {
     onSuccess: (data) => {
+      console.log(data);
+
       if (data.status === 200) {
         console.log(data);
         setLoginValidate(false);
 
-        const tokenData: TokenData = data.token;
-        localStorage.setItem('accessToken', tokenData.access);
-        localStorage.setItem('refreshToken', tokenData.refresh);
-      } else if (data.status === 401) {
-        setLoginValidate(true);
+        const token = data.data.token;
+        localStorage.setItem('token', token);
+        changeSection();
       }
     },
     onError: (err) => {
       console.log('Login fail', err);
+      if (err.status === 401) {
+        setLoginValidate(true);
+      }
     },
   });
 
