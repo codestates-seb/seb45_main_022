@@ -3,32 +3,22 @@ import { useParams } from 'react-router';
 import Backdrop from '../components/common/Backdrop';
 import ModalFrame from '../components/common/ModalFrame';
 import ServerList from '../components/map/ServerList';
-import { getCategoryList } from '../api/category';
+import { STATUS_CATEGORY_MAP } from '../utility/status';
+import { StatusCode, CategoryCode } from '../api/category';
 
 const MapPage = () => {
-  const [categoryList, setCategoryList] = useState<string[]>([]);
-  const [iconNumbers, setIconNumbers] = useState<number[]>([]);
-  const { statusCodeParam } = useParams();
-  const statusCode = Number(statusCodeParam);
+  const [categoryList, setCategoryList] = useState<CategoryCode[]>([]);
+  const { statusCodeParam } = useParams<{ statusCodeParam: string }>();
+  const statusCode: StatusCode = Number(statusCodeParam);
 
   useEffect(() => {
     const fetchCategoryData = async () => {
       try {
-        const codes: number[] = [];
-        const names: string[] = [];
-        const categoryList = await getCategoryList(statusCode);
-        categoryList.categories.forEach((category) => {
-          const { categoryCode, categoryName } = category;
-          codes.push(categoryCode);
-          names.push(categoryName);
-        });
-        setCategoryList(names);
-        setIconNumbers(codes);
+        setCategoryList(STATUS_CATEGORY_MAP[statusCode]);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchCategoryData();
   }, [statusCode]);
 
@@ -41,12 +31,8 @@ const MapPage = () => {
           </div>
           <div className="w-full h-px bg-gray-600"></div>
           <div className="w-[800px] h-[480px] flex flex-col justify-around items-center p-10 gap-4">
-            {categoryList.map((categoryName, index) => (
-              <ServerList
-                key={index}
-                title={categoryName}
-                categoryCode={iconNumbers[index]}
-              />
+            {categoryList.map((categoryCode, index) => (
+              <ServerList key={index} categoryCode={categoryCode} />
             ))}
           </div>
         </ModalFrame>
