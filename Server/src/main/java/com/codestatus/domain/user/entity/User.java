@@ -30,7 +30,7 @@ public class User extends Auditable {
     private String password;
 
     @Column(nullable = false, unique = true)
-    private String nickName;
+    private String nickname;
 
     @OneToMany(mappedBy = "user")
     private List<Like> likes = new ArrayList<>();

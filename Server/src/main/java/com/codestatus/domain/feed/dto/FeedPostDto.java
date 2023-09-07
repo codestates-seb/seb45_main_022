@@ -1,6 +1,5 @@
 package com.codestatus.domain.feed.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

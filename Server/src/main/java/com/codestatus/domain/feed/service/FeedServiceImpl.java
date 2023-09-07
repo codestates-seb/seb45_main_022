@@ -49,22 +49,21 @@ public class FeedServiceImpl implements FeedService {
         return optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
     }
 
-    //일주일 안에 작성된 피드를 좋아요 순으로 정렬해서 조회
+    //카테고리 내 피드리스트 조회
     @Transactional(readOnly = true)
     public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Sort sort = Sort.by(Sort.Direction.DESC, "feedId"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
         return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(categoryId, pageable);
     }
 
-    //카테고리 내 피드리스트 조회
+    //일주일 안에 작성된 피드를 좋아요 순으로 정렬해서 조회
     @Transactional(readOnly = true)
-    public Page<Feed> findWeeklyBestFeeds(int page, int size) {
-
+    public Page<Feed> findWeeklyBestFeeds(long categoryId, int page, int size) {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-        Sort sort = Sort.by(Sort.Direction.DESC, "likes"); // likes 내림차순 정렬
+        Sort sort = Sort.by(Sort.Direction.DESC, "feedId"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCreatedAtAfterAndDeletedIsFalseOrderByLikesDesc(oneWeekAgo, pageable);
+        return feedRepository.findFeedsByCategoryAndCreatedAtAndSortLikes(categoryId, oneWeekAgo, pageable);
     }
 
     //(검색기능)텍스트 받아서 해당하는 바디 가지고 있는 피드목록 조회
@@ -147,7 +146,7 @@ public class FeedServiceImpl implements FeedService {
 
     }
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void deleteComments(List<Comment> comments) {
+    public void deleteComments(List<Comment> comments) {
         comments.forEach(comment -> comment.setDeleted(true));
         commentRepository.saveAll(comments);
     }

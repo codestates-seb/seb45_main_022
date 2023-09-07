@@ -4,10 +4,7 @@ import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
-import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import com.codestatus.domain.hashTag.repository.FeedHashTagRepository;
-import com.codestatus.domain.hashTag.service.HashTagService;
-import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.aws.FileStorageService;
 import com.codestatus.domain.status.entity.Stat;
@@ -18,10 +15,7 @@ import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.repository.UserRepository;
-import com.codestatus.global.service.BaseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -51,7 +44,7 @@ public class UserServiceImpl implements UserService {
     // 유저 생성
     public void createEntity(User user) {
         verifyExistsEmail(user.getEmail()); // 이메일 중복 검사
-        verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사
+        verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
         user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
         List<String> roles = customAuthorityUtils.createRoles(user.getEmail()); // 권한 생성
         user.setRoles(roles); // 권한 저장
@@ -68,7 +61,6 @@ public class UserServiceImpl implements UserService {
 
         // 유저 생성 시 기본 status 생성
         createStatus(user);
-//        user.getStatuses().addAll(Arrays.asList(strStatus, dexStatus, intStatus, charmStatus, vitalityStatus)); // status 저장
     }
 
     // 유저 조회
@@ -89,12 +81,12 @@ public class UserServiceImpl implements UserService {
     }
 
     // 유저 닉네임 수정
-    public void updateUserNickName(User user, long loginUserId) {
+    public void updateUserNickname(User user, long loginUserId) {
         User findUser = findVerifiedUser(loginUserId);
 
-        if (!findUser.getNickName().equals(user.getNickName())) { // 유저 닉네임이 수정되었다면
-            verifyExistsNickName(user.getNickName()); // 닉네임 중복 검사 실행
-            findUser.setNickName(user.getNickName());
+        if (!findUser.getNickname().equals(user.getNickname())) { // 유저 닉네임이 수정되었다면
+            verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
+            findUser.setNickname(user.getNickname());
             repository.save(findUser);// 유저 닉네임 수정
         }
     }
@@ -170,9 +162,9 @@ public class UserServiceImpl implements UserService {
     }
 
     // 닉네임 중복 검사
-    private void verifyExistsNickName(String nickName) {
+    private void verifyExistsNickname(String nickname) {
         Optional<User> OptionalUser =
-                repository.findByNickName(nickName);
+                repository.findByNickname(nickname);
 
         OptionalUser.ifPresent(user -> {
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS_NICKNAME); // 닉네임이 이미 존재한다면 예외 발생
@@ -200,18 +192,4 @@ public class UserServiceImpl implements UserService {
         }
         statusRepository.saveAll(statusList);
     }
-
-    // 로그인한 유저의 id를 가져옴
-    public Long getLoginUserId() {
-        Long id = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof PrincipalDto) {
-            PrincipalDto principal = (PrincipalDto) authentication.getPrincipal();
-            id = principal.getId();
-        }
-
-        return id;
-    }
-
-
 }

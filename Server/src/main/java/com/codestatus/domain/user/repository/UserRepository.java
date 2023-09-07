@@ -13,16 +13,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email); // @Param("email")
 
     // @Query(value = "SELECT * FROM users u WHERE u.nick_name = :nickname", nativeQuery = true)
-    Optional<User> findByNickName(String nickName); // @Param("nickname")
-
-    // @Query(value = "SELECT * FROM users u WHERE u.user_status = :userStatus AND u.attendance = :attendance", nativeQuery = true)
-    List<User> findAllByUserStatusAndAttendance(User.UserStatus userStatus, boolean b); // @Param("userStatus") @Param("attendance")
+    Optional<User> findByNickname(String nickName); // @Param("nickname")
 }
 
 /*
 * SELECT * FROM users WHERE email = 'signup@test.luv';
 * SELECT * FROM users WHERE nick_name = '테스터';
-* SELECT * FROM users
-* WHERE user_status = 'USER_ACTIVE' // or 'USER_DELETE'
-* AND attendance = FALSE;
- */
+* */

@@ -30,16 +30,12 @@ import java.util.List;
 public class FeedController {
 
     private final FeedServiceImpl feedServiceImpl;
-
     private final HashTagServiceImpl hashTagServiceImpl;
-
     private final FeedMapper feedMapper;
-
     private final CategoryMapper categoryMapper;
-
     private final UserMapper userMapper;
 
-    //해당하는 카테고리에 피드 작성
+    //선택한 카테고리에 피드 작성
     @PostMapping("/{categoryId}")
     public ResponseEntity postFeed(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
                                    @RequestBody FeedPostDto requestBody,
@@ -54,7 +50,7 @@ public class FeedController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //해당하는 피드아이디의 피드 조회
+    //피드 상세 조회
     @GetMapping("/{feedId}")
     public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId) {
         Feed feed = feedServiceImpl.findVerifiedFeed(feedId);
@@ -65,7 +61,7 @@ public class FeedController {
         return new ResponseEntity<>(feedResponseDto, HttpStatus.OK);
     }
 
-    //해당 카테고리 내의 피드목록 조회
+    //선택한 카테고리 내의 피드 전체 조회
     @GetMapping("/get/{categoryId}")
     public ResponseEntity getFeedsByCategory(@PathVariable @Min(0) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size) {
         Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByCategory(categoryId, page-1, size);
@@ -76,7 +72,7 @@ public class FeedController {
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
 
-    //카테고리 구분없이 피드목록 조회
+    //카테고리 구분없이 피드 전체 조회
     @GetMapping
     public ResponseEntity getFeeds(@RequestParam int page, @RequestParam int size) {
         Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByDeleted(page-1, size);
@@ -88,9 +84,9 @@ public class FeedController {
     }
 
     //일주일 내에 작성된 피드목록 중에 삭제되지 않은 피드들을 좋아요 순으로 조회
-    @GetMapping("/weeklybest")
-    public ResponseEntity getWeeklyBestFeeds(@RequestParam int page, @RequestParam int size) {
-        Page<Feed> pageFeeds = feedServiceImpl.findWeeklyBestFeeds(page-1, size);
+    @GetMapping("/weeklybest/{categoryId}")
+    public ResponseEntity getWeeklyBestFeeds(@PathVariable @Min(1) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size) {
+        Page<Feed> pageFeeds = feedServiceImpl.findWeeklyBestFeeds(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
 
         return new ResponseEntity<>(
@@ -98,7 +94,7 @@ public class FeedController {
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
 
-    //쿼리를 바디로 검색하여 피드목록 조회
+    //피드 본문 검색
     @GetMapping("/find")
     public ResponseEntity getFeedsBybody(@RequestParam int page,
                                          @RequestParam int size,
@@ -111,7 +107,7 @@ public class FeedController {
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
 
-    //해당하는 카테고리 내에서 쿼리를 바디로 검색하여 피드목록 조회
+    //카테고리 내 피드 본문 검색
     @GetMapping("/findByBody/{categoryId}")
     public ResponseEntity getFeedsByBodyAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
@@ -125,7 +121,7 @@ public class FeedController {
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
 
-    // 유저 닉네임을 통해 유저 검색
+    //카테고리 내 유저 닉네임으로 피드 검색
     @GetMapping("/findByUser/{categoryId}")
     public ResponseEntity getFeedsByUserAndCategory(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
                                                     @RequestParam int page,
@@ -138,7 +134,7 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
-    //    HashTagID로 검색
+    //HashTagID로 검색
     @GetMapping("/findByHashTag/{categoryId}")
     public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
@@ -152,7 +148,7 @@ public class FeedController {
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
 
-    //피드아이디로 조회하여 피드 바디 수정
+    //피드 본문 수정
     @PatchMapping("/{feedId}")
     public ResponseEntity patchFeed(@PathVariable("feedId") int feedId,
                                     @RequestBody FeedPatchDto requestBody,
@@ -163,7 +159,7 @@ public class FeedController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //피드 아이디로 조회하여 피드 바디 삭제(DB삭제아님)
+    //피드 삭제(DB삭제아님)
     @DeleteMapping("/{feedId}")
     public ResponseEntity deleteFeed(@PathVariable("feedId") int feedId,
                                      @AuthenticationPrincipal PrincipalDto principal) {
