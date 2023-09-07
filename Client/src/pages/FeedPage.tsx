@@ -2,10 +2,14 @@ import Backdrop from '../components/common/Backdrop';
 import Header from '../components/feed/Header';
 import board from '../assets/feed/board.png';
 import Main from '../components/feed/Main';
-import { useParams } from 'react-router';
+
+import { useEffect, useState } from 'react';
+import { getFeedList } from '../api/feed';
+import { Outlet, useParams } from 'react-router';
 import useFeedList from '../hooks/useFeedList';
 import LoadingBar from '../components/common/LoadingBar';
 import { Feed } from '../api/feed';
+
 
 const FeedPage = () => {
   const { categoryCodeParam } = useParams();
@@ -47,6 +51,7 @@ const FeedPage = () => {
           <Main feedList={feedList} categoryCode={categoryCode} />
         </div>
       </Backdrop>
+      <Outlet />
     </div>
   );
 };
