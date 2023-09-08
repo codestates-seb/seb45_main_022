@@ -33,6 +33,9 @@ interface FeedApiData {
   };
 }
 
+export interface FeedId {
+  feedId: number;
+}
 
 
 
@@ -63,9 +66,22 @@ export const getWeeklyBest = async (categoryCode: CategoryCode) => {
   } catch (error) {
     console.log('Cannot GET weekly best due to Error', error)
   }
-
 }
 
+// 상세 피드 
+export const getUserFeed = async (feedId: FeedId) => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+
+  } catch (error) {
+    console.log("Cannot GET user's feed due to error", error)
+  }
+}
 
 
 export const getFilterdFeedList = async (
