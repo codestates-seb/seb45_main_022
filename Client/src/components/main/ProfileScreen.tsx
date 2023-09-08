@@ -58,7 +58,7 @@ const ProfileScreen = () => {
                 NAME
                 <br />
                 <span className="font-[Pretendard] text-[2.5rem] font-extrabold">
-                  {userInfo.nickName}
+                  {userInfo.nickname}
                 </span>
               </h1>
               <h1 className="text-[.8rem] text-center">

@@ -11,7 +11,7 @@ export interface Status {
 export interface UserInfo {
   id: number;
   email: string;
-  nickName: string;
+  nickname: string;
   profileImage: string;
   attendance: boolean;
   statuses: Status[];
