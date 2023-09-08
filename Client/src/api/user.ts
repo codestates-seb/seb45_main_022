@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../utility/axios';
 import { StatusCode } from './category';
 
 export interface Status {
@@ -18,6 +18,6 @@ export interface UserInfo {
 }
 
 export const getUserInfo = async (): Promise<UserInfo> => {
-  const res = await axios.get('/user/test.json');
+  const res = await axios.get('user/mypage');
   return res.data;
 };
