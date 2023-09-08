@@ -21,3 +21,5 @@ export const getUserInfo = async (): Promise<UserInfo> => {
   const res = await axios.get('user/mypage');
   return res.data;
 };
+
+export const changePassword = async () => {};
