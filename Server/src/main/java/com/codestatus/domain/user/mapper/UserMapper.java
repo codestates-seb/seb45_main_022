@@ -65,7 +65,6 @@ public class UserMapper {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
-                .attendance(user.isAttendance())
                 .statuses(statusResponses)
                 .createDate(String.valueOf(user.getCreatedAt()))
                 .modifiedDate(String.valueOf(user.getModifiedAt()))

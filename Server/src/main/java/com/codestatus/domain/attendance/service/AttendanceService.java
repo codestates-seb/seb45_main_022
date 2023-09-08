@@ -15,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -37,6 +39,11 @@ public class AttendanceService {
         levelCommand.gainExp(user, attendanceExp, attendance.getStatId());
 
         userRepository.save(user); // 유저 정보 저장
+    }
+
+    public boolean isAlreadyCheckedAttendance(long userId) { // 출석체크 여부 확인
+        Optional<Attendance> attendance = attendanceRepository.findByUserId(userId); // 출석체크 테이블에서 유저 아이디로 검색
+        return attendance.isPresent(); // 출석체크 여부 반환
     }
 
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul") // cron = "0 0 0 * * ?", zone = "Asia/Seoul" <- 매일 자정마다 실행

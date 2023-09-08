@@ -87,6 +87,10 @@ public class SecurityConfig {
                         // like 권한 부여
                         .antMatchers(HttpMethod.POST, "/feed/like/**").hasRole("USER")
 
+                        // 출석체크 권한 부여
+                        .antMatchers(HttpMethod.POST, "/attendance/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/attendance/**").hasRole("USER")
+
                         .antMatchers(HttpMethod.POST,"/logout").hasRole("USER") // logout 은 USER 권한 필요
                         .anyRequest().permitAll() // 나머지 요청은 누구나 가능
                 )
