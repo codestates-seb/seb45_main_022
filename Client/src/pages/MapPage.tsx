@@ -5,14 +5,12 @@ import ModalFrame from '../components/common/ModalFrame';
 import ServerList from '../components/map/ServerList';
 import { STATUS_CATEGORY_MAP } from '../utility/status';
 import { StatusCode, CategoryCode } from '../api/category';
-import { useNavigate } from 'react-router';
-import backButton from '../assets/common/back-button.png';
+import { ReturnToMainButton } from '../components/common/BackButton';
 
 const MapPage = () => {
   const [categoryList, setCategoryList] = useState<CategoryCode[]>([]);
   const { statusCodeParam } = useParams<{ statusCodeParam: string }>();
   const statusCode: StatusCode = Number(statusCodeParam);
-  const nav = useNavigate();
 
   useEffect(() => {
     const fetchCategoryData = async () => {
@@ -30,14 +28,8 @@ const MapPage = () => {
       <Backdrop>
         <ModalFrame width={1020} height={680}>
           <div className="flex w-full h-full relative">
-            <div className="mt-[17px] ml-[90px] absolute cursor-pointer">
-              <img
-                src={backButton}
-                alt="back"
-                onClick={() => nav(-1)}
-                width={48}
-                height={36}
-              />
+            <div className="mt-[17px] ml-[90px] absolute">
+              <ReturnToMainButton />
             </div>
             <div className="w-full h-[80px] flex justify-center items-center text-4xl mb-4">
               Servers
