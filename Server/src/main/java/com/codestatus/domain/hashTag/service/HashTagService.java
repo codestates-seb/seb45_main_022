@@ -6,5 +6,4 @@ import com.codestatus.global.service.BaseService;
 import java.util.List;
 
 public interface HashTagService extends BaseService<HashTag> {
-    void deleteHashTag(List<HashTag> hashTags);
 }

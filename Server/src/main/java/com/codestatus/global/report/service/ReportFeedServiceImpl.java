@@ -1,7 +1,7 @@
 package com.codestatus.global.report.service;
 
+import com.codestatus.domain.feed.command.FeedCommand;
 import com.codestatus.domain.feed.entity.Feed;
-import com.codestatus.domain.feed.service.FeedService;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
@@ -24,11 +24,11 @@ public class ReportFeedServiceImpl implements ReportService<Feed>{
 
     private final ReportFeedRepository reportFeedRepository;
     private final CustomMailSender customMailSender;
-    private final FeedService feedService;
+    private final FeedCommand feedCommand;
 
     @Override
     public void report(Feed targetFeed, User user) {
-        targetFeed = feedService.findVerifiedFeed(targetFeed.getFeedId());
+        targetFeed = feedCommand.findVerifiedFeed(targetFeed.getFeedId());
 
         Optional<ReportFeed> optionalReportFeed = reportFeedRepository.findByFeedAndUser(targetFeed, user);
         if (optionalReportFeed.isPresent()) throw new BusinessLogicException(ExceptionCode.DUPLICATE_REPORT_EXCEPTION);

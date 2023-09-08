@@ -1,11 +1,8 @@
 package com.codestatus.domain.feed.service;
 
-import com.codestatus.domain.comment.entity.Comment;
-import com.codestatus.domain.comment.repository.CommentRepository;
-import com.codestatus.domain.hashTag.entity.FeedHashTag;
-import com.codestatus.domain.hashTag.service.HashTagService;
-import com.codestatus.global.exception.BusinessLogicException;
-import com.codestatus.global.exception.ExceptionCode;
+import com.codestatus.domain.comment.command.CommentCommand;
+import com.codestatus.domain.feed.command.FeedCommand;
+import com.codestatus.domain.hashTag.command.FeedHashTagCommand;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.global.utils.CheckUser;
@@ -20,9 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -30,20 +25,17 @@ import java.util.stream.Collectors;
 public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
 
-    private final CommentRepository commentRepository;
-
-    private final HashTagService hashTagService;
+    private final FeedCommand feedCommand;
+    private final FeedHashTagCommand feedHashTagCommand;
+    private final CommentCommand commentCommand;
 
     @Override
     public void createEntity(Feed feed) {
         feedRepository.save(feed);
     }
 
-    //해당하는 카테고리 ID와 피드 ID로 삭제되지 않은 피드 하나 조회
-    @Transactional(readOnly = true)
-    public Feed findVerifiedFeed(long feedId){
-        Optional<Feed> optionalFeed = feedRepository.findFeedByFeedIdAndDeletedIsFalse(feedId);
-        return optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
+    public Feed findEntity(long feedId) {
+        return feedCommand.findVerifiedFeed(feedId);
     }
 
     //카테고리 내 피드리스트 조회
@@ -115,7 +107,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void updateEntity(Feed feed, long userId){
-        Feed findFeed = findVerifiedFeed(feed.getFeedId());
+        Feed findFeed = feedCommand.findVerifiedFeed(feed.getFeedId());
         CheckUser.isCreator(findFeed.getUser().getUserId(), userId);
 
         Optional.ofNullable(feed.getBody())
@@ -129,22 +121,12 @@ public class FeedServiceImpl implements FeedService {
     //db에서 완전 삭제가 아닌 deleted=true 로 수정
     @Override
     public void deleteEntity(long feedId, long userId){
-        Feed findFeed = findVerifiedFeed(feedId);
+        Feed findFeed = feedCommand.findVerifiedFeed(feedId);
         CheckUser.isCreator(findFeed.getUser().getUserId(), userId);
         findFeed.setDeleted(true);
         feedRepository.save(findFeed);
 
-        List<Comment> comments = findFeed.getComments();
-        deleteComments(comments);
-
-        hashTagService.deleteHashTag(findFeed.getFeedHashTags()
-                .stream().map(FeedHashTag::getHashTag)
-                .collect(Collectors.toList()));
-
-    }
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteComments(List<Comment> comments) {
-        comments.forEach(comment -> comment.setDeleted(true));
-        commentRepository.saveAll(comments);
+        commentCommand.deleteCommentAll(findFeed.getComments());
+        feedHashTagCommand.deleteFeedHashtagAll(findFeed.getFeedHashTags());
     }
 }

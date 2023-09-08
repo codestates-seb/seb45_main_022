@@ -1,15 +1,18 @@
 package com.codestatus.domain.user.service;
 
+import com.codestatus.domain.comment.command.CommentCommand;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
+import com.codestatus.domain.feed.command.FeedCommand;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
+import com.codestatus.domain.hashTag.command.FeedHashTagCommand;
 import com.codestatus.domain.hashTag.repository.FeedHashTagRepository;
+import com.codestatus.domain.user.command.UserCommand;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.aws.FileStorageService;
 import com.codestatus.domain.status.entity.Stat;
 import com.codestatus.domain.status.entity.Status;
-import com.codestatus.domain.status.repository.StatRepository;
 import com.codestatus.domain.status.repository.StatusRepository;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
@@ -32,11 +35,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-    private final StatRepository statRepository;
+    
+    private final UserCommand userCommand;
+    private final FeedCommand feedCommand;
+    private final FeedHashTagCommand feedHashTagCommand;
+    private final CommentCommand commentCommand;
+
     private final StatusRepository statusRepository;
-    private final FeedRepository feedRepository;
-    private final CommentRepository commentRepository;
-    private final FeedHashTagRepository feedHashTagRepository;
+
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
@@ -65,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     // 유저 조회
     public User findEntity(long userId) {
-        User user = findVerifiedUser(userId); // 유저 정보를 가져옴
+        User user = userCommand.findVerifiedUser(userId); // 유저 정보를 가져옴
         if (user.getUserStatus() == User.UserStatus.USER_ACTIVE) { // 유저가 활성화 상태라면 유저 정보 반환
             return user;
         } else if (user.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 탈퇴 상태라면 예외 발생
@@ -82,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     // 유저 닉네임 수정
     public void updateUserNickname(User user, long loginUserId) {
-        User findUser = findVerifiedUser(loginUserId);
+        User findUser = userCommand.findVerifiedUser(loginUserId);
 
         if (!findUser.getNickname().equals(user.getNickname())) { // 유저 닉네임이 수정되었다면
             verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
@@ -93,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
     // 비밀번호 변경
     public void updatePassword(User user, long loginUserId) {
-        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         // 현재 비밀번호와 같다면 에러
         if (passwordEncoder.matches(user.getPassword(), findUser.getPassword())) {
@@ -106,49 +112,23 @@ public class UserServiceImpl implements UserService {
 
     // 유저 탈퇴
     public void deleteEntity(long loginUserId, long userId) {
-        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
-        if (findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 이미 탈퇴 상태라면 예외 발생
-            throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
-        }
+        User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+
         findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
 
-        List<Feed> feedList = feedRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
-        feedList.forEach(feed -> {
-            feed.setDeleted(true);
-            feedHashTagRepository.deleteAll(feed.getFeedHashTags());
-        });
+        feedCommand.deleteFeedAll(findUser.getUserId());
+        feedHashTagCommand.deleteFeedHashtagAll(findUser.getUserId());
+        commentCommand.deleteCommentAll(findUser.getUserId());
 
-        List<Comment> commentList = commentRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
-        commentList.forEach(comment -> comment.setDeleted(true));
-
-        commentRepository.saveAll(commentList);
-        feedRepository.saveAll(feedList);
         repository.save(findUser);
     }
 
     // 프로필 이미지 업로드
     public void uploadProfileImage(MultipartFile imageFile, long loginUserId) {
-        User findUser = findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
+        User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         String fileUrl = fileStorageService.storeFile(imageFile); // 파일 업로드
         findUser.setProfileImage(fileUrl); // 유저 프로필 이미지 경로 저장
         repository.save(findUser); // 유저 저장
-    }
-
-    // 가입된 유저인지 조회
-    @Override
-    public User findVerifiedUser(Long userId) {
-        Optional<User> OptionalUser =
-                repository.findById(userId);
-
-        User findUser =
-                OptionalUser.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.USER_NOT_FOUND)); // 유저가 없다면 예외 발생
-
-        if(findUser.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 탈퇴 상태라면 예외 발생
-            throw new BusinessLogicException(ExceptionCode.USER_IS_DELETED);
-        }
-
-        return findUser;
     }
 
     // 이메일 중복 검사
@@ -171,17 +151,13 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    // stat 조회
-    private Stat findStat(Long statId) {
-        Optional<Stat> existingStat = statRepository.findById(statId);
-        return existingStat.orElseThrow(() -> new RuntimeException("Stat with ID " + statId + " not found")); // stat이 없다면 예외 발생(테스트용)
-    }
-
     // status 생성
     private void createStatus(User user) {
         List<Status> statusList = new ArrayList<>();
         for(int i=1; i<=5 ; i++) {
-            Stat stat = findStat((long) i);
+            Stat stat = new Stat();
+            stat.setStatId((long) i);
+
             Status status = new Status();
             status.setUser(user);
             status.setStat(stat);

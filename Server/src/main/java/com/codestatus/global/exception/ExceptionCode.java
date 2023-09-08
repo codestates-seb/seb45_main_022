@@ -1,5 +1,7 @@
 package com.codestatus.global.exception;
 
+import com.codestatus.domain.user.entity.User;
+
 public enum ExceptionCode {
     INVALID_INPUT_VALUE(400, "유효성 검증에 실패했습니다."),
     USER_NOT_FOUND(404, "유저를 찾을 수 없습니다."),
@@ -41,5 +43,10 @@ public enum ExceptionCode {
 
     public String getMessage() {
         return message;
+    }
+
+    public static ExceptionCode of(User.UserStatus userStatus){
+        if (userStatus.equals(User.UserStatus.USER_DELETE)) return ExceptionCode.USER_IS_DELETED;
+        else return ExceptionCode.USER_IS_BANNED;
     }
 }
