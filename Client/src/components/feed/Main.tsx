@@ -1,6 +1,6 @@
 import FilterButton from './FilterButton';
 import SearchBar from './SearchBar';
-import { Feed, getWeeklyBest, postFeed } from '../../api/feed';
+import { Feed } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
 import FeedItem from './FeedItem';
@@ -13,8 +13,8 @@ interface Props {
 }
 
 const Main = ({ categoryCode }: Props) => {
-  const [latestFeeds, setLatestFeed] = useState(true);
-  const [bestFeeds, setBestFeeds] = useState(false);
+  const [latestFeeds, setLatestFeed] = useState<boolean>(true);
+  const [bestFeeds, setBestFeeds] = useState<boolean>(false);
 
   const { feedListQuery, bestFeedQuery } = useFeedList(categoryCode);
 
@@ -47,8 +47,6 @@ const Main = ({ categoryCode }: Props) => {
     <div className="relative w-full h-[31.25rem] flex flex-col justify-start items-center mt-[55px] ml-1 ">
       <div className="w-full h-[3rem] flex justify-around items-center bg-[#f8d8ae] gap-[20rem]">
         <FilterButton
-          setLatestFeed={setLatestFeed}
-          setBestFeeds={setBestFeeds}
           latestFeeds={latestFeeds}
           bestFeeds={bestFeeds}
           handleFilterNewest={handleFilterNewest}

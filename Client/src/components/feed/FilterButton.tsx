@@ -1,13 +1,16 @@
-import { useState } from 'react';
+interface FilterProps {
+  latestFeeds: boolean;
+  bestFeeds: boolean;
+  handleFilterNewest: () => void;
+  handleFilterByBest: () => void;
+}
 
 const FilterButton = ({
-  setLatestFeed,
-  setBestFeeds,
   latestFeeds,
   bestFeeds,
   handleFilterNewest,
   handleFilterByBest,
-}) => {
+}: FilterProps) => {
   const buttonStyle = {
     fontFamily: 'Pretendard',
     padding: '0.5rem 1rem',
