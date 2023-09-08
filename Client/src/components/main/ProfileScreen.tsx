@@ -6,6 +6,7 @@ import LoadingBar from '../common/LoadingBar';
 import 'cropperjs/dist/cropper.css';
 import ImageUploadModal from '../common/ImageUploadModal';
 import { Link, useNavigate } from 'react-router-dom';
+import ChangePwTab from './ChangePwTab';
 
 const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
@@ -57,7 +58,7 @@ const ProfileScreen = () => {
                 NAME
                 <br />
                 <span className="font-[Pretendard] text-[2.5rem] font-extrabold">
-                  {userInfo.nickName}
+                  {userInfo.nickname}
                 </span>
               </h1>
               <h1 className="text-[.8rem] text-center">
@@ -109,26 +110,7 @@ const ProfileScreen = () => {
             {/* 탭 내용 */}
             <div className="w-full h-[260px] p-2 bg-[#bf916b] rounded-b-md">
               {tab === 'post' && <div className="w-full h-full">MY POST</div>}
-              {tab === 'password' && (
-                <div className="w-full h-full flex flex-col justify-evenly items-center">
-                  <input
-                    placeholder="Current Password"
-                    type="password"
-                    className="text-sm border-solid border-2 p-2 rounded-lg"
-                  />
-                  <input
-                    placeholder="New Password"
-                    type="password"
-                    className="text-sm border-solid border-2 p-2 rounded-lg"
-                  />
-                  <input
-                    placeholder="Confirm New Password"
-                    type="password"
-                    className="text-sm border-solid border-2 p-2 rounded-lg"
-                  />
-                  <Button size="medium">Change</Button>
-                </div>
-              )}
+              {tab === 'password' && <ChangePwTab />}
             </div>
           </div>
         </div>

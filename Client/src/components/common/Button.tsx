@@ -22,7 +22,7 @@ const Button = ({ size = 'large', children, onClick }: Props) => {
   };
 
   return (
-    <div
+    <button
       style={{
         width: `${width[size]}px`,
         height: `${height[size]}px`,
@@ -32,7 +32,7 @@ const Button = ({ size = 'large', children, onClick }: Props) => {
       onClick={onClick}
     >
       {children}
-    </div>
+    </button>
   );
 };
 
