@@ -68,7 +68,7 @@ const Register = () => {
     setIsInvalidPassword(!validatePassword(password));
     setIsInvalidNickname(!validateNickname(nickname));
     if (isInvalidEmail || isInvalidPassword || isInvalidNickname) return; // 하나라도 유효하지 않은 값인 경우 회원 가입 요청 보내지 않음
-    register({ email, nickName: nickname, password });
+    register({ email, nickname, password });
   };
 
   if (isLoading) return <LoadingBar />;

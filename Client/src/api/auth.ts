@@ -8,7 +8,7 @@ interface LoginUserData {
 
 interface NewUserData {
   email: string;
-  nickName: string;
+  nickname: string;
   password: string;
 }
 
