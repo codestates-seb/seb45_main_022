@@ -22,4 +22,9 @@ export const getUserInfo = async (): Promise<UserInfo> => {
   return res.data;
 };
 
-export const changePassword = async () => {};
+export const changePassword = async (password: string): Promise<string> => {
+  const res = await axios.patch('user/mypage/edit/password', {
+    password,
+  });
+  return res.data;
+};
