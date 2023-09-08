@@ -1,4 +1,3 @@
-import feedItem from '../../assets/feed/feedItem.png';
 import likeButton from '../../assets/feed/likeButton.png';
 import commentButton from '../../assets/feed/commentButton.png';
 import { CategoryCode } from '../../api/category';
@@ -34,22 +33,14 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     setOpenFeedItem(false);
   };
 
-  const FeedBoard = {
-    backgroundImage: `url(${feedItem})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  };
-
   return (
     <>
       {openFeedItem && <UserPost handleCloseScreen={handleCloseScreen} />}
 
       <div
         onClick={handleShowPost}
-        className="w-[295px] h-[137px] hover:cursor-pointer m-3"
-        style={FeedBoard}
+        className="w-[295px] h-[137px] hover:cursor-pointer m-3 bg-cover bg-center bg-feedBox"
       >
-        {/* {displayPost && <UserPost setOpenFeedItem={setOpenFeedItem} />} */}
         <div className="w-full h-full p-7 flex">
           {/* 왼쪽 구간 (전체 너비 1/3) */}
           <div className="w-[70px] h-full flex flex-col justify-between items-start gap-1 cursor-pointer">
@@ -83,14 +74,13 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
             </div>
             <div className="w-full flex justify-end items-center gap-1.5">
               <div className="text-[10px] font-[Pretendard]">
-                {/* {new Date(createdAt).toLocaleTimeString('ko-KR', {
+                {new Date(createdAt).toLocaleTimeString('ko-KR', {
                   year: '2-digit',
                   month: '2-digit',
                   day: '2-digit',
                   hour: '2-digit',
                   minute: '2-digit',
-                })} */}
-                {createdAt.slice(5, 10)}
+                })}
               </div>
               <div className="flex gap-1 text-[10px] cursor-pointer">
                 <img src={likeButton} alt="좋아요 아이콘" width={15} />

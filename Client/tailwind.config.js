@@ -7,6 +7,7 @@ export default {
         title: "url('/src/assets/bg/room.png')",
         map: "url('/src/assets/bg/map.png')",
         feed: "url('/src/assets/bg/village.png')",
+        feedBox: "url('/src/assets/feed/feedItem.png')",
       },
     },
     fontFamily: {

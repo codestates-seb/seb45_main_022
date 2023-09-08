@@ -19,16 +19,21 @@ const FeedPage = () => {
     backgroundPosition: 'center',
   };
 
-  const { feedListQuery } = useFeedList(categoryCode);
-  const {
-    data: feedList,
-    isLoading,
-    isError,
-  } = feedListQuery as {
-    data: Feed[];
+  const { feedListQuery, bestFeedQuery } = useFeedList(categoryCode);
+  const { isLoading, isError } = feedListQuery as {
     isLoading: boolean;
     isError: boolean;
   };
+
+  const latestFeedQueies = feedListQuery.data?.data.data;
+  const bestFeedQueries = bestFeedQuery.data;
+  console.log(latestFeedQueies);
+  console.log('best', bestFeedQueries);
+
+  //현재 좋아요 있는 게시글이 없어서 렌더링 안됨
+  if (bestFeedQueries === undefined) {
+    console.log('No best feeds Yet. Coming soon!');
+  }
 
   if (isLoading)
     return (
@@ -46,8 +51,12 @@ const FeedPage = () => {
       <Backdrop>
         <div className="flex flex-col justify-between items-center gap-8 mt-8">
           <div className=" w-[1080px] h-[720px] p-[42px]" style={sectionStyle}>
-            <Header categoryCode={categoryCode} />
-            <Main feedList={feedList} categoryCode={categoryCode} />
+          <Header categoryCode={categoryCode} />
+          <Main
+            latestFeedQueies={latestFeedQueies}
+            categoryCode={categoryCode}
+            bestFeedQueries={bestFeedQueries}
+          />
           </div>
           <div className="flex gap-[900px]">
             {categoryCode !== 1 && <BackButton categoryCode={categoryCode} />}

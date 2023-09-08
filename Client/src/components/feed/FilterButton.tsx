@@ -1,11 +1,16 @@
-import { useState } from 'react';
+interface FilterProps {
+  latestFeeds: boolean;
+  bestFeeds: boolean;
+  handleFilterNewest: () => void;
+  handleFilterByBest: () => void;
+}
 
 const FilterButton = ({
+  latestFeeds,
+  bestFeeds,
   handleFilterNewest,
   handleFilterByBest,
-  sortByNewest,
-  sortByBest,
-}) => {
+}: FilterProps) => {
   const buttonStyle = {
     fontFamily: 'Pretendard',
     padding: '0.5rem 1rem',
@@ -26,13 +31,13 @@ const FilterButton = ({
   return (
     <div className="flex justify-center items-center gap-5">
       <button
-        style={sortByNewest ? clickedButtonStyle : unclickedButtonStyle}
+        style={latestFeeds ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterNewest}
       >
         최신순
       </button>
       <button
-        style={sortByBest ? clickedButtonStyle : unclickedButtonStyle}
+        style={bestFeeds ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterByBest}
       >
         주간 베스트
