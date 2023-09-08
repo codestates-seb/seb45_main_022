@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -28,14 +25,23 @@ public class AttendanceController {
 
     // 출석체크 컨트롤러
     @PostMapping("/{chosenStat}")
-    public ResponseEntity checkAttendance(@PathVariable @Min(1) @Max(5) int chosenStat,
+    public ResponseEntity attendance(@PathVariable @Min(1) @Max(5) int chosenStat,
                                           @AuthenticationPrincipal PrincipalDto principal) {
-        AttendanceDto attendanceDto = AttendanceDto.builder()
+        AttendanceDto.Post attendanceDto = AttendanceDto.Post.builder()
                 .statId(chosenStat)
                 .userId(principal.getId())
                 .build();
         Attendance attendance = attendanceMapper.dtoToEntity(attendanceDto);
         attendanceService.checkAttendance(attendance); // 출석체크 메서드 호출
         return ResponseEntity.status(HttpStatus.OK).body("attendance check success"); // 출석체크 성공 메시지 반환
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity checkAttendance(@AuthenticationPrincipal PrincipalDto principal) {
+        boolean isAttendance = attendanceService.isAlreadyCheckedAttendance(principal.getId()); // 출석체크 여부 확인
+        AttendanceDto.Response response = AttendanceDto.Response.builder()
+                .isAttendance(isAttendance)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response); // 출석체크 여부 반환
     }
 }
