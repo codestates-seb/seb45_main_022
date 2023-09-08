@@ -24,8 +24,8 @@ const FeedPage = () => {
     isError: boolean;
   };
 
-  const latestFeedQueies: Feed[] = feedListQuery.data?.data.data;
-  const bestFeedQueries: Feed[] = bestFeedQuery.data;
+  const latestFeedQueies = feedListQuery.data?.data.data;
+  const bestFeedQueries = bestFeedQuery.data;
   console.log(latestFeedQueies);
   console.log('best', bestFeedQueries);
 

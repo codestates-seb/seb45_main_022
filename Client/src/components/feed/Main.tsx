@@ -8,8 +8,9 @@ import useFeedList from '../../hooks/useFeedList';
 import { useState } from 'react';
 
 interface Props {
-  feedList: Feed[];
   categoryCode: CategoryCode;
+  latestFeedQueies: Feed[];
+  bestFeedQueries: Feed[];
 }
 
 const Main = ({ latestFeedQueies, bestFeedQueries, categoryCode }: Props) => {
