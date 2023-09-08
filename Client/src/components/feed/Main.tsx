@@ -12,16 +12,9 @@ interface Props {
   categoryCode: CategoryCode;
 }
 
-const Main = ({ categoryCode }: Props) => {
+const Main = ({ latestFeedQueies, bestFeedQueries, categoryCode }: Props) => {
   const [latestFeeds, setLatestFeed] = useState<boolean>(true);
   const [bestFeeds, setBestFeeds] = useState<boolean>(false);
-
-  const { feedListQuery, bestFeedQuery } = useFeedList(categoryCode);
-
-  const latestFeedQueies = feedListQuery.data?.data.data;
-  const bestFeedQueries = bestFeedQuery.data;
-  console.log(latestFeedQueies);
-  console.log('best', bestFeedQueries);
 
   const handleFilterNewest = () => {
     setLatestFeed(true);
@@ -35,14 +28,6 @@ const Main = ({ categoryCode }: Props) => {
     console.log('주간 베스트');
   };
 
-  if (feedListQuery.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  //현재 좋아요 있는 게시글이 없어서 렌더링 안됨
-  if (bestFeedQueries === undefined) {
-    console.log('No best feeds Yet. Coming soon!');
-  }
   return (
     <div className="relative w-full h-[31.25rem] flex flex-col justify-start items-center mt-[55px] ml-1 ">
       <div className="w-full h-[3rem] flex justify-around items-center bg-[#f8d8ae] gap-[20rem]">
