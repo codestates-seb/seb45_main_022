@@ -34,11 +34,11 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     setOpenFeedItem(false);
   };
 
-  const FeedBoard = {
-    backgroundImage: `url(${feedItem})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  };
+  // const FeedBoard = {
+  //   backgroundImage: `url(${feedItem})`,
+  //   backgroundSize: 'cover',
+  //   backgroundPosition: 'center',
+  // };
 
   return (
     <>
@@ -46,8 +46,7 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
 
       <div
         onClick={handleShowPost}
-        className="w-[295px] h-[137px] hover:cursor-pointer m-3"
-        style={FeedBoard}
+        className="w-[295px] h-[137px] hover:cursor-pointer m-3 bg-cover bg-center bg-feedBox"
       >
         {/* {displayPost && <UserPost setOpenFeedItem={setOpenFeedItem} />} */}
         <div className="w-full h-full p-7 flex">
