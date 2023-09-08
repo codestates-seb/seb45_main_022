@@ -20,7 +20,7 @@ public interface FeedMapper {
     default FeedResponseDto feedToFeedResponseDto(Feed feed){
         return FeedResponseDto.builder()
                 .feedId(feed.getFeedId())
-                .nickName(feed.getUser().getNickName())
+                .nickName(feed.getUser().getNickname())
                 .profileImage(feed.getUser().getProfileImage())
                 .statId(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatId().intValue())
                 .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
@@ -36,7 +36,7 @@ public interface FeedMapper {
                         .filter(comment -> !comment.isDeleted())
                         .map(comment -> CommentResponseDto.builder()
                                 .commentId(comment.getCommentId())
-                                .nickName(comment.getUser().getNickName())
+                                .nickName(comment.getUser().getNickname())
                                 .profileImage(comment.getUser().getProfileImage())
                                 .level(comment.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue()).getStatLevel())
                                 .body(comment.getBody())
@@ -53,7 +53,7 @@ public interface FeedMapper {
                 .map(feed -> FeedsResponseDto
                         .builder()
                         .feedId(feed.getFeedId())
-                        .nickName(feed.getUser().getNickName())
+                        .nickName(feed.getUser().getNickname())
                         .profileImage(feed.getUser().getProfileImage())
                         .statId(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStat().getStatId().intValue())
                         .level(feed.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())

@@ -1,6 +1,7 @@
 package com.codestatus.domain.image.service;
 
 import com.codestatus.global.aws.FileStorageService;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

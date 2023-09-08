@@ -43,10 +43,10 @@ public class UserController {
 
     // 유저 닉네임 수정 컨트롤러
     @PatchMapping("/mypage/edit/nickname")
-    public ResponseEntity patchUserNickName(@Valid @RequestBody UserDto.PatchNickName requestBody,
+    public ResponseEntity patchUserNickname(@Valid @RequestBody UserDto.PatchNickname requestBody,
                                             @AuthenticationPrincipal PrincipalDto principal) {
         User user = userMapper.userPatchToUser(requestBody); // PatchDto -> Entity
-        service.updateUserNickName(user, principal.getId()); // 유저 닉네임 수정 메서드 호출
+        service.updateUserNickname(user, principal.getId()); // 유저 닉네임 수정 메서드 호출
         return ResponseEntity.status(HttpStatus.OK).body("nickname patch success"); // 닉네임 수정 성공 메시지 반환
     }
 

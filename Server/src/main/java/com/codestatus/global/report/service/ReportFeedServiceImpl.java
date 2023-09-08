@@ -45,7 +45,7 @@ public class ReportFeedServiceImpl implements ReportService<Feed>{
     public void sendReportAlarm(Feed targetFeed) {
         int reportCount = reportFeedRepository.countAllByFeed(targetFeed);
         if (reportCount >= feedAlarmCount) {
-            customMailSender.sendReportAlarm(targetFeed.getFeedId(), targetFeed.getUser().getNickName(), "피드");
+            customMailSender.sendReportAlarm(targetFeed.getFeedId(), targetFeed.getUser().getNickname(), "피드");
         }
     }
 }

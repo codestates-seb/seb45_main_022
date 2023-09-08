@@ -23,16 +23,16 @@ public class UserDto {
         @NotBlank(message = "닉네임은 공백이 아니어야 합니다.")
         @Pattern(regexp = "^[가-힣a-zA-Z]{2,6}$",
                 message = "닉네임은 한글, 영문자만 허용되며 2글자 이상 6글자 이하로 구성되어야 하며 공백은 허용하지 않습니다.")
-        private String nickName;
+        private String nickname;
     }
 
     @Getter
-    public static class PatchNickName {
+    public static class PatchNickname {
         private Long id;
 
         @Pattern(regexp = "^[가-힣a-zA-Z]{2,6}$",
                 message = "닉네임은 한글, 영문자만 허용되며 2글자 이상 6글자 이하로 구성되어야 하며 공백은 허용하지 않습니다.")
-        private String nickName;
+        private String nickname;
 
         public void setId(Long id) {
             this.id = id;
@@ -57,7 +57,7 @@ public class UserDto {
     public static class Response {
         private Long id;
         private String email;
-        private String nickName;
+        private String nickname;
         private String profileImage;
         private boolean attendance;
         private List<StatusResponse> statuses;

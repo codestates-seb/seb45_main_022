@@ -16,12 +16,10 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     @Query("SELECT f FROM Feed f WHERE f.feedId = :feedId AND f.deleted = false ")
     Optional<Feed> findFeedByFeedIdAndDeletedIsFalse(long feedId);
 
-    Page<Feed> findByCreatedAtAfterAndDeletedIsFalseOrderByLikesDesc(LocalDateTime createdAt, Pageable pageable);
-
     @Query(nativeQuery = true, value = "SELECT f FROM Feed f WHERE f.body LIKE %:body% AND f.deleted = false ")
     Page<Feed> findByBodyAndDeletedIsFalse(@Param("body") String body, Pageable pageable);
 
-    @Query("SELECT f FROM Feed f WHERE f.category.categoryId = :categoryId AND f.user.nickName LIKE %:user% AND f.deleted = false ")
+    @Query("SELECT f FROM Feed f WHERE f.category.categoryId = :categoryId AND f.user.nickname LIKE %:user% AND f.deleted = false ")
     Page<Feed> findByUserAndDeleted(@Param("categoryId")long categoryId, @Param("user") String user,  Pageable pageable);
 
     Page<Feed> findByCategory_CategoryIdAndFeedHashTags_HashTag_HashTagId(long categoryId, long hashTagId, Pageable pageable);
@@ -36,4 +34,16 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     Page<Feed> findAllByDeletedIsFalseAndCategoryCategoryId(long categoryId, Pageable pageable);
 
     List<Feed> findAllByUser_UserIdAndDeletedIsFalse(long userId);
+
+    // 일주일 안에 작성된 피드를 likes 의 사이즈 순으로 정렬해서 조회
+    @Query("SELECT f FROM Feed f " +
+            "WHERE f.category.categoryId = :categoryId " +
+            "AND f.createdAt >= :oneWeekAgo " +
+            "AND f.deleted = false " +
+            "ORDER BY SIZE(f.likes) DESC")
+    Page<Feed> findFeedsByCategoryAndCreatedAtAndSortLikes(
+            Long categoryId,
+            LocalDateTime oneWeekAgo,
+            Pageable pageable
+    );
 }

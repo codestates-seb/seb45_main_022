@@ -22,15 +22,15 @@ public class UserMapper {
         User user = new User();
         user.setEmail(requestBody.getEmail());
         user.setPassword(requestBody.getPassword());
-        user.setNickName(requestBody.getNickName());
+        user.setNickname(requestBody.getNickname());
         return user;
     }
 
     // Dto -> Entity
-    public User userPatchToUser(UserDto.PatchNickName requestBody) {
+    public User userPatchToUser(UserDto.PatchNickname requestBody) {
         User user = new User();
         user.setUserId(requestBody.getId());
-        user.setNickName(requestBody.getNickName());
+        user.setNickname(requestBody.getNickname());
         return user;
     }
 
@@ -63,7 +63,7 @@ public class UserMapper {
         return UserDto.Response.builder()
                 .id(user.getUserId())
                 .email(user.getEmail())
-                .nickName(user.getNickName())
+                .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .attendance(user.isAttendance())
                 .statuses(statusResponses)
