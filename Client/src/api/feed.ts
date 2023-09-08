@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { CategoryCode } from './category';
 
+const token = localStorage.getItem("token")
+
+
+
 export interface Feed {
   feedId: number;
   nickName: string;
@@ -29,26 +33,52 @@ interface FeedApiData {
   };
 }
 
-export const getFeedList = async (categoryCode: CategoryCode) => {
-  const response = await axios.get<FeedApiData>(
-    `/feed/feedData${categoryCode}.json`,
-  );
-  const feedList = response.data.data;
 
-  return feedList;
+
+
+export const getFeedList = async (categoryCode: CategoryCode,) => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/get/${categoryCode}?page=1&size=10`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+
+  } catch (error) {
+    console.log('Cannot GET latest posts due to Error', error)
+  }
 };
+
+// 주간 베스트
+export const getWeeklyBest = async (categoryCode: CategoryCode) => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/weeklybest/${categoryCode}?page=1&size=10`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response
+
+  } catch (error) {
+    console.log('Cannot GET weekly best due to Error', error)
+  }
+
+}
+
+
 
 export const getFilterdFeedList = async (
   categoryCode: CategoryCode,
   keyword: string,
 ) => {
   const response = await axios.get<FeedApiData>(
-    `${
-      import.meta.env.VITE_APP_BASE_URL
-    }/feed/findByBody/${categoryCode}?page=1&size=10&query=${keyword}`,
+    `${import.meta.env.VITE_APP_BASE_URL
+    }feed/get/${categoryCode}?page=1&size=10&query=${keyword}`,
   );
   const feedList = response.data.data;
   console.log(categoryCode);
 
   return feedList;
 };
+
