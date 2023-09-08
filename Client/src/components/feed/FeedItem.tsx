@@ -1,4 +1,3 @@
-import feedItem from '../../assets/feed/feedItem.png';
 import likeButton from '../../assets/feed/likeButton.png';
 import commentButton from '../../assets/feed/commentButton.png';
 import { CategoryCode } from '../../api/category';
@@ -34,12 +33,6 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     setOpenFeedItem(false);
   };
 
-  // const FeedBoard = {
-  //   backgroundImage: `url(${feedItem})`,
-  //   backgroundSize: 'cover',
-  //   backgroundPosition: 'center',
-  // };
-
   return (
     <>
       {openFeedItem && <UserPost handleCloseScreen={handleCloseScreen} />}
@@ -48,7 +41,6 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
         onClick={handleShowPost}
         className="w-[295px] h-[137px] hover:cursor-pointer m-3 bg-cover bg-center bg-feedBox"
       >
-        {/* {displayPost && <UserPost setOpenFeedItem={setOpenFeedItem} />} */}
         <div className="w-full h-full p-7 flex">
           {/* 왼쪽 구간 (전체 너비 1/3) */}
           <div className="w-[70px] h-full flex flex-col justify-between items-start gap-1 cursor-pointer">
