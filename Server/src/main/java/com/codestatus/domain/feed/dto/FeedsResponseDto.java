@@ -14,7 +14,7 @@ import java.util.List;
 public class FeedsResponseDto {
     private long feedId;
 
-    private String nickName;
+    private String nickname;
 
     private String profileImage;
 

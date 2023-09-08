@@ -16,7 +16,7 @@ public class FeedResponseDto {
 
     private long feedId;
 
-    private String nickName;
+    private String nickname;
 
     private String profileImage;
 
