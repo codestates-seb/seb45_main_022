@@ -42,9 +42,6 @@ public class User extends Auditable {
     private List<Ranking> rankings = new ArrayList<>();
 
     @Column(nullable = false)
-    private boolean attendance = false;
-
-    @Column(nullable = false)
     private String profileImage;
 
     @Enumerated(value = EnumType.STRING)

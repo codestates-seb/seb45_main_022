@@ -59,7 +59,6 @@ public class UserDto {
         private String email;
         private String nickname;
         private String profileImage;
-        private boolean attendance;
         private List<StatusResponse> statuses;
         private String createDate;
         private String modifiedDate;
