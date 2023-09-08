@@ -1,20 +1,21 @@
-package com.codestatus.domain.user.service;
+package com.codestatus.domain.user.command;
 
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.repository.ExpTableRepository;
 import com.codestatus.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class LevelServiceImpl implements LevelService {
+public class LevelCommand {
     private final UserRepository userRepository;
     private final ExpTableRepository expTableRepository;
 
-    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void gainExp(User user, int exp, int statId) {
         user.getStatuses().get(statId-1).setStatExp(
                 user.getStatuses().get(statId-1).getStatExp() + exp

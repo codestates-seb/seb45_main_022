@@ -53,7 +53,7 @@ public class FeedController {
     //피드 상세 조회
     @GetMapping("/{feedId}")
     public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId) {
-        Feed feed = feedServiceImpl.findVerifiedFeed(feedId);
+        Feed feed = feedServiceImpl.findEntity(feedId);
 
         FeedResponseDto feedResponseDto =
                 feedMapper.feedToFeedResponseDto(feed);
