@@ -1,19 +1,13 @@
 import { useState } from 'react';
 
-const FilterButton = () => {
-  const [activeNewFeeds, setActiveNewFeeds] = useState(true);
-  const [activeBestFeeds, setActiveBestFeeds] = useState(false);
-
-  const handleActiveNewFeeds = () => {
-    setActiveNewFeeds(true);
-    setActiveBestFeeds(false);
-  };
-
-  const handleActiveBestFeeds = () => {
-    setActiveBestFeeds(true);
-    setActiveNewFeeds(false);
-  };
-
+const FilterButton = ({
+  setLatestFeed,
+  setBestFeeds,
+  latestFeeds,
+  bestFeeds,
+  handleFilterNewest,
+  handleFilterByBest,
+}) => {
   const buttonStyle = {
     fontFamily: 'Pretendard',
     padding: '0.5rem 1rem',
@@ -34,14 +28,14 @@ const FilterButton = () => {
   return (
     <div className="flex justify-center items-center gap-5">
       <button
-        style={activeNewFeeds ? clickedButtonStyle : unclickedButtonStyle}
-        onClick={handleActiveNewFeeds}
+        style={latestFeeds ? clickedButtonStyle : unclickedButtonStyle}
+        onClick={handleFilterNewest}
       >
         최신순
       </button>
       <button
-        style={activeBestFeeds ? clickedButtonStyle : unclickedButtonStyle}
-        onClick={handleActiveBestFeeds}
+        style={bestFeeds ? clickedButtonStyle : unclickedButtonStyle}
+        onClick={handleFilterByBest}
       >
         주간 베스트
       </button>
