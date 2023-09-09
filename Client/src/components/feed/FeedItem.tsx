@@ -14,7 +14,7 @@ interface FeedItemProps {
 
 const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   const {
-    nickName,
+    nickname,
     profileImage,
     level,
     body,
@@ -47,15 +47,7 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
             <div className="w-[35px] h-[35px] mt-[3px] ml-[10px]">
               <img src={profileImage} alt="profile" />
             </div>
-            <div
-              className="w-[45px] mt-1 ml-[6px] flex justify-center items-center"
-              style={{
-                fontFamily: 'Pretendard',
-                fontSize: nickName.length > 3 ? '0.5rem' : '1rem',
-              }}
-            >
-              {nickName}
-            </div>
+            <div className="w-[60px] mt-1 ml-[6px] text-[1rem]">{nickname}</div>
             <div className="w-full flex justify-start items-center -mt-1">
               <div className="w-[10px]">
                 <img
@@ -70,7 +62,8 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
           {/* 오른쪽 구간 (전체 너비 2/3) */}
           <div className="w-full h-full flex flex-col justify-between items-end">
             <div className="w-full h-[35px] font-[Pretendard] cursor-pointer">
-              {body.length > 20 ? `${body.slice(0, 20)}...` : body}
+              {/* {body.length > 20 ? `${body.slice(0, 20)}...` : body} */}
+              {body.slice(0, 20)}
             </div>
             <div className="w-full flex justify-end items-center gap-1.5">
               <div className="text-[10px] font-[Pretendard]">
