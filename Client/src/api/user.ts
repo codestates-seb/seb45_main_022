@@ -1,4 +1,5 @@
 import axios from '../utility/axios';
+import { convertEncodedImageToFile } from '../utility/image';
 import { StatusCode } from './category';
 
 export interface Status {
@@ -20,6 +21,14 @@ export interface UserInfo {
 export const getUserInfo = async (): Promise<UserInfo> => {
   const res = await axios.get('user/mypage');
   return res.data;
+};
+
+export const postProfileImage = async (encodedImage: string) => {
+  const file = await convertEncodedImageToFile(encodedImage, 'profile.png');
+  const formData = new FormData();
+  formData.append('imageFile', file);
+  const res = await axios.post('user/mypage/edit/image', formData);
+  console.log(res);
 };
 
 export const changePassword = async (password: string): Promise<string> => {
