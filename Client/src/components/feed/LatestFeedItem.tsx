@@ -12,7 +12,7 @@ interface FeedItemProps {
   categoryCode: CategoryCode;
 }
 
-const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
+const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   const {
     nickname,
     profileImage,
@@ -91,4 +91,4 @@ const FeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   );
 };
 
-export default FeedItem;
+export default LatestFeedItem;
