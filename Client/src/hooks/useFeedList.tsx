@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getFeedList, getUserFeed, getWeeklyBest } from '../api/feed';
+import { getFeedList, getWeeklyBest } from '../api/feed';
 import { CategoryCode } from '../api/category';
 import { getFilterdFeedList } from '../api/feed';
 import { FeedId } from '../api/feed';
@@ -33,19 +33,6 @@ function useFeedList(
     },
   );
 
-  const getUserFeedQuery = useQuery(
-    ['userFeed', feedId],
-    () => getUserFeed(feedId),
-
-    {
-      staleTime: 1000 * 60,
-      cacheTime: 1000 * 60 * 10,
-      enabled: !!feedId,
-      refetchOnWindowFocus: false,
-      retry: 2,
-    },
-  );
-
   const searchFeedsQuery = useQuery(
     ['filteredFeedList', categoryCode, keyword],
     () => getFilterdFeedList(categoryCode, keyword || ''),
@@ -58,7 +45,7 @@ function useFeedList(
     },
   );
 
-  return { feedListQuery, bestFeedQuery, getUserFeedQuery, searchFeedsQuery };
+  return { feedListQuery, bestFeedQuery, searchFeedsQuery };
 }
 
 export default useFeedList;
