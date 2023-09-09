@@ -1,6 +1,5 @@
 import Backdrop from '../components/common/Backdrop';
 import Header from '../components/feed/Header';
-import board from '../assets/feed/board.png';
 import Main from '../components/feed/Main';
 import { Outlet, useParams } from 'react-router';
 import useFeedList from '../hooks/useFeedList';
@@ -10,41 +9,38 @@ import { FrontButton } from '../components/common/BackButton';
 
 const FeedPage = () => {
   const { categoryCodeParam } = useParams();
-  const categoryCode = categoryCodeParam;
-
-  const sectionStyle = {
-    backgroundImage: `url(${board})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  };
+  const categoryCode = Number(categoryCodeParam);
 
   const { feedListQuery, bestFeedQuery } = useFeedList(categoryCode);
-  const { isLoading, isError } = feedListQuery as {
-    isLoading: boolean;
-    isError: boolean;
-  };
+
+  const { isLoading: isLoadingFeedList, isError: isErrorFeedList } =
+    feedListQuery as {
+      isLoading: boolean;
+      isError: boolean;
+    };
+
+  const { isLoading: isLoadingBestFeeds, isError: isErrorBestFeeds } =
+    bestFeedQuery as {
+      isLoading: boolean;
+      isError: boolean;
+    };
 
   const latestFeedQueries = feedListQuery.data?.data.data;
-  const bestFeedQueries = bestFeedQuery.data;
-  console.log(latestFeedQueries);
-  console.log('best', bestFeedQueries);
+  const bestFeedQueries = bestFeedQuery.data?.data.data;
+  console.log('latest feeds .... ', latestFeedQueries);
+  console.log('best feeds .... ', bestFeedQueries);
 
-  //현재 좋아요 있는 게시글이 없어서 렌더링 안됨
-  if (bestFeedQueries === undefined) {
-    console.log('No best feeds Yet. Coming soon!');
-  }
-
-  if (isLoading)
+  if (isLoadingFeedList || isLoadingBestFeeds) {
     return (
       <Backdrop>
         <LoadingBar />
       </Backdrop>
     );
-
-  if (isError) {
-    return <p>{isError.toString()}</p>;
   }
 
+  if (isErrorFeedList || isErrorBestFeeds) {
+    return <p>Error</p>;
+  }
   return (
     <div className="flex flex-col justify-center items-center w-screen h-screen bg-feed bg-center bg-cover">
       <Backdrop>
