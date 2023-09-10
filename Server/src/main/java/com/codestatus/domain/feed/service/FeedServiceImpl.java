@@ -50,7 +50,7 @@ public class FeedServiceImpl implements FeedService {
     @Transactional(readOnly = true)
     public Page<Feed> findWeeklyBestFeeds(long categoryId, int page, int size) {
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Sort sort = Sort.by(Sort.Direction.DESC, "created_at"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
         return feedRepository.findFeedsByCategoryAndCreatedAtAndSortLikes(categoryId, oneWeekAgo, pageable);
     }
