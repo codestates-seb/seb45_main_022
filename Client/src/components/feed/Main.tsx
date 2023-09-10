@@ -57,7 +57,7 @@ const Main = ({ latestFeedQueries, bestFeedQueries, categoryCode }: Props) => {
               />
             ))}
       </div>
-      <Link to="/post">
+      <Link to={`/feed/${categoryCode}/post`}>
         <button className="absolute bottom-5 right-5 w-[50px] h-[50px] bg-[#f8d8ae] bg-[url('/src/assets/icons/btn-pencil.png')] bg-no-repeat bg-cover rounded-full p-2 duration-300 shadow-[0_0_5px_#e1772d] hover:brightness-110 hover:scale-110" />
       </Link>
     </div>
