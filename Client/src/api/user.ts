@@ -31,6 +31,13 @@ export const postProfileImage = async (encodedImage: string) => {
   console.log(res);
 };
 
+export const postNickname = async (nickname: string): Promise<string> => {
+  const res = await axios.patch('user/mypage/edit/nickname', {
+    nickname,
+  });
+  return res.data;
+};
+
 export const changePassword = async (password: string): Promise<string> => {
   const res = await axios.patch('user/mypage/edit/password', {
     password,
