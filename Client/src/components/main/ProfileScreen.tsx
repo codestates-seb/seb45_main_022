@@ -4,22 +4,17 @@ import Button from '../common/Button';
 import { useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
 import 'cropperjs/dist/cropper.css';
-import ImageUploadModal from '../common/ImageUploadModal';
 import { Link, useNavigate } from 'react-router-dom';
 import ChangePwTab from './ChangePwTab';
-import { postProfileImage } from '../../api/user';
-import { useQueryClient } from 'react-query';
+import ProfileHeader from './ProfileHeader';
 
 const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
-  const [showImageModal, setShowImageModal] = useState(false);
 
   const { userInfoQuery } = useUserInfo();
   const { isLoading, data: userInfo } = userInfoQuery;
 
   const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
 
   if (isLoading)
     return (
@@ -37,60 +32,7 @@ const ProfileScreen = () => {
     <Backdrop>
       <div className="relative w-full h-full flex flex-col justify-center items-center gap-[2rem]">
         <div className="relative w-[500px] h-[600px] p-[40px] bg-[url('/src/assets/common/modal-frame-paper.png')] bg-center bg-cover bg-no-repeat flex flex-col justify-between">
-          <div className="flex flex-row justify-between items-start">
-            {/* 프로필 사진 액자 */}
-            <div className="flex flex-col gap-2">
-              <div className="w-[150px] h-[150px] bg-[url('/src/assets/common/profile-frame.png')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
-                <img
-                  className="w-[120px] h-[120px]"
-                  src={userInfo.profileImage}
-                  alt="profile"
-                />
-              </div>
-              <Button
-                style={{ width: '150px', height: '37.5px', fontSize: '.5rem' }}
-                onClick={() => {
-                  setShowImageModal(true);
-                }}
-              >
-                Change Image
-              </Button>
-            </div>
-            {/* 닉네임 */}
-            <div className="w-[300px] h-[200px] flex flex-col justify-center items-center gap-3">
-              <h1 className="text-[1rem] text-center">
-                NAME
-                <br />
-                <span className="font-[Pretendard] text-[2.5rem] font-extrabold">
-                  {userInfo.nickname}
-                </span>
-              </h1>
-              <h1 className="text-[.8rem] text-center">
-                EMAIL
-                <br />
-                <span className="text-[.5rem] font-extrabold">
-                  {userInfo.email}
-                </span>
-              </h1>
-            </div>
-          </div>
-          {showImageModal && (
-            <ImageUploadModal
-              onCloseBtnClick={() => {
-                setShowImageModal(false);
-              }}
-              onConfirmBtnClick={async (encodedImage) => {
-                try {
-                  await postProfileImage(encodedImage);
-                } catch (error) {
-                  alert('프로필 이미지 변경에 실패했습니다.');
-                  return;
-                }
-                queryClient.invalidateQueries('userInfo');
-                setShowImageModal(false);
-              }}
-            />
-          )}
+          <ProfileHeader userInfo={userInfo} />
           {/* 탭 메뉴 */}
           <div className="w-[400px] h-[310px]">
             {/* 탭 버튼 */}
