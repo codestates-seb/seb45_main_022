@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
 import Backdrop from './Backdrop';
 import Button from './Button';
+import 'cropperjs/dist/cropper.css';
 
 interface Props {
   onCloseBtnClick: () => void;

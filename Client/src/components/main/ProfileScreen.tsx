@@ -3,7 +3,6 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
-import 'cropperjs/dist/cropper.css';
 import { Link, useNavigate } from 'react-router-dom';
 import ChangePwTab from './ChangePwTab';
 import ProfileHeader from './ProfileHeader';
