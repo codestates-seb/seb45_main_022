@@ -56,12 +56,15 @@ export const getFeedList = async (categoryCode: CategoryCode,) => {
 // 주간 베스트
 export const getWeeklyBest = async (categoryCode: CategoryCode) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/weeklybest/${categoryCode}?page=1&size=10`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    return response
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_BASE_URL}feed/weeklybest/${categoryCode}?page=1&size=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
 
   } catch (error) {
     console.log('Cannot GET weekly best due to Error', error)
