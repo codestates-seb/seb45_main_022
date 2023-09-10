@@ -5,7 +5,7 @@ import Button from './Button';
 
 interface Props {
   onCloseBtnClick: () => void;
-  onConfirmBtnClick: (imageURL?: string) => void;
+  onConfirmBtnClick: (encodedImage: string) => void;
 }
 
 type StepType = 'upload' | 'crop' | 'preview';
@@ -13,20 +13,20 @@ type StepType = 'upload' | 'crop' | 'preview';
 const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
   const cropperRef = useRef<ReactCropperElement>(null);
   const [step, setStep] = useState<StepType>('upload');
-  const [inputImage, setInputImage] = useState('');
-  const [croppedImage, setCroppedImage] = useState('');
+  const [inputImageURL, setInputImageURL] = useState('');
+  const [encodedCroppedImage, setEncodedCroppedImage] = useState('');
 
   const onCrop = () => {
     const imageElement = cropperRef?.current;
     const cropper = imageElement?.cropper;
-    setCroppedImage(cropper?.getCroppedCanvas().toDataURL() || '');
+    setEncodedCroppedImage(cropper?.getCroppedCanvas().toDataURL() || '');
   };
 
   useEffect(() => {
-    if (inputImage !== '') {
+    if (inputImageURL !== '') {
       setStep('crop');
     }
-  }, [inputImage]);
+  }, [inputImageURL]);
 
   return (
     <Backdrop>
@@ -37,21 +37,23 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
               <>
                 <div className="w-[260px] h-[260px] bg-[url('/src/assets/common/no-image.png')] bg-no-repeat bg-cover p-[15px] shadow-[0_0_10px_#000]"></div>
                 <form className="w-fit h-fit">
-                  <label className="w-fit h-fit block" htmlFor="image-input">
-                    <Button size="large">Upload Image</Button>
+                  <label className="w-fit h-fit" htmlFor="image-input">
+                    <div className="w-[200px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]">
+                      Upload Image
+                    </div>
                   </label>
                   <input
                     id="image-input"
                     className="hidden"
                     type="file"
                     accept="image/*"
-                    onChange={(e) =>
-                      setInputImage(
+                    onChange={(e) => {
+                      setInputImageURL(
                         e.target.files
                           ? URL.createObjectURL(e.target.files[0])
                           : '',
-                      )
-                    }
+                      );
+                    }}
                   />
                 </form>
               </>
@@ -60,7 +62,7 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
               <>
                 <div className="w-[260px] h-[260px] bg-[url('/src/assets/common/loading-image.png')] bg-no-repeat bg-cover p-[15px] shadow-[0_0_10px_#000]">
                   <Cropper
-                    src={inputImage}
+                    src={inputImageURL}
                     crop={onCrop}
                     ref={cropperRef}
                     viewMode={1}
@@ -69,23 +71,24 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
                     style={{ height: 230, width: 230 }}
                   />
                 </div>
-                <div className="flex flex-col gap-3">
-                  <Button
+                <div className="w-full flex flex-row justify-evenly">
+                  <div
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
                     onClick={() => {
-                      setInputImage('');
+                      setInputImageURL('');
                       setStep('upload');
                     }}
                   >
                     Back
-                  </Button>
-                  <Button
+                  </div>
+                  <div
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
                     onClick={() => {
                       setStep('preview');
                     }}
-                    size="large"
                   >
                     Next
-                  </Button>
+                  </div>
                 </div>
               </>
             )}
@@ -93,17 +96,23 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
               <>
                 <img
                   className="w-[260px] h-[260px] rounded-md"
-                  src={croppedImage}
+                  src={encodedCroppedImage}
                 />
-                <div className="flex flex-col gap-3">
-                  <Button onClick={() => setStep('crop')}>Back</Button>
-                  <Button
-                    onClick={() => {
-                      onConfirmBtnClick(croppedImage);
+                <div className="w-full flex flex-row justify-evenly">
+                  <div
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
+                    onClick={() => setStep('crop')}
+                  >
+                    Back
+                  </div>
+                  <div
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
+                    onClick={async () => {
+                      onConfirmBtnClick(encodedCroppedImage);
                     }}
                   >
                     Confirm
-                  </Button>
+                  </div>
                 </div>
               </>
             )}

@@ -7,6 +7,8 @@ import 'cropperjs/dist/cropper.css';
 import ImageUploadModal from '../common/ImageUploadModal';
 import { Link, useNavigate } from 'react-router-dom';
 import ChangePwTab from './ChangePwTab';
+import { postProfileImage } from '../../api/user';
+import { useQueryClient } from 'react-query';
 
 const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
@@ -16,6 +18,8 @@ const ProfileScreen = () => {
   const { isLoading, data: userInfo } = userInfoQuery;
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   if (isLoading)
     return (
@@ -44,7 +48,7 @@ const ProfileScreen = () => {
                 />
               </div>
               <Button
-                size="medium"
+                style={{ width: '150px', height: '37.5px', fontSize: '.5rem' }}
                 onClick={() => {
                   setShowImageModal(true);
                 }}
@@ -75,7 +79,14 @@ const ProfileScreen = () => {
               onCloseBtnClick={() => {
                 setShowImageModal(false);
               }}
-              onConfirmBtnClick={() => {
+              onConfirmBtnClick={async (encodedImage) => {
+                try {
+                  await postProfileImage(encodedImage);
+                } catch (error) {
+                  alert('프로필 이미지 변경에 실패했습니다.');
+                  return;
+                }
+                queryClient.invalidateQueries('userInfo');
                 setShowImageModal(false);
               }}
             />
@@ -88,7 +99,7 @@ const ProfileScreen = () => {
                 style={{
                   backgroundColor: tab === 'post' ? '#bf916b' : '#ffc98f',
                 }}
-                className="text-[.8rem] flex-1 rounded-t-md"
+                className="text-[.7rem] flex-1 rounded-t-md"
                 onClick={() => {
                   setTab('post');
                 }}
@@ -99,7 +110,7 @@ const ProfileScreen = () => {
                 style={{
                   backgroundColor: tab === 'password' ? '#bf916b' : '#ffc98f',
                 }}
-                className="text-[.8rem] flex-1 rounded-t-md"
+                className="text-[.7rem] flex-1 rounded-t-md"
                 onClick={() => {
                   setTab('password');
                 }}
