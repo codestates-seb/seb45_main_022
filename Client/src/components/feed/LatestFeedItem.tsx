@@ -14,8 +14,7 @@ interface FeedItemProps {
 
 const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   const {
-    feedId,
-    nickname,
+    nickName,
     profileImage,
     level,
     body,
@@ -46,7 +45,7 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
             <div className="w-[35px] h-[35px] mt-[3px] ml-[10px]">
               <img src={profileImage} alt="profile" />
             </div>
-            <div className="w-[60px] mt-1 ml-[6px] text-[1rem]">{nickname}</div>
+            <div className="w-[60px] mt-1 ml-[6px] text-[1rem]">{nickName}</div>
             <div className="w-full flex justify-start items-center -mt-1">
               <div className="w-[10px]">
                 <img

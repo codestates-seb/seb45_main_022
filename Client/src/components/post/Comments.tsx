@@ -1,7 +1,6 @@
 import icon from '../../assets/icons/status-strength.png';
 
-const Comments = ({ comments }) => {
-  console.log(comments);
+const Comments = () => {
   return (
     <div className="border-b border-solid border-gray-400  py-2 flex p-4 ">
       <div className="flex flex-col items-center justify-center w-20">

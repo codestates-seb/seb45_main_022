@@ -18,11 +18,7 @@ const SearchPage = () => {
   };
 
   const { searchFeedsQuery } = useFeedList(categoryCode, keyword);
-  const {
-    data: feedList,
-    isLoading,
-    isError,
-  } = searchFeedsQuery as {
+  const { isLoading, isError } = searchFeedsQuery as {
     data: Feed[];
     isLoading: boolean;
     isError: boolean;
@@ -44,7 +40,7 @@ const SearchPage = () => {
       <Backdrop>
         <div className=" w-[1080px] h-[720px] p-[42px]" style={sectionStyle}>
           <Header categoryCode={categoryCode} />
-          <Main feedList={feedList} categoryCode={categoryCode} />
+          <Main categoryCode={categoryCode} />
         </div>
       </Backdrop>
     </div>

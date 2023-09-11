@@ -1,43 +1,40 @@
 interface FilterProps {
-  latestFeeds: boolean;
-  bestFeeds: boolean;
   handleFilterNewest: () => void;
   handleFilterByBest: () => void;
 }
 
 const FilterButton = ({
   handleFilterNewest,
-  handleFilterByBest,
-  latestFeeds,
-  bestFeeds,
+  handleFilterByBest, // latestFeeds,
+  // bestFeeds,
 }: FilterProps) => {
-  const buttonStyle = {
-    fontFamily: 'Pretendard',
-    padding: '0.5rem 1rem',
-    borderRadius: '0.25rem',
-    cursor: 'pointer',
-  };
+  // const buttonStyle = {
+  //   fontFamily: 'Pretendard',
+  //   padding: '0.5rem 1rem',
+  //   borderRadius: '0.25rem',
+  //   cursor: 'pointer',
+  // };
 
-  const clickedButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: '#fcebd7',
-  };
+  // const clickedButtonStyle = {
+  //   ...buttonStyle,
+  //   backgroundColor: '#fcebd7',
+  // };
 
-  const unclickedButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: '#e8cead',
-  };
+  // const unclickedButtonStyle = {
+  //   ...buttonStyle,
+  //   backgroundColor: '#e8cead',
+  // };
 
   return (
     <div className="flex justify-center items-center gap-5">
       <button
-        style={latestFeeds ? clickedButtonStyle : unclickedButtonStyle}
+        // style={latestFeeds ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterNewest}
       >
         최신순
       </button>
       <button
-        style={bestFeeds ? clickedButtonStyle : unclickedButtonStyle}
+        // style={bestFeeds ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterByBest}
       >
         주간 베스트

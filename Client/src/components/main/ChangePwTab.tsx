@@ -88,7 +88,7 @@ const ChangePwTab = () => {
         className="text-sm border-solid border-2 p-2 rounded-lg"
         onFocus={resetErrorMsg}
       />
-      <Button size="medium">Change</Button>
+      <Button>Change</Button>
     </form>
   );
 };

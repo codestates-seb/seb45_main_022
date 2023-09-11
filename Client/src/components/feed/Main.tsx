@@ -5,7 +5,7 @@ import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import LatestFeedItem from './LatestFeedItem';
-import BestFeedItem from './BestFeedItem';
+// import BestFeedItem from './BestFeedItem';
 import useFeedList from '../../hooks/useFeedList';
 import Backdrop from '../common/Backdrop';
 import LoadingBar from '../common/LoadingBar';
