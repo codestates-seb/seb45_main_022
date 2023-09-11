@@ -69,7 +69,6 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.PATCH,"/user/mypage/edit/**").hasRole("USER") // mypage 는 USER 권한 필요
                         .antMatchers(HttpMethod.DELETE ,"/user/mypage/**").hasRole("USER") // mypage 는 USER 권한 필요
 
-
                         // feed 권한 부여
                         .antMatchers(HttpMethod.POST, "/feed/**").hasRole("USER") // feed 작성은 USER 권한 필요
                         .antMatchers(HttpMethod.GET, "/feed/{feedId}").hasRole("USER") // feed 상세 조회는 USER 권한 필요
@@ -79,6 +78,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET, "feed/findByUser/{categoryId}").permitAll() // user 로 검색한 feed 목록 조회는 누구나 가능
                         .antMatchers(HttpMethod.PATCH, "/feed/{feedId}").hasRole("USER") // feed 수정은 USER 권한 필요
                         .antMatchers(HttpMethod.DELETE, "/feed/{feedId}").hasRole("USER") // feed 삭제는 USER 권한 필요
+                        .antMatchers(HttpMethod.GET, "/feed/my-post").hasRole("USER") // my-post 조회는 USER 권한 필요
 
                         // comment 권한 부여
                         .antMatchers(HttpMethod.POST, "/comment/**").hasRole("USER")

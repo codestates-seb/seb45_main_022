@@ -159,6 +159,20 @@ public class FeedController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 로그인한 유저가 작성한 글 전체 조회
+    @GetMapping("/my-post")
+    public ResponseEntity myPost(@AuthenticationPrincipal PrincipalDto principal,
+                                 @RequestParam int page,
+                                 @RequestParam int size) {
+        long userId = userMapper.userIdToUser(principal.getId()).getUserId();
+        Page<Feed> pageFeeds = feedServiceImpl.myPost(userId, page - 1, size);
+        List<Feed> feeds = pageFeeds.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+    }
+
     //피드 삭제(DB삭제아님)
     @DeleteMapping("/{feedId}")
     public ResponseEntity deleteFeed(@PathVariable("feedId") int feedId,

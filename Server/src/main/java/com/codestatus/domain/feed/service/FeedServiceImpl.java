@@ -118,6 +118,13 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(findFeed);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Feed> myPost(long userId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findAllByUser_UserIdAndDeletedIsFalse(userId, pageable);
+    }
+
     //db에서 완전 삭제가 아닌 deleted=true 로 수정
     @Override
     public void deleteEntity(long feedId, long userId){
