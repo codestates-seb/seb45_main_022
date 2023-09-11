@@ -32,7 +32,7 @@ public class SecurityConfig {
     private final CustomAuthorityUtils authorityUtils;
     private final UsersDetailService userService;
     private final JwtResponseUtil jwtResponseUtil;
-    private String s3 = "https://seb45-main-022-gz09p0en3-donghun-k.vercel.app/"; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
+    private String s3 = ""; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
@@ -103,7 +103,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() { // cors 설정
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList("http://localhost:3000", "http://localhost:8080", s3));
+                Arrays.asList("http://localhost:3000", "http://localhost:8080", "https://seb45-main-022-gz09p0en3-donghun-k.vercel.app/", s3));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
