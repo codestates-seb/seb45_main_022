@@ -1,5 +1,6 @@
 import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/status-strength.png';
+import { FaThumbsUp } from 'react-icons/fa';
 
 import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
@@ -108,19 +109,21 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
         </div>
         <div className="flex items-center justify-between p-4 border-b border-solid border-gray-400 w-full">
           <div>
-            <span className="border border-solid bg-yellow-700 text-white text-sm font-semibold  rounded-xl p-3">
-              Total Comments {userFeed.comments.length}
+            <span className=" text-sm font-semibold  rounded-xl p-3">
+              Total Comments
             </span>
-            <span className="ml-4 text-m text-gray-500 font-semibold">5</span>
+            <span className="ml-2 text-m text-gray-500 font-semibold">
+              {userFeed.comments.length}
+            </span>
           </div>
-          <div>
+          <div className="relative mr-6 ">
             <button
               // onClick={handleLikePost}
-              className="hover:brightness-110 duration-300 rounded-xl text-white bg-green-500 font-semibold p-2"
+              className="hover:brightness-110 duration-200 hover:text-green-400 rounded-xl text-xl font-semibold "
             >
-              Like Post
+              <FaThumbsUp />
             </button>
-            <span className="ml-4 text-m text-gray-500 font-semibold">
+            <span className="absolute  top-0 ml-3 text-sm text-gray-500 font-semibold ">
               {userFeed.likeCount}
             </span>
           </div>
