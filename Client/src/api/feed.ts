@@ -33,19 +33,12 @@ interface FeedApiData {
   };
 }
 
-export interface FeedId {
-  feedId: number;
-}
 
 
 
 export const getFeedList = async (categoryCode: CategoryCode,) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/get/${categoryCode}?page=1&size=10`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/get/${categoryCode}?page=1&size=10`)
     return response
 
   } catch (error) {
@@ -57,13 +50,7 @@ export const getFeedList = async (categoryCode: CategoryCode,) => {
 export const getWeeklyBest = async (categoryCode: CategoryCode) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_BASE_URL}feed/weeklybest/${categoryCode}?page=1&size=10`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      `${import.meta.env.VITE_APP_BASE_URL}feed/weeklybest/${categoryCode}?page=1&size=10`)
     return response;
 
   } catch (error) {
@@ -72,7 +59,7 @@ export const getWeeklyBest = async (categoryCode: CategoryCode) => {
 }
 
 // 상세 피드 
-export const getUserFeed = async (feedId: FeedId) => {
+export const getUserFeed = async (feedId: Feed['feedId']) => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`, {
       headers: {

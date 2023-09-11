@@ -14,6 +14,7 @@ interface FeedItemProps {
 
 const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   const {
+    feedId,
     nickname,
     profileImage,
     level,
@@ -29,13 +30,11 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     setOpenFeedItem(true);
   };
 
-  const handleCloseScreen = () => {
-    setOpenFeedItem(false);
-  };
-
   return (
     <>
-      {openFeedItem && <UserPost handleCloseScreen={handleCloseScreen} />}
+      {openFeedItem && (
+        <UserPost feed={feed} setOpenFeedItem={setOpenFeedItem} />
+      )}
 
       <div
         onClick={handleShowPost}

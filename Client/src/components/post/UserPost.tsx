@@ -1,102 +1,39 @@
-import { useState } from 'react';
-import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/status-strength.png';
-import Comments from './Comments';
-// import { getPostInfo } from '../../api/post';
-// import { useQuery } from 'react-query';
-// import PostFrame from '../common/PostFrame';
-interface Comment {
-  id: number;
-  profileImg: string;
-  nickname: string;
-  label: string;
-  text: string;
-  timeCreated: string;
-}
+import { FaThumbsUp } from 'react-icons/fa';
 
-const UserPost = ({ handleCloseScreen }) => {
-  const [comments, setComments] = useState<Comment[]>([
-    {
-      id: 1,
-      profileImg: profileImg,
-      nickname: 'code',
-      label: 'Lv. 01',
-      text: '중간 출석!!',
-      timeCreated: '1H',
-    },
-    {
-      id: 2,
-      profileImg: profileImg,
-      nickname: 'states',
-      label: 'Lv. 03',
-      text: 'QR 입실/퇴실 해주세요',
-      timeCreated: '5H',
-    },
-    {
-      id: 3,
-      profileImg: profileImg,
-      nickname: '지원',
-      label: 'Lv. 05',
-      text: '✨ Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?met consectetur adipisicing elit. Iusto, consequuntur?',
-      timeCreated: '1M',
-    },
-    {
-      id: 4,
-      profileImg: profileImg,
-      nickname: '연성',
-      label: 'Lv. 08',
-      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo exercitationem rerum voluptates? Molestiae ratione fuga vel dolor ad sed blanditiis culpa, tempore voluptates velit sequi mollitia voluptatem vero recusandae deleniti! Deserunt delectus, mollitia optio facere recusandae possimus vitae obcaecati iure!',
-      timeCreated: '5M',
-    },
-    {
-      id: 5,
-      profileImg: profileImg,
-      nickname: '흑룡',
-      label: 'Lv. 08',
-      text: '용요선생 🍻',
-      timeCreated: '2D',
-    },
-    {
-      id: 6,
-      profileImg: profileImg,
-      nickname: '도석',
-      label: 'Lv. 08',
-      text: '용요선생 🍻',
-      timeCreated: '3D',
-    },
-    {
-      id: 7,
-      profileImg: profileImg,
-      nickname: '동쿤',
-      label: 'Lv. 08',
-      text: '내가 이겼다',
-      timeCreated: '12H',
-    },
-    {
-      id: 9,
-      profileImg: profileImg,
-      nickname: '성일',
-      label: 'Lv. 08',
-      text: '최고',
-      timeCreated: '5h',
-    },
-    {
-      id: 9,
-      profileImg: profileImg,
-      nickname: '강석',
-      label: 'Lv. 08',
-      text: 'github: kangsuck',
-      timeCreated: '1D',
-    },
-  ]);
+import useUserFeed from '../../hooks/useUserFeed';
+import { STATUS_ICON } from '../../utility/status';
+import { CATEGORY_STATUS_MAP } from '../../utility/category';
+import { useState } from 'react';
+import { Feed } from '../../api/feed';
 
-  const [likeCount, setLikeCount] = useState(3);
+const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
+  // const [likes, setlikes] = useState(3);
 
-  const handleLikePost = () => {
-    setLikeCount(likeCount + 1);
-  };
+  // const handleLikePost = () => {
+  //   setlikes(likes + 1);
+  // };
   const [displayComments, setDisplayComments] = useState(3);
-  const [addComment, setAddComment] = useState('');
+  // const [addComment, setAddComment] = useState('');
+
+  const { getUserFeedQuery } = useUserFeed(feed.feedId);
+  const { isLoading, isError } = getUserFeedQuery as {
+    isLoading: boolean;
+    isError: boolean;
+  };
+
+  // console.log(getUserFeedQuery.data?.data.comments);
+
+  const userFeed = getUserFeedQuery.data?.data;
+  console.log(getUserFeedQuery.data?.data);
+  console.log(getUserFeedQuery.data?.data.comments);
+
+  // console.log(userFeed.comments);
+  /// readt query
+
+  const handleCloseScreen = () => {
+    setOpenFeedItem(false);
+  };
 
   const expandComments = () => {
     setDisplayComments(displayComments + 3);
@@ -111,9 +48,13 @@ const UserPost = ({ handleCloseScreen }) => {
     e.stopPropagation();
   };
 
-  // 명세서 나오면 추가 예정
-  // const { isLoading, data: userPost } = useQuery(['postInfo'], getPostInfo);
-  // if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error..</p>;
+  }
 
   return (
     <div
@@ -133,56 +74,65 @@ const UserPost = ({ handleCloseScreen }) => {
         <div className="flex  justify-between  py-4 ">
           <div className="  px-4 flex flex-col items-center border-r border-solid border-gray-400 ">
             <img
-              src={profileImg}
+              src={userFeed.profileImage}
               width={90}
               alt="profile pic"
               className="mb-2"
             />
-            <span className="font-[Pretendard] font-semibold">동훈</span>
+            <span className="font-[Pretendard] font-semibold">
+              {userFeed.nickname}
+            </span>
             <div className="flex mt-1 items-center justify-around w-[100%]">
-              <img src={icon} alt="muscle icon" width={25} />
-              <span className="font-[Pretendard]">Lv. 01</span>
+              <img
+                // src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
+                alt="스탯 아이콘"
+              />
+              <span className="font-[Pretendard]">Lv. {userFeed.level}</span>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center  py-2 w-[500px]">
-            <p className="font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis">
-              솔직히 3대 200도 못들면 헬스 접는게 맞음 ㄹㅇ ㅋㅋ 벤치 40에 스쾃
-              80 데드 80만 들어도 3대 ㅋㅋ 솔직히 3대 200도 못들면 헬스 접는게
-              맞음 ㄹㅇ ㅋㅋ 벤치 40에 스쾃 80 데드 80만 들어도 3대 ㅋㅋ
-            </p>
-            <img
-              width={150}
-              src="https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/1648545238/B.jpg?597000000"
-              alt=""
+          <div className="flex flex-col items-center justify-between  py-2 w-[500px]">
+            <div
+              dangerouslySetInnerHTML={{ __html: userFeed.data }}
+              className=" font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis"
             />
+
+            <span className="font-[Pretendard] text-[12px] text-right w-full">
+              {new Date(userFeed.createdAt).toLocaleTimeString('ko-KR', {
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </span>
           </div>
         </div>
         <div className="flex items-center justify-between p-4 border-b border-solid border-gray-400 w-full">
           <div>
-            <span className="border border-solid bg-yellow-700 text-white text-sm font-semibold  rounded-xl p-3">
+            <span className=" text-sm font-semibold  rounded-xl p-3">
               Total Comments
             </span>
-            <span className="ml-4 text-m text-gray-500 font-semibold">
-              {comments.length}
+            <span className="ml-2 text-m text-gray-500 font-semibold">
+              {userFeed.comments.length}
             </span>
           </div>
-          <div>
+          <div className="relative mr-6 ">
             <button
-              onClick={handleLikePost}
-              className="hover:brightness-110 duration-300 rounded-xl text-white bg-green-500 font-semibold p-2"
+              // onClick={handleLikePost}
+              className="hover:brightness-110 duration-200 hover:text-green-400 rounded-xl text-xl font-semibold "
             >
-              Like Post
+              <FaThumbsUp />
             </button>
-            <span className="ml-4 text-m text-gray-500 font-semibold">
-              {likeCount}
+            <span className="absolute  top-0 ml-3 text-sm text-gray-500 font-semibold ">
+              {userFeed.likeCount}
             </span>
           </div>
         </div>
         <div className="flex items-center justify-center  border-b border-solid border-gray-400 w-full py-4">
           <input
             type="search"
-            onChange={(e) => setAddComment(e.target.value)}
-            value={addComment}
+            // onChange={(e) => setAddComment(e.target.value)}
+            // value={addComment}
             className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[400px]"
           />
           <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white py-2 px-3 text-sm font-semibold ml-4 w-[200px] rounded-xl">
@@ -191,21 +141,43 @@ const UserPost = ({ handleCloseScreen }) => {
         </div>
 
         <div className="max-w-[800px] w-full">
-          <div className="flex flex-col justify-evenly">
-            {comments.slice(0, displayComments).map((comment) => (
-              <Comments
-                key={comment.id}
-                profileImg={comment.profileImg}
-                nickname={comment.nickname}
-                label={comment.label}
-                text={comment.text}
-                timeCreated={comment.timeCreated}
-              />
-            ))}
-          </div>
+          {userFeed.comments.slice(0, displayComments).map((comment) => (
+            <div
+              key={comment.commentId}
+              className="border-b border-solid border-gray-400  py-2 flex p-4 "
+            >
+              <div className="flex flex-col items-center justify-center w-20">
+                <img
+                  src={comment.profileImage}
+                  alt="profile image"
+                  width={45}
+                />
+                <span className="font-[Pretendard] font-semibold">
+                  {comment.nickname}
+                </span>
+
+                <div className="flex mt-1 items-center justify-around w-[100%]">
+                  <img src={icon} alt="muscle icon" width={15} />
+                  <span className="font-[Pretendard] text-sm">
+                    Lv. {comment.level}
+                  </span>
+                </div>
+              </div>
+              <div className="flex text-sm   w-full p-4">
+                <span className="font-[Pretendard] font-normal">
+                  {comment.body}
+                </span>
+              </div>
+              <div className="w-10 text-center">
+                <span className="font-[Pretendard] text-sm text-gray-500 ">
+                  {comment.createdAt}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-5">
-          {comments.length > 3 && (
+          {userFeed.comments.length > 3 && (
             <button
               onClick={expandComments}
               className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
@@ -225,12 +197,6 @@ const UserPost = ({ handleCloseScreen }) => {
         </div>
       </div>
     </div>
-
-    //     <span className="w-[180px]  text-xl mr-5 font-bold font-[Pretendard]">
-    //     {comment.nickname}
-    //   </span>
-    //   <span className="font-[Pretendard]">{comment.text}</span>
-    // </div>
   );
 };
 
