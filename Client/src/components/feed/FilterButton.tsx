@@ -6,10 +6,10 @@ interface FilterProps {
 }
 
 const FilterButton = ({
-  latestFeeds,
-  bestFeeds,
   handleFilterNewest,
   handleFilterByBest,
+  latestFeeds,
+  bestFeeds,
 }: FilterProps) => {
   const buttonStyle = {
     fontFamily: 'Pretendard',
