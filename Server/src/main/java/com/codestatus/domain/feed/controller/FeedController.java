@@ -164,8 +164,7 @@ public class FeedController {
     public ResponseEntity myPost(@AuthenticationPrincipal PrincipalDto principal,
                                  @RequestParam int page,
                                  @RequestParam int size) {
-        long userId = userMapper.userIdToUser(principal.getId()).getUserId();
-        Page<Feed> pageFeeds = feedServiceImpl.myPost(userId, page - 1, size);
+        Page<Feed> pageFeeds = feedServiceImpl.myPost(principal.getId(), page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
 
         return new ResponseEntity<>(
