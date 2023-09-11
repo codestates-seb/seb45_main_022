@@ -62,7 +62,7 @@ export const getWeeklyBest = async (categoryCode: CategoryCode) => {
 }
 
 // 상세 피드 
-export const getUserFeed = async (feedId: FeedId) => {
+export const getUserFeed = async (feedId: Feed) => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`, {
       headers: {

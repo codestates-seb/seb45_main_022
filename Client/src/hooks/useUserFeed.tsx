@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
-import { getUserFeed } from '../api/feed';
+import { Feed, getUserFeed } from '../api/feed';
 import { FeedId } from '../api/feed';
 
-function useUserFeed(feedId: FeedId) {
+function useUserFeed(feedId: Feed) {
   const getUserFeedQuery = useQuery(
     ['userFeed', feedId],
     () => getUserFeed(feedId),
