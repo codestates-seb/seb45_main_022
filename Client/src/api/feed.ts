@@ -33,9 +33,6 @@ interface FeedApiData {
   };
 }
 
-export interface FeedId {
-  feedId: number;
-}
 
 
 

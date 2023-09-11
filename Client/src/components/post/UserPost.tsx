@@ -1,4 +1,3 @@
-import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/status-strength.png';
 import { FaThumbsUp } from 'react-icons/fa';
 
@@ -6,8 +5,9 @@ import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { useState } from 'react';
+import { Feed } from '../../api/feed';
 
-const UserPost = ({ setOpenFeedItem, feed }) => {
+const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
   // const [likes, setlikes] = useState(3);
 
   // const handleLikePost = () => {
