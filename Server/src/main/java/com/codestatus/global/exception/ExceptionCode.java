@@ -15,9 +15,8 @@ public enum ExceptionCode {
     USER_SAME_PASSWORD(400, "현재 비밀번호와 같은 비밀번호는 사용할 수 없습니다.", "U003"),
     USER_EXISTS_EMAIL(409, "사용중인 이메일 입니다.", "U004"),
     USER_EXISTS_NICKNAME(409, "사용중인 닉네임 입니다.", "U005"),
-    NOT_RESOURCE_OWNER(400, "리소스의 소유자가 아닙니다.", "U006"),
-    FORBIDDEN_REQUEST(403, "해당 리소스에 접근이 불가능합니다.", "U007"),
-    INVALID_USER(401, "유효하지 않은 유저입니다.", "U008"),
+    FORBIDDEN_REQUEST(403, "해당 리소스에 접근이 불가능합니다.", "U006"),
+    INVALID_USER(401, "유효하지 않은 유저입니다.", "U007"),
 
     USER_ALREADY_CHECKED_ATTENDANCE(400, "오늘은 출석체크를 하셨습니다.", "A000"),
 
