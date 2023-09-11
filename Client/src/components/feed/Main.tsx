@@ -3,9 +3,10 @@ import SearchBar from './SearchBar';
 import { Feed } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LatestFeedItem from './LatestFeedItem';
 import BestFeedItem from './BestFeedItem';
+import useFeedList from '../../hooks/useFeedList';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -14,34 +15,68 @@ interface Props {
 }
 
 const Main = ({ latestFeedQueries, bestFeedQueries, categoryCode }: Props) => {
-  const [latestFeeds, setLatestFeed] = useState<boolean>(true);
-  const [bestFeeds, setBestFeeds] = useState<boolean>(false);
+  // const [latestFeeds, setLatestFeed] = useState<boolean>(true);
+  // const [bestFeeds, setBestFeeds] = useState<boolean>(false);
 
+  const { feedListQuery, bestFeedQuery } = useFeedList(categoryCode);
+  const QUERY_MAP = { latest: feedListQuery, best: bestFeedQuery };
+  const [feedList, setFeedList] = useState<Feed[]>([]);
+  const [tab, setTab] = useState<'latest' | 'best'>('latest');
+
+  // const { isLoading, onSuccess } = feedListQuery as {
+  //   isLoading: boolean;
+  //   isError: boolean;
+  // };
+
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  useEffect(() => {
+    // const { data } = QUERY_MAP[tab];
+    // console.log(data, 'data');
+    // setFeedList(data);
+
+    if (QUERY_MAP[tab].data?.data?.data) {
+      setFeedList(QUERY_MAP[tab].data.data.data);
+    }
+  }, [tab]);
+
+  // latest | tab
   const handleFilterNewest = () => {
-    setLatestFeed(true);
-    setBestFeeds(false);
+    setTab('latest');
     console.log('최신순');
   };
 
   const handleFilterByBest = () => {
-    setBestFeeds(true);
-    setLatestFeed(false);
+    setTab('best');
     console.log('주간 베스트');
   };
+
+  console.log(feedList, 'feedlist;;;;;sfa;fa;fa;fsa;');
 
   return (
     <div className="relative w-full h-[31.25rem] flex flex-col justify-start items-center mt-[55px] ml-1 ">
       <div className="w-full h-[3rem] flex justify-around items-center bg-[#f8d8ae] gap-[20rem]">
         <FilterButton
-          latestFeeds={latestFeeds}
-          bestFeeds={bestFeeds}
+          // latestFeeds={latestFeeds}
+          // bestFeeds={bestFeeds}
+
           handleFilterNewest={handleFilterNewest}
           handleFilterByBest={handleFilterByBest}
         />
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div className="flex items-center justify-around w-[1000px] flex-wrap p-3  overflow-y-scroll ">
-        {latestFeeds
+        {feedList &&
+          feedList.map((feed) => {
+            return <LatestFeedItem categoryCode={categoryCode} feed={feed} />;
+          })}
+        {/* {feedList &&
+          feedList.map((feed) => {
+            return <h1>FSNIOSNFISONF</h1>;
+          })} */}
+        {/* {latestFeeds
           ? latestFeedQueries.map((feed) => (
               <LatestFeedItem
                 key={feed.feedId}
@@ -55,7 +90,7 @@ const Main = ({ latestFeedQueries, bestFeedQueries, categoryCode }: Props) => {
                 feed={feed}
                 categoryCode={categoryCode}
               />
-            ))}
+            ))} */}
       </div>
       <Link to={`/feed/${categoryCode}/post`}>
         <button className="absolute bottom-5 right-5 w-[50px] h-[50px] bg-[#f8d8ae] bg-[url('/src/assets/icons/btn-pencil.png')] bg-no-repeat bg-cover rounded-full p-2 duration-300 shadow-[0_0_5px_#e1772d] hover:brightness-110 hover:scale-110" />
