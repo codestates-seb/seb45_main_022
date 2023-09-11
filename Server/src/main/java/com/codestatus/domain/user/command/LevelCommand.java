@@ -15,7 +15,6 @@ public class LevelCommand {
     private final UserRepository userRepository;
     private final ExpTableRepository expTableRepository;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void gainExp(User user, int exp, int statId) {
         user.getStatuses().get(statId-1).setStatExp(
                 user.getStatuses().get(statId-1).getStatExp() + exp
