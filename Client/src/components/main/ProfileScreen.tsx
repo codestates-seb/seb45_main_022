@@ -29,7 +29,7 @@ const ProfileScreen = () => {
   }
   return (
     <Backdrop>
-      <div className="relative w-full h-full flex flex-col justify-center items-center gap-[2rem]">
+      <div className="relative w-full h-full flex flex-col justify-center items-center gap-[32px]">
         <div className="relative w-[500px] h-[600px] p-[40px] bg-[url('/src/assets/common/modal-frame-paper.png')] bg-center bg-cover bg-no-repeat flex flex-col justify-between">
           <ProfileHeader userInfo={userInfo} />
           {/* 탭 메뉴 */}
@@ -40,7 +40,7 @@ const ProfileScreen = () => {
                 style={{
                   backgroundColor: tab === 'post' ? '#bf916b' : '#ffc98f',
                 }}
-                className="text-[.7rem] flex-1 rounded-t-md"
+                className="text-[.7rem] flex-1 rounded-t-[6px]"
                 onClick={() => {
                   setTab('post');
                 }}
@@ -51,7 +51,7 @@ const ProfileScreen = () => {
                 style={{
                   backgroundColor: tab === 'password' ? '#bf916b' : '#ffc98f',
                 }}
-                className="text-[.7rem] flex-1 rounded-t-md"
+                className="text-[.7rem] flex-1 rounded-t-[6px]"
                 onClick={() => {
                   setTab('password');
                 }}
@@ -60,7 +60,7 @@ const ProfileScreen = () => {
               </button>
             </div>
             {/* 탭 내용 */}
-            <div className="w-full h-[260px] p-2 bg-[#bf916b] rounded-b-md">
+            <div className="w-full h-[260px] p-[8px] bg-[#bf916b] rounded-b-[6px]">
               {tab === 'post' && <div className="w-full h-full">MY POST</div>}
               {tab === 'password' && <ChangePwTab />}
             </div>

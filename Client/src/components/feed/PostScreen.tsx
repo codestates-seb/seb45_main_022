@@ -36,8 +36,8 @@ const PostScreen = () => {
 
   return (
     <Backdrop>
-      <div className="w-screen h-screen flex flex-col justify-center items-center gap-3">
-        <div className="w-[580px] h-[755px] bg-[url('/src/assets/common/modal-frame-post.png')] bg-no-repeat bg-cover flex flex-col justify-center items-center pl-[40px] gap-4">
+      <div className="w-screen h-screen flex flex-col justify-center items-center gap-[12px]">
+        <div className="w-[580px] h-[755px] bg-[url('/src/assets/common/modal-frame-post.png')] bg-no-repeat bg-cover flex flex-col justify-center items-center pl-[40px] gap-[16px]">
           <FeedEditor
             onEditorBlur={(body, data) => {
               setBody(body || '');
@@ -45,7 +45,7 @@ const PostScreen = () => {
             }}
           />
           <TagEditor tags={tags} setTags={setTags} />
-          <div className="flex flex-row gap-7">
+          <div className="flex flex-row gap-[28px]">
             <Button onClick={handlePost}>Post</Button>
             <Link to={`/feed/${categoryCode}`}>
               <Button>Cancel</Button>

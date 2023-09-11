@@ -8,18 +8,18 @@ interface Props {
 const TagEditor = ({ tags, setTags }: Props) => {
   const tagInputRef = useRef<HTMLInputElement | null>(null);
   return (
-    <div className="w-[430px] h-fit bg-[#f2b888] rounded-lg flex flex-col justify-evenly items-start gap-1 p-2 font-[Pretendard] ">
-      <div className="flex flex-row flex-wrap gap-2">
+    <div className="w-[430px] h-fit bg-[#f2b888] rounded-[8px] flex flex-col justify-evenly items-start gap-[4px] p-[8px] font-[Pretendard] ">
+      <div className="flex flex-row flex-wrap gap-[8px]">
         {tags.map((tag, index) => (
           <div
             key={index}
             onClick={() => {
               setTags(tags.filter((t) => t !== tag));
             }}
-            className="h-[30px] bg-[#f8d8ae] font-bold rounded-md flex justify-center items-center p-1 w-fit hover:scale-105 hover:brightness-110 duration-300 cursor-pointer"
+            className="h-[30px] bg-[#f8d8ae] font-bold rounded-[6px] flex justify-center items-center p-[4px] w-fit hover:scale-105 hover:brightness-110 duration-300 cursor-pointer"
           >
             {tag}
-            <span className="text-[#666] pl-1">ｘ</span>
+            <span className="text-[#666] pl-[4px]">ｘ</span>
           </div>
         ))}
       </div>

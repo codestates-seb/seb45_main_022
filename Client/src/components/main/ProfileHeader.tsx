@@ -62,7 +62,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
     <>
       <div className="flex flex-row justify-between items-start">
         {/* 프로필 사진 액자 */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-[8px]">
           <div className="w-[150px] h-[150px] bg-[url('/src/assets/common/profile-frame.png')] bg-center bg-cover bg-no-repeat flex justify-center items-center">
             <img
               className="w-[120px] h-[120px]"
@@ -80,7 +80,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
           </Button>
         </div>
         {/* 닉네임 */}
-        <div className="w-[300px] h-[200px] flex flex-col justify-center items-center gap-3">
+        <div className="w-[300px] h-[200px] flex flex-col justify-center items-center gap-[12px]">
           <h1 className="text-[1rem] text-center">
             NAME
             <br />
@@ -90,7 +90,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
                   <input
                     ref={nicknameInputRef}
                     autoFocus
-                    className="w-[200px] bg-[#bf916b] font-[Pretendard] text-[2.5rem] font-extrabold rounded-md"
+                    className="w-[200px] bg-[#bf916b] font-[Pretendard] text-[2.5rem] font-extrabold rounded-[6px]"
                     onBlur={changeNickname}
                     type="text"
                     defaultValue={userInfo.nickname}
@@ -98,7 +98,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
                 </form>
               </>
             ) : (
-              <div className="flex flex-row gap-1 items-center">
+              <div className="flex flex-row gap-[4px] items-center">
                 <span className="font-[Pretendard] text-[2.5rem] font-extrabold">
                   {userInfo.nickname}
                 </span>

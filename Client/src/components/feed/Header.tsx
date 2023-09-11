@@ -20,7 +20,7 @@ const Header = ({ categoryCode }: Props) => {
     >
       {/* 닉네임 */}
       <p
-        className=" text-[1.5rem] font-bold mt-[100px] cursor-pointer"
+        className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer"
         style={{ fontFamily: 'Pretendard' }}
       >
         ⚔️ 헬창용사님
@@ -28,7 +28,7 @@ const Header = ({ categoryCode }: Props) => {
 
       {/* 아이콘, 카테고리 이름 */}
       <div
-        className="w-[250px] flex justify-between items-center cursor-pointer"
+        className="w-[250px] flex justify-between items-center cursor-pointer ml-[8px]"
         onClick={() => nav(`/map/${CATEGORY_STATUS_MAP[categoryCode]}`)}
       >
         <img
@@ -36,7 +36,7 @@ const Header = ({ categoryCode }: Props) => {
           src={CATEGORY_ICON[categoryCode]}
           alt="Icon"
         />
-        <span className="text-[2rem] font-bold mb-[0.5rem]">
+        <span className="text-[2rem] font-bold mb-[8px]">
           {CATEGORY_NAME[categoryCode]}
         </span>
         <img
@@ -47,10 +47,10 @@ const Header = ({ categoryCode }: Props) => {
       </div>
 
       {/* 스탯 아이콘, 레벨, 경험치 바 */}
-      <div className="flex flex-col justify-center items-end gap-[0.5rem] cursor-pointer mt-[100px]">
-        <div className="flex gap-[1rem]">
+      <div className="flex flex-col justify-center items-end gap-[8px] cursor-pointer mt-[100px]">
+        <div className="flex gap-[16px]">
           <img
-            className="w-[1rem] h-[1rem]"
+            className="w-[16px] h-[16px]"
             src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
             alt="titleIcon"
           />
@@ -58,14 +58,14 @@ const Header = ({ categoryCode }: Props) => {
         </div>
 
         <div className="flex">
-          <div className="relative w-[10rem] h-[1rem] p-[0.5rem] bg-gray-300 rounded-full overflow-hidden flex justify-start items-center">
+          <div className="relative w-[144px] h-[16px] p-[8px] bg-gray-300 rounded-full overflow-hidden flex justify-start items-center">
             <div
               className="h-full bg-yellow-500 rounded-full"
               style={{
                 width: `${(0 / 100) * 100}%`,
               }}
             ></div>
-            <span className="absolute left-[1rem] text-xs text-gray-400">
+            <span className="absolute left-[16px] text-xs text-gray-400">
               {`${0} / ${100}`}
             </span>
           </div>

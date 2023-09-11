@@ -51,22 +51,26 @@ const Login = () => {
     <ModalFrame height={550} width={780}>
       <form
         onSubmit={handleLogin}
-        className="flex flex-col items-center justify-center w-[500px]  p-3"
+        className="flex flex-col items-center justify-center w-[500px] p-[12px]"
       >
         {showLoginErrMsg && (
-          <p className="text-[10px] my-1 text-red-500">
+          <p className="text-[0.625rem] my-[4px] text-red-500">
             Please check email or password
           </p>
         )}
-        <h1 className="my-4 text-2xl">Login</h1>
-        <div className="flex items-center  relative ">
+        <h1 className="my-[16px] text-2xl">Login</h1>
+        <div className="flex items-center relative">
           {isEmailFocused && (
-            <img src={sword} alt="sword icon" className="absolute right-2" />
+            <img
+              src={sword}
+              alt="sword icon"
+              className="absolute right-[8px]"
+            />
           )}
           <input
             placeholder="Email"
             type="text"
-            className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
+            className=" border-solid border-[2px] border-000 p-[8px] rounded-[8px] my-[16px]"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             required
@@ -81,12 +85,16 @@ const Login = () => {
         </div>
         <div className="flex items-center relative">
           {isPasswordFocused && (
-            <img src={shield} alt="shield icon" className="right-2 absolute" />
+            <img
+              src={shield}
+              alt="shield icon"
+              className="right-[8px] absolute"
+            />
           )}
           <input
             placeholder="Password"
             type="password"
-            className="border-solid border-2 border-000 p-2 rounded-lg my-4"
+            className="border-solid border-[2px] border-000 p-[8px] rounded-[8px] my-[16px]"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             required
@@ -99,11 +107,11 @@ const Login = () => {
             }}
           />
         </div>
-        <button className="my-1">
+        <button className="my-[4px]">
           <Button>Login</Button>
         </button>
       </form>
-      <div className="flex items-center justify-around my-4 w-full h-10">
+      <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
         <button className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
           Kakao Login
         </button>
@@ -111,7 +119,7 @@ const Login = () => {
           Google Login
         </button>
       </div>
-      <div className="text-[10px] flex items-center justify-evenly w-full my-2">
+      <div className="text-[0.625rem] flex items-center justify-evenly w-full my-[8px]">
         <span className="text-neutral-500">Don't have an account yet?</span>
         <span
           className="text-neutral-100 hover:cursor-pointer"

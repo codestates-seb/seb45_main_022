@@ -5,15 +5,14 @@ interface FilterProps {
 
 const FilterButton = ({
   handleFilterNewest,
-  handleFilterByBest, // latestFeeds,
-  // bestFeeds,
+  handleFilterByBest,
 }: FilterProps) => {
-  // const buttonStyle = {
-  //   fontFamily: 'Pretendard',
-  //   padding: '0.5rem 1rem',
-  //   borderRadius: '0.25rem',
-  //   cursor: 'pointer',
-  // };
+  const buttonStyle = {
+    fontFamily: 'Pretendard',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  };
 
   // const clickedButtonStyle = {
   //   ...buttonStyle,
@@ -26,7 +25,7 @@ const FilterButton = ({
   // };
 
   return (
-    <div className="flex justify-center items-center gap-5">
+    <div className="flex justify-center items-center gap-[20px]">
       <button
         // style={latestFeeds ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterNewest}

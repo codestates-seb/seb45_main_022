@@ -31,7 +31,7 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
 
   return (
     <Backdrop>
-      <div className="w-screen h-screen flex flex-col justify-center items-center gap-5">
+      <div className="w-screen h-screen flex flex-col justify-center items-center gap-[20px]">
         <div className="w-[450px] h-[600px] bg-[url('/src/assets/common/modal-frame-cropper.png')] bg-no-repeat bg-cover flex flex-col justify-center items-center">
           <div className="flex flex-col h-[400px] justify-between items-center">
             {step === 'upload' && (
@@ -39,7 +39,7 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
                 <div className="w-[260px] h-[260px] bg-[url('/src/assets/common/no-image.png')] bg-no-repeat bg-cover p-[15px] shadow-[0_0_10px_#000]"></div>
                 <form className="w-fit h-fit">
                   <label className="w-fit h-fit" htmlFor="image-input">
-                    <div className="w-[200px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]">
+                    <div className="w-[200px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-[6px] hover:brightness-110 duration-150 shadow-[0_0_3px_#000]">
                       Upload Image
                     </div>
                   </label>
@@ -74,7 +74,7 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
                 </div>
                 <div className="w-full flex flex-row justify-evenly">
                   <div
-                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-[6px] hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
                     onClick={() => {
                       setInputImageURL('');
                       setStep('upload');
@@ -83,7 +83,7 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
                     Back
                   </div>
                   <div
-                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-[6px] hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
                     onClick={() => {
                       setStep('preview');
                     }}
@@ -96,18 +96,18 @@ const ImageUploadModal = ({ onCloseBtnClick, onConfirmBtnClick }: Props) => {
             {step === 'preview' && (
               <>
                 <img
-                  className="w-[260px] h-[260px] rounded-md"
+                  className="w-[260px] h-[260px] rounded-[6px]"
                   src={encodedCroppedImage}
                 />
                 <div className="w-full flex flex-row justify-evenly">
                   <div
-                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-[6px] hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
                     onClick={() => setStep('crop')}
                   >
                     Back
                   </div>
                   <div
-                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-md hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
+                    className="w-[100px] h-[50px] bg-[#cbb393] flex justify-center items-center p-[10px] text-[.8rem] cursor-pointer rounded-[6px] hover:brightness-110 duration-150 shadow-[0_0_3px_#000]"
                     onClick={async () => {
                       onConfirmBtnClick(encodedCroppedImage);
                     }}

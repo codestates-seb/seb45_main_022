@@ -13,7 +13,7 @@ const FeedPage = () => {
   return (
     <div className="flex flex-col justify-center items-center w-screen h-screen bg-feed bg-center bg-cover">
       <Backdrop>
-        <div className="flex flex-col justify-between items-center gap-8 mt-8">
+        <div className="flex flex-col justify-between items-center gap-[32px] mt-[32px]">
           <div className=" w-[1080px] h-[720px] p-[42px] bg-board bg-cover bg-center">
             <Header categoryCode={categoryCode} />
             <Main categoryCode={categoryCode} />

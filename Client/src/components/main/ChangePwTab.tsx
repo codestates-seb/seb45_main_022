@@ -71,21 +71,21 @@ const ChangePwTab = () => {
       onSubmit={onSubmit}
       className="w-full h-full flex flex-col justify-evenly items-center"
     >
-      <p className="h-[20px] text-[10px] my-1 text-red-500 text-center">
+      <p className="h-[20px] text-[10px] my-[4px] text-red-500 text-center">
         {errorMsg}
       </p>
       <input
         ref={passwordRef}
         placeholder="New Password"
         type="password"
-        className="text-sm border-solid border-2 p-2 rounded-lg"
+        className="text-sm border-solid border-[2px] p-[8px] rounded-[8px]"
         onFocus={resetErrorMsg}
       />
       <input
         ref={confirmPasswordRef}
         placeholder="Confirm New Password"
         type="password"
-        className="text-sm border-solid border-2 p-2 rounded-lg"
+        className="text-sm border-solid border-[2px] p-[8px] rounded-[8px]"
         onFocus={resetErrorMsg}
       />
       <Button>Change</Button>

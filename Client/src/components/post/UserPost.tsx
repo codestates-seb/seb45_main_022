@@ -78,21 +78,21 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
     >
       <div
         onClick={handleContainerClick}
-        className=" bg-white relative top-10 right-0 bottom-10 left-0 mx-auto p-4 flex flex-col items-center w-[800px] rounded-xl border-[20px] border-solid border-[#444657]"
+        className=" bg-white relative top-[40px] right-0 bottom-[40px] left-0 mx-auto p-[16px] flex flex-col items-center w-[800px] rounded-[12px] border-[20px] border-solid border-[#444657]"
       >
         <button
           onClick={handleCloseScreen}
-          className="absolute top-4 right-4 text-3xl "
+          className="absolute top-[16px] right-[16px] text-3xl "
         >
           X
         </button>
-        <div className="flex  justify-between  py-4 ">
-          <div className="  px-4 flex flex-col items-center border-r border-solid border-gray-400 ">
+        <div className="flex justify-between py-[16px]">
+          <div className="px-[16px] flex flex-col items-center border-[1px] border-solid border-gray-400 ">
             <img
               src={userFeed.profileImage}
               width={90}
               alt="profile pic"
-              className="mb-2"
+              className="mb-[8px]"
             />
             <span className="font-[Pretendard] font-semibold">
               {userFeed.nickname}
@@ -110,19 +110,9 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
               dangerouslySetInnerHTML={{ __html: userFeed.data }}
               className=" font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis"
             />
-
-            <span className="font-[Pretendard] text-[12px] text-right w-full">
-              {new Date(userFeed.createdAt).toLocaleTimeString('ko-KR', {
-                year: '2-digit',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </span>
           </div>
         </div>
-        <div className="flex items-center justify-between p-4 border-b border-solid border-gray-400 w-full">
+        <div className="flex items-center justify-between p-[16px] border-[1px] border-solid border-gray-400 w-full">
           <div>
             <span className=" text-sm font-semibold  rounded-xl p-3">
               Total Comments
@@ -143,14 +133,14 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
             </span>
           </div>
         </div>
-        <div className="flex items-center justify-center  border-b border-solid border-gray-400 w-full py-4">
+        <div className="flex items-center justify-center border-[1px] border-solid border-gray-400 w-full py-[16px]">
           <input
             type="search"
             // onChange={(e) => setAddComment(e.target.value)}
             // value={addComment}
             className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[400px]"
           />
-          <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white py-2 px-3 text-sm font-semibold ml-4 w-[200px] rounded-xl">
+          <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white py-[8px] px-[12px] text-sm font-semibold ml-[16px] w-[200px] rounded-[12px]">
             Add a comment
           </button>
         </div>
@@ -197,7 +187,7 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
           {userFeed.comments.length > 3 && (
             <button
               onClick={expandComments}
-              className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
+              className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-[12px] font-semibold text-sm ml-[16px] rounded-[12px]"
             >
               View More Comments
             </button>
@@ -206,7 +196,7 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
           {displayComments > 3 && (
             <button
               onClick={hideComments}
-              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
+              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-[12px] font-semibold text-sm ml-[16px] rounded-[12px]"
             >
               Hide Comments
             </button>

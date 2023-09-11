@@ -31,12 +31,12 @@ const MapPage = () => {
             <div className="mt-[17px] ml-[90px] absolute">
               <ReturnToMainButton />
             </div>
-            <div className="w-full h-[80px] flex justify-center items-center text-4xl mb-4">
+            <div className="w-full h-[80px] flex justify-center items-center text-4xl mb-[16px]">
               Servers
             </div>
           </div>
           <div className="w-full h-px bg-gray-600"></div>
-          <div className="w-[800px] h-[480px] flex flex-col justify-around items-center p-10 gap-4">
+          <div className="w-[800px] h-[480px] flex flex-col justify-around items-center p-[40px] gap-[16px]">
             {categoryList.map((categoryCode, index) => (
               <ServerList key={index} categoryCode={categoryCode} />
             ))}

@@ -77,14 +77,14 @@ const Register = () => {
     <ModalFrame height={550} width={780}>
       <form
         onSubmit={handleRegister}
-        className="flex flex-col items-center justify-center w-[550px] h-[450px] p-5 relative"
+        className="flex flex-col items-center justify-center w-[550px] h-[450px] p-[20px] relative"
       >
-        <h1 className="my-2 text-2xl">Register</h1>
-        <div className="flex items-center  ">
+        <h1 className="my-[8px] text-2xl">Register</h1>
+        <div className="flex items-center">
           <input
             placeholder="Email"
             type="text"
-            className=" border-solid border-2 border-000 p-2 rounded-lg my-4 "
+            className=" border-solid border-[2px] border-000 p-[8px] rounded-[8px] my-[16px]"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             onFocus={() => {
@@ -96,17 +96,19 @@ const Register = () => {
         </div>
 
         {isInvalidEmail && (
-          <p className="text-[10px]  text-red-500">Please check email format</p>
+          <p className="text-[0.625rem] text-red-500">
+            Please check email format
+          </p>
         )}
         {isExistingEmail && (
-          <p className="text-[10px]  text-red-500">Existing Email</p>
+          <p className="text-[0.625rem] text-red-500">Existing Email</p>
         )}
 
-        <div className="flex items-center relative ">
+        <div className="flex items-center relative">
           <input
             placeholder="Password"
             type={isPasswordVisible ? 'text' : 'password'}
-            className="border-solid border-2 border-000 p-2 rounded-lg my-4 w-full "
+            className="border-solid border-[2px] border-000 p-[8px] rounded-[8px] my-[16px] w-full "
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             onFocus={() => {
@@ -119,11 +121,11 @@ const Register = () => {
             alt="view icon"
             width={40}
             onClick={toggleViewPassword}
-            className="absolute right-2 cursor-pointer"
+            className="absolute right-[8px] cursor-pointer"
           />
         </div>
         {isInvalidPassword && (
-          <p className="text-[10px]  text-red-500 text-center">
+          <p className="text-[0.625rem]  text-red-500 text-center">
             8-16 characters, lowercase & uppercase, numbers, and characters
           </p>
         )}
@@ -132,7 +134,7 @@ const Register = () => {
           <input
             placeholder="Nickname "
             type="text"
-            className="border-solid border-2 border-000 p-2 rounded-lg my-4"
+            className="border-solid border-[2px] border-000 p-[8px] rounded-[8px] my-[16px]"
             onChange={(e) => setNickname(e.target.value)}
             value={nickname}
             onFocus={() => {
@@ -144,25 +146,25 @@ const Register = () => {
         </div>
 
         {isInvalidNickname && (
-          <p className="text-[10px]  text-red-500">
+          <p className="text-[0.625rem]  text-red-500">
             2-6 characters, Korean or English
           </p>
         )}
         {isExistingNickname && (
-          <p className="text-[10px]  text-red-500">Existing Nickname</p>
+          <p className="text-[0.625rem] text-red-500">Existing Nickname</p>
         )}
 
-        <button className="my-4 text-sm">
+        <button className="my-[16px] text-sm">
           <Button>Create an Account</Button>
         </button>
 
-        <div className="text-[10px] flex items-center justify-center w-full my-2">
+        <div className="text-[0.625rem] flex items-center justify-center w-full my-[8px]">
           <span className="text-neutral-500">Already a user?</span>
           <span
             onClick={() => {
               navigate('/auth/login');
             }}
-            className="text-neutral-100 ml-4 hover:cursor-pointer"
+            className="text-neutral-100 ml-[16px] hover:cursor-pointer"
           >
             Login!
           </span>
