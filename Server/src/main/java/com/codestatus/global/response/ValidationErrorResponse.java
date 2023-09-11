@@ -13,14 +13,15 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class ValidationErrorResponse {
-    private int status_code;
-    private List<Object> message;
+    private int status;
+    private Object message;
+    private String errorCode;
 
     public static ValidationErrorResponse of (BindingResult bindingResult){
-        return new ValidationErrorResponse(ExceptionCode.INVALID_INPUT_VALUE.getStatus(), FieldError.of(bindingResult));
+        return new ValidationErrorResponse(ExceptionCode.INVALID_INPUT_VALUE.getStatus(), FieldError.of(bindingResult), ExceptionCode.INVALID_INPUT_VALUE.getErrorCode());
     }
     public static ValidationErrorResponse of (Set<ConstraintViolation<?>> violations){
-        return new ValidationErrorResponse(ExceptionCode.INVALID_INPUT_VALUE.getStatus(), ConstraintViolationError.of(violations));
+        return new ValidationErrorResponse(ExceptionCode.INVALID_PATH_VALUE.getStatus(), ConstraintViolationError.of(violations), ExceptionCode.INVALID_PATH_VALUE.getErrorCode());
     }
     @Getter
     @AllArgsConstructor
@@ -29,8 +30,9 @@ public class ValidationErrorResponse {
         private Object rejectedValue;
         private String reason;
 
-        public static List<Object> of(BindingResult bindingResult) {
+        public static Object of(BindingResult bindingResult) {
             final List<org.springframework.validation.FieldError> fieldErrors = bindingResult.getFieldErrors();
+            if (fieldErrors.size() == 1) return fieldErrors.get(0).getDefaultMessage();
             return fieldErrors.stream()
                     .map(err -> new FieldError(
                             err.getField(),

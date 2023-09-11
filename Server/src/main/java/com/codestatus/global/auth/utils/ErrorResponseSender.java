@@ -1,5 +1,6 @@
 package com.codestatus.global.auth.utils;
 
+import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.global.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -10,13 +11,12 @@ import java.io.IOException;
 
 public class ErrorResponseSender {
     public static void sendResponse(HttpServletResponse response, HttpStatus status) throws IOException {
-
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), status.getReasonPhrase());
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.FORBIDDEN_REQUEST);
         sendResponse(response,status, errorResponse);
     }
 
     public static void sendResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), message);
+        ErrorResponse errorResponse = ErrorResponse.of(status, message);
         sendResponse(response,status, errorResponse);
     }
 

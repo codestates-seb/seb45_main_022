@@ -29,7 +29,6 @@ public class UserMapper {
     // Dto -> Entity
     public User userPatchToUser(UserDto.PatchNickname requestBody) {
         User user = new User();
-        user.setUserId(requestBody.getId());
         user.setNickname(requestBody.getNickname());
         return user;
     }
@@ -37,7 +36,6 @@ public class UserMapper {
     // Dto -> Entity
     public User userPatchPasswordToUser(UserDto.PatchPassword requestBody) {
         User user = new User();
-        user.setUserId(requestBody.getId());
         user.setPassword(requestBody.getPassword());
         return user;
     }

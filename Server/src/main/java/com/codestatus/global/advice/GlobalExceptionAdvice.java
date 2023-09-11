@@ -33,7 +33,7 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity buiSinessLogicException(BusinessLogicException e) {
+    public ResponseEntity businessLogicException(BusinessLogicException e) {
         return new ResponseEntity<>(ErrorResponse.of(e.getExceptionCode()),
                 HttpStatus.valueOf(e.getExceptionCode().getStatus()));
     }
@@ -49,7 +49,7 @@ public class GlobalExceptionAdvice {
     }
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse missingErvletRequestParameterException(MissingServletRequestParameterException e){
+    public ErrorResponse missingServletRequestParameterException(MissingServletRequestParameterException e){
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
     @ExceptionHandler
