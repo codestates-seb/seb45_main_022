@@ -4,16 +4,35 @@ import { Link, useParams } from 'react-router-dom';
 import FeedEditor from './FeedEditor';
 import { useState } from 'react';
 import TagEditor from './TagEditor';
+import usePost from '../../hooks/usePost';
+import LoadingBar from '../common/LoadingBar';
 
 const PostScreen = () => {
   const [body, setBody] = useState('');
   const [data, setData] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+
   const { categoryCodeParam } = useParams();
+  const categoryCode = Number(categoryCodeParam);
+
+  const { postMutation } = usePost(categoryCode);
+  const { mutate: post, isLoading, isError } = postMutation;
 
   const handlePost = () => {
+    post({ body, data, tags, categoryCode });
     alert(`body: ${body}data: ${data}\ntags: ${tags}`);
   };
+
+  if (isLoading)
+    return (
+      <Backdrop>
+        <LoadingBar />
+      </Backdrop>
+    );
+
+  if (isError) {
+    return <p>{isError.toString()}</p>;
+  }
 
   return (
     <Backdrop>
@@ -28,7 +47,7 @@ const PostScreen = () => {
           <TagEditor tags={tags} setTags={setTags} />
           <div className="flex flex-row gap-7">
             <Button onClick={handlePost}>Post</Button>
-            <Link to={`/feed/${categoryCodeParam}`}>
+            <Link to={`/feed/${categoryCode}`}>
               <Button>Cancel</Button>
             </Link>
           </div>
