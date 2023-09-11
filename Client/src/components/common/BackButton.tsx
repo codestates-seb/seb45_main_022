@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 import { CategoryCode } from '../../api/category';
 import backButton from '../../assets/common/back-button.png';
+import { CATEGORY_STATUS_MAP } from '../../utility/category';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -31,7 +32,7 @@ export function FrontButton({ categoryCode }: Props) {
   const nav = useNavigate();
 
   const handleFrontClick = () => {
-    if (categoryCode < 13) {
+    if (categoryCode < Object.keys(CATEGORY_STATUS_MAP).length) {
       nav(`/feed/${categoryCode + 1}`);
     }
   };
