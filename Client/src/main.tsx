@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import TitlePage from './pages/TitlePage';
@@ -16,6 +20,7 @@ import MainPage from './pages/MainPage';
 import CheckInScreen from './components/main/CheckInScreen';
 import ProfileScreen from './components/main/ProfileScreen';
 import StatusScreen from './components/main/StatusScreen';
+import PrivateRoute from './pages/PrivateRoute';
 
 const queryClient = new QueryClient();
 
@@ -39,41 +44,50 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/main',
-    element: <MainPage />,
+    element: <PrivateRoute />,
     children: [
       {
-        path: 'checkin',
-        element: <CheckInScreen />,
+        path: '/main',
+        element: <MainPage />,
+        children: [
+          {
+            path: 'checkin',
+            element: <CheckInScreen />,
+          },
+          {
+            path: 'profile',
+            element: <ProfileScreen />,
+          },
+          {
+            path: 'status',
+            element: <StatusScreen />,
+          },
+        ],
       },
-      {
-        path: 'profile',
-        element: <ProfileScreen />,
-      },
-      {
-        path: 'status',
-        element: <StatusScreen />,
-      },
-    ],
-  },
 
-  {
-    path: '/map/:statusCodeParam',
-    element: <MapPage />,
-  },
-  {
-    path: '/feed/:categoryCodeParam',
-    element: <FeedPage />,
-    children: [
       {
-        path: 'post',
-        element: <PostScreen />,
+        path: '/map/:statusCodeParam',
+        element: <MapPage />,
+      },
+      {
+        path: '/feed/:categoryCodeParam',
+        element: <FeedPage />,
+        children: [
+          {
+            path: 'post',
+            element: <PostScreen />,
+          },
+        ],
+      },
+      {
+        path: '/feed/:categoryCodeParam/search/:keyword',
+        element: <SearchPage />,
       },
     ],
   },
   {
-    path: '/feed/:categoryCodeParam/search/:keyword',
-    element: <SearchPage />,
+    path: '*',
+    element: <Navigate to="/" />,
   },
 ]);
 
