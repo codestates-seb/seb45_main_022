@@ -35,6 +35,8 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
 
     List<Feed> findAllByUser_UserIdAndDeletedIsFalse(long userId);
 
+    Page<Feed> findAllByUser_UserIdAndDeletedIsFalse(long userId, Pageable pageable);
+
     // 일주일 안에 작성된 피드를 likes 의 사이즈 순으로 정렬해서 조회
     @Query(nativeQuery = true,
             value = "SELECT * FROM feed as f WHERE f.category_id=:categoryId and f.created_at>=:oneWeekAgo and f.deleted=false " +
