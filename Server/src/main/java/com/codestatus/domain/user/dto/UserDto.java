@@ -2,6 +2,7 @@ package com.codestatus.domain.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -27,29 +28,23 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class PatchNickname {
-        private Long id;
 
         @Pattern(regexp = "^[가-힣a-zA-Z]{2,6}$",
                 message = "닉네임은 한글, 영문자만 허용되며 2글자 이상 6글자 이하로 구성되어야 하며 공백은 허용하지 않습니다.")
         private String nickname;
 
-        public void setId(Long id) {
-            this.id = id;
-        }
     }
 
     @Getter
+    @NoArgsConstructor
     public static class PatchPassword {
-        private Long id;
 
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,16}$",
                 message = "비밀번호는 특수문자, 영문자, 숫자를 포함한 8글자 이상 16글자 이하로 구성되어야 합니다.")
         private String password;
 
-        public void setId(Long id) {
-            this.id = id;
-        }
     }
 
     @Getter
