@@ -1,9 +1,8 @@
 import { useQuery } from 'react-query';
 import { getFeedList, getWeeklyBest } from '../api/feed';
 import { CategoryCode } from '../api/category';
-import { getFilterdFeedList } from '../api/feed';
 
-function useFeedList(categoryCode: CategoryCode, keyword?: string) {
+function useFeedList(categoryCode: CategoryCode) {
   const feedListQuery = useQuery(
     ['feedList', categoryCode],
     () => getFeedList(categoryCode),
@@ -28,19 +27,7 @@ function useFeedList(categoryCode: CategoryCode, keyword?: string) {
     },
   );
 
-  const searchFeedsQuery = useQuery(
-    ['filteredFeedList', categoryCode, keyword],
-    () => getFilterdFeedList(categoryCode, keyword || ''),
-    {
-      staleTime: 1000 * 60,
-      cacheTime: 1000 * 60 * 10,
-      enabled: !!categoryCode,
-      refetchOnWindowFocus: false,
-      retry: 2,
-    },
-  );
-
-  return { feedListQuery, bestFeedQuery, searchFeedsQuery };
+  return { feedListQuery, bestFeedQuery };
 }
 
 export default useFeedList;

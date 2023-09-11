@@ -3,7 +3,7 @@ import Header from '../components/feed/Header';
 import board from '../assets/feed/board.png';
 import Main from '../components/feed/Main';
 import { useParams } from 'react-router';
-import useFeedList from '../hooks/useFeedList';
+import useSearch from '../hooks/useSearch';
 import LoadingBar from '../components/common/LoadingBar';
 import { Feed } from '../api/feed';
 
@@ -17,7 +17,7 @@ const SearchPage = () => {
     backgroundPosition: 'center',
   };
 
-  const { searchFeedsQuery } = useFeedList(categoryCode, keyword);
+  const { searchFeedsQuery } = useSearch(categoryCode, keyword);
   const { isLoading, isError } = searchFeedsQuery as {
     data: Feed[];
     isLoading: boolean;
