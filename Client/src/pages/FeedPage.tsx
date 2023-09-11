@@ -27,8 +27,6 @@ const FeedPage = () => {
 
   const latestFeedQueries = feedListQuery.data?.data.data;
   const bestFeedQueries = bestFeedQuery.data?.data.data;
-  console.log('latest feeds .... ', latestFeedQueries);
-  console.log('best feeds .... ', bestFeedQueries);
 
   if (isLoadingFeedList || isLoadingBestFeeds) {
     return (
