@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import profileImg from '../../assets/common/profile.png';
 import icon from '../../assets/icons/status-strength.png';
-import Comments from './Comments';
-import { Feed } from '../../api/feed';
+
 import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
@@ -13,8 +11,8 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
   // const handleLikePost = () => {
   //   setlikes(likes + 1);
   // };
-  const [displayComments, setDisplayComments] = useState(3);
-  const [addComment, setAddComment] = useState('');
+  // const [displayComments, setDisplayComments] = useState(3);
+  // const [addComment, setAddComment] = useState('');
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -22,10 +20,13 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
     isError: boolean;
   };
 
-  console.log(getUserFeedQuery.data?.data);
+  // console.log(getUserFeedQuery.data?.data.comments);
 
   const userFeed = getUserFeedQuery.data?.data;
+  console.log(getUserFeedQuery.data?.data);
+  console.log(getUserFeedQuery.data?.data.comments);
 
+  // console.log(userFeed.comments);
   /// readt query
 
   const handleCloseScreen = () => {
@@ -88,9 +89,11 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-between  py-2 w-[500px]">
-            <p className=" font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis">
-              <div dangerouslySetInnerHTML={{ __html: userFeed.data }} />
-            </p>
+            <div
+              dangerouslySetInnerHTML={{ __html: userFeed.data }}
+              className=" font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis"
+            />
+
             <span className="font-[Pretendard] text-[12px] text-right w-full">
               {new Date(userFeed.createdAt).toLocaleTimeString('ko-KR', {
                 year: '2-digit',
@@ -105,7 +108,7 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
         <div className="flex items-center justify-between p-4 border-b border-solid border-gray-400 w-full">
           <div>
             <span className="border border-solid bg-yellow-700 text-white text-sm font-semibold  rounded-xl p-3">
-              Total Comments {userFeed.comments}
+              Total Comments {userFeed.comments.length}
             </span>
             <span className="ml-4 text-m text-gray-500 font-semibold">5</span>
           </div>
@@ -124,8 +127,8 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
         <div className="flex items-center justify-center  border-b border-solid border-gray-400 w-full py-4">
           <input
             type="search"
-            onChange={(e) => setAddComment(e.target.value)}
-            value={addComment}
+            // onChange={(e) => setAddComment(e.target.value)}
+            // value={addComment}
             className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[400px]"
           />
           <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white py-2 px-3 text-sm font-semibold ml-4 w-[200px] rounded-xl">
@@ -134,49 +137,17 @@ const UserPost = ({ setOpenFeedItem, feed }) => {
         </div>
 
         <div className="max-w-[800px] w-full">
-          {
-            <div className="flex flex-col justify-evenly">
-              {/* {userFeed.comments.slice(0, displayComments).map((comment) => (
-                <Comments
-                  key={userFeed.id}
-                  profileImg={userFeed.profileImg}
-                  nickname={userFeed.nickname}
-                  label={userFeed.label}
-                  text={userFeed.text}
-                  timeCreated={userFeed.createdAt}
-                />
-              ))} */}
-              <Comments comments={userFeed.comments} />
+          {userFeed.comments.map((comment) => (
+            <div key={comment.commentId}>
+              <p>{comment.nickname}</p>
+              <img src={comment.profileImage} alt="profile img" />
+              <p>{comment.level}</p>
+              <p>{comment.body}</p>
             </div>
-          }
-        </div>
-        <div className="mt-5">
-          {/* {userFeed.comments.length > 3 && (
-            <button
-              onClick={expandComments}
-              className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
-            >
-              View More Comments
-            </button>
-          )}
-
-          {displayComments > 3 && (
-            <button
-              onClick={hideComments}
-              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-3 font-semibold text-sm ml-4 rounded-xl"
-            >
-              Hide Comments
-            </button>
-          )} */}
+          ))}
         </div>
       </div>
     </div>
-
-    //     <span className="w-[180px]  text-xl mr-5 font-bold font-[Pretendard]">
-    //     {comment.nickname}
-    //   </span>
-    //   <span className="font-[Pretendard]">{comment.text}</span>
-    // </div>
   );
 };
 
