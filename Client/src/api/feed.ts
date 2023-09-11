@@ -1,9 +1,5 @@
-import axios from 'axios';
+import axios from '../utility/axios';
 import { CategoryCode } from './category';
-
-const token = localStorage.getItem("token")
-
-
 
 export interface Feed {
   feedId: number;
@@ -33,16 +29,16 @@ interface FeedApiData {
   };
 }
 
-
-
-
-export const getFeedList = async (categoryCode: CategoryCode,) => {
+export const getFeedList = async (categoryCode: CategoryCode) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/get/${categoryCode}?page=1&size=10`)
-    return response
-
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_APP_BASE_URL
+      }feed/get/${categoryCode}?page=1&size=10`,
+    );
+    return response;
   } catch (error) {
-    console.log('Cannot GET latest posts due to Error', error)
+    console.log('Cannot GET latest posts due to Error', error);
   }
 };
 
@@ -50,36 +46,35 @@ export const getFeedList = async (categoryCode: CategoryCode,) => {
 export const getWeeklyBest = async (categoryCode: CategoryCode) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_APP_BASE_URL}feed/weeklybest/${categoryCode}?page=1&size=10`)
+      `${
+        import.meta.env.VITE_APP_BASE_URL
+      }feed/weeklybest/${categoryCode}?page=1&size=10`,
+    );
     return response;
-
   } catch (error) {
-    console.log('Cannot GET weekly best due to Error', error)
+    console.log('Cannot GET weekly best due to Error', error);
   }
-}
+};
 
-// 상세 피드 
+// 상세 피드
 export const getUserFeed = async (feedId: Feed['feedId']) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    return response
-
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
+    );
+    return response;
   } catch (error) {
-    console.log("Cannot GET user's feed due to error", error)
+    console.log("Cannot GET user's feed due to error", error);
   }
-}
-
+};
 
 export const getFilterdFeedList = async (
   categoryCode: CategoryCode,
   keyword: string,
 ) => {
   const response = await axios.get<FeedApiData>(
-    `${import.meta.env.VITE_APP_BASE_URL
+    `${
+      import.meta.env.VITE_APP_BASE_URL
     }feed/get/${categoryCode}?page=1&size=10&query=${keyword}`,
   );
   const feedList = response.data.data;
@@ -87,4 +82,3 @@ export const getFilterdFeedList = async (
 
   return feedList;
 };
-
