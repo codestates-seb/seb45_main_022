@@ -32,7 +32,7 @@ public class SecurityConfig {
     private final CustomAuthorityUtils authorityUtils;
     private final UsersDetailService userService;
     private final JwtResponseUtil jwtResponseUtil;
-    private String s3 = ""; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
+    private String s3 = "http://statandus.s3-website.ap-northeast-2.amazonaws.com/"; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
