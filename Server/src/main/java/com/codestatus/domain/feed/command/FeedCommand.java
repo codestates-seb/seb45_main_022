@@ -31,7 +31,7 @@ public class FeedCommand {
     }
 
     public void deleteFeedAll(long userId) {
-        List<Feed> feedList = feedRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
+        List<Feed> feedList = feedRepository.findAllByUserUserIdAndDeletedIsFalse(userId);
         feedList.forEach(feed -> feed.setDeleted(true));
         feedRepository.saveAll(feedList);
     }

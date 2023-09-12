@@ -11,7 +11,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 //    @Query(nativeQuery = true, value = "SELECT * FROM comment as c WHERE c.comment_id=:commentId AND c.deleted=:deleted")
     Optional<Comment> findCommentByCommentIdAndDeleted(long commentId, boolean deleted);
 
-    List<Comment> findAllByUser_UserIdAndDeletedIsFalse(long userId);
-
-    List<Comment> findAllByFeed_FeedIdAndDeletedIsFalse(long feedId);
+    List<Comment> findAllByUserUserIdAndDeletedIsFalse(long userId);
 }
