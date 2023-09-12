@@ -1,15 +1,12 @@
 import { FaThumbsUp, FaCommentDots } from 'react-icons/fa';
-
 import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
-// import { useState } from 'react';
 import { Feed } from '../../api/feed';
 import Comments from './Comments';
 import { CategoryCode } from '../../api/category';
 import { useState } from 'react';
 import useAddComment from '../../hooks/useComment';
-// import { Feed } from '../../api/feed';
 
 interface PostProps {
   feed: Feed;
@@ -26,8 +23,14 @@ interface Comment {
   createDate: string;
 }
 
+interface Hashtag {
+  hashTagId: number;
+  body: string;
+}
+
 const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
   const [addComment, setAddComent] = useState('');
+  const [areCommentsShown, setAreCommentsShown] = useState(false);
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -45,7 +48,6 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
     setOpenFeedItem(false);
   };
 
-  // 게시글 컴포넌트 클릭했을 때는 닫힘하지 않기
   const handleContainerClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
   };
@@ -76,7 +78,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
     >
       <div
         onClick={handleContainerClick}
-        className="bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] h-[80vh] rounded-[12px] overflow-hidden"
+        className="bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] min-h-[35rem]  rounded-[12px] overflow-hidden"
       >
         <button
           onClick={handleCloseScreen}
@@ -108,34 +110,22 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
           </div>
           <div className="flex flex-col items-center justify-between py-2 "></div>
         </div>
-        <div className="flex flex-col w-[80rem]">
-          <div className=" h-[5.25rem]  flex items-center px-2">
-            {userFeed.feedHashTags.map((hashtag) => {
-              return (
-                <div key={hashtag.hashTagId} className="">
-                  <button className="font-[Pretendard] rounded-xl border-zinc-500 bg-yellow-400 text-sm px-4 py-1  ">
-                    #{hashtag.body}
-                  </button>{' '}
-                </div>
-              );
-            })}
-          </div>
 
-          {/* text +comments */}
-          <div className="flex flex-col justify-between  h-full ">
-            <div className="flex justify-between  ">
-              <div className="w-[400px] border   border-gray-400">
-                <p
-                  dangerouslySetInnerHTML={{ __html: userFeed.data }}
-                  className="font-[Pretendard] text-m p-4 break-all"
-                />
-              </div>
+        {/* text +comments */}
+        <div className="flex flex-col justify-between   ">
+          <div className="flex justify-between ">
+            <div className="w-[400px] oveflow-y-scroll  ">
+              <p
+                dangerouslySetInnerHTML={{ __html: userFeed.data }}
+                className="font-[Pretendard] text-m p-10 break-all"
+              />
+            </div>
 
-              <div className="flex flex-col w-[26rem] ">
-                {/* <div className="max-w-[800px] w-full"> */}
-                <div className=" overflow-auto scrollbar-width-none ">
+            <div className="flex flex-col w-[400px] py-3 mt-2">
+              <div className="flex flex-col w-[400px]">
+                <div className="overflow-y-auto scrollbar-width-none">
                   {userFeed.comments
-                    // .slice(0, 3)
+                    .slice(0, areCommentsShown ? userFeed.comments.length : 3)
                     .map((comment: Comment) => (
                       <Comments
                         key={comment.commentId}
@@ -144,10 +134,42 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                       />
                     ))}
                 </div>
+                {!areCommentsShown && userFeed.comments.length > 3 && (
+                  <button
+                    className="cursor-pointer bg-blue-500 text-white w-[5rem] h-[2rem] mx-auto rounded-xl mt-1 text-sm"
+                    onClick={() => setAreCommentsShown(true)}
+                  >
+                    더 보기
+                  </button>
+                )}
+                {areCommentsShown && (
+                  <button
+                    className="cursor-pointer bg-red-500 text-white w-[5rem] h-[2rem] mx-auto rounded-xl mt-1 text-sm"
+                    onClick={() => setAreCommentsShown(false)}
+                  >
+                    숨기기
+                  </button>
+                )}
               </div>
             </div>
-            {/* input */}
-            <div className="flex  items-center justify-between w-full bg-gray-100">
+          </div>
+
+          {/* input */}
+
+          <div className="flex flex-col ml-[-3px]">
+            <div className=" h-[4.25rem]  flex items-center justify-evenly px-4">
+              {userFeed.feedHashTags?.map((hashtag: Hashtag) => {
+                return (
+                  <div key={hashtag.hashTagId} className="">
+                    <button className="font-[Pretendard] rounded-xl border-zinc-500 bg-yellow-400 text-sm px-4 py-2  ">
+                      #{hashtag.body}
+                    </button>{' '}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex  items-center justify-between  bg-gray-100">
               <div className="flex items-center justify-evenly  w-full">
                 <div className="flex items-center ">
                   <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
@@ -172,10 +194,12 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                   placeholder="댓글"
                   value={addComment}
                   onChange={(e) => setAddComent(e.target.value)}
-                  onClick={handleSubmitComment}
-                  className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[40rem]"
+                  className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[30rem]"
                 />
-                <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]">
+                <button
+                  onClick={handleSubmitComment}
+                  className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]"
+                >
                   +
                 </button>
               </div>
