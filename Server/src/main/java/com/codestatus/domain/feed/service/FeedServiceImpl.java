@@ -84,14 +84,14 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> findFeedByHashTagAndCategory(long categoryId, long hashTagId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCategoryCategoryIdAndFeedHashTags_HashTag_HashTagId(categoryId, hashTagId, pageable);
+        return feedRepository.findByCategoryCategoryIdAndFeedHashTagsHashTagHashTagId(categoryId, hashTagId, pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<Feed> findFeedByHashTagBody(long categoryId, String body, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCategoryCategoryIdAndDeletedIsFalseAndFeedHashTags_HashTag_BodyContaining(categoryId, body, pageable);
+        return feedRepository.findByCategoryCategoryIdAndDeletedIsFalseAndFeedHashTagsHashTagBodyContaining(categoryId, body, pageable);
     }
 
     //삭제되지않은 피드목록 조회
