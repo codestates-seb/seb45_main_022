@@ -7,6 +7,8 @@ import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
 import Comments from './Comments';
 import { CategoryCode } from '../../api/category';
+import { useState } from 'react';
+import useAddComment from '../../hooks/useComment';
 // import { Feed } from '../../api/feed';
 
 interface PostProps {
@@ -25,13 +27,7 @@ interface Comment {
 }
 
 const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
-  // const [likes, setlikes] = useState(3);
-
-  // const handleLikePost = () => {
-  //   setlikes(likes + 1);
-  // };
-  // const [displayComments, setDisplayComments] = useState(3);
-  // const [addComment, setAddComment] = useState('');
+  const [addComment, setAddComent] = useState('');
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -39,30 +35,30 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
     isError: boolean;
   };
 
-  // console.log(getUserFeedQuery.data?.data.comments);
+  const { addCommentMutation } = useAddComment();
 
   const userFeed = getUserFeedQuery.data?.data;
   console.log(getUserFeedQuery.data?.data);
   console.log(getUserFeedQuery.data?.data.comments);
 
-  // console.log(userFeed.comments);
-  /// readt query
-
   const handleCloseScreen = () => {
     setOpenFeedItem(false);
   };
 
-  // const expandComments = () => {
-  //   setDisplayComments(displayComments + 3);
-  // };
-
-  // const hideComments = () => {
-  //   setDisplayComments(3);
-  // };
-
   // 게시글 컴포넌트 클릭했을 때는 닫힘하지 않기
   const handleContainerClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
+  };
+
+  const handleSubmitComment = () => {
+    console.log(addComment);
+
+    addCommentMutation.mutate({
+      feedId: feed.feedId,
+      body: addComment,
+    });
+
+    setAddComent('');
   };
 
   if (isLoading) {
@@ -135,11 +131,11 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                 />
               </div>
 
-              <div className="flex flex-col w-[26rem] h-full ">
+              <div className="flex flex-col w-[26rem] ">
                 {/* <div className="max-w-[800px] w-full"> */}
-                <div className=" overflow-auto scrollbar-width-none">
+                <div className=" overflow-auto scrollbar-width-none ">
                   {userFeed.comments
-                    // .slice(0, displayComments)
+                    // .slice(0, 3)
                     .map((comment: Comment) => (
                       <Comments
                         key={comment.commentId}
@@ -174,8 +170,9 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                 <input
                   type="text"
                   placeholder="댓글"
-                  // onChange={(e) => setAddComment(e.target.value)}
-                  // value={addComment}
+                  value={addComment}
+                  onChange={(e) => setAddComent(e.target.value)}
+                  onClick={handleSubmitComment}
                   className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[40rem]"
                 />
                 <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]">
@@ -184,39 +181,6 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
               </div>
             </div>
           </div>
-
-          {/* <div className="">
-            {userFeed.comments.length > 3 && (
-              <button
-                onClick={expandComments}
-                className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-[12px] font-semibold text-sm ml-[16px] rounded-[12px]"
-              >
-                View More Comments
-              </button>
-            )}
-
-            {displayComments > 3 && (
-              <button
-                onClick={hideComments}
-                className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-[12px] font-semibold text-sm ml-[16px] rounded-[12px]"
-              >
-                Hide Comments
-              </button>
-            )}
-          </div> */}
-
-          {/* <div className="flex items-center justify-center mx-auto p-4">
-            <input
-              type="text"
-              placeholder="댓글"
-              // onChange={(e) => setAddComment(e.target.value)}
-              // value={addComment}
-              className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[20rem]"
-            />
-            <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]">
-              +
-            </button>
-          </div> */}
         </div>
       </div>
     </div>
