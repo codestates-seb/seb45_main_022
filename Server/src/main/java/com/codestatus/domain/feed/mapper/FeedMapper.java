@@ -12,6 +12,7 @@ import com.codestatus.domain.user.entity.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -49,7 +50,7 @@ public interface FeedMapper {
                 .build();
     }
 
-    default List<FeedsResponseDto> feedsToFeedResponseDtos(List<Feed> feeds, List<Long> feedIds){
+    default List<FeedsResponseDto> feedsToFeedResponseDtos(List<Feed> feeds, Set<Long> feedIds){
         return feeds.stream()
                 .map(feed -> FeedsResponseDto
                         .builder()

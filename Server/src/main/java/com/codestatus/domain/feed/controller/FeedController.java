@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Set;
 
 @Validated
 @RestController
@@ -68,7 +69,7 @@ public class FeedController {
                                              @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByCategory(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -81,7 +82,7 @@ public class FeedController {
                                    @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByDeleted(page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -94,7 +95,7 @@ public class FeedController {
                                              @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findWeeklyBestFeeds(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -109,7 +110,7 @@ public class FeedController {
                                          @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findFeedByBody(query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -125,7 +126,7 @@ public class FeedController {
                                                     @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findFeedByBodyAndCategory(categoryId, query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -141,7 +142,7 @@ public class FeedController {
                                                     @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findFeedByUserAndCategory(categoryId, query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -156,7 +157,7 @@ public class FeedController {
                                                     @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -171,7 +172,7 @@ public class FeedController {
                                                 @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagBody(categoryId, body, page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -196,7 +197,7 @@ public class FeedController {
                                  @RequestParam int size) {
         Page<Feed> pageFeeds = feedServiceImpl.myPost(principal.getId(), page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        List<Long> feedIds = feedServiceImpl.isLikeFeedIds(principal.getId());
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(

@@ -6,6 +6,7 @@ import com.codestatus.domain.hashTag.command.FeedHashTagCommand;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.domain.like.likeCommand.LikeCommand;
+import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.global.utils.CheckUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -46,10 +49,16 @@ public class FeedServiceImpl implements FeedService {
         return likeCommand.checkIsLikeUser(feedId, userId);
     }
 
-    public List<Long> isLikeFeedIds(long userId) {
-        List<Feed> feeds = feedRepository.findByLikesUserUserIdAndLikesDeletedIsFalse(userId);
-        List<Long> feedIds = feeds.stream().map(Feed::getFeedId).collect(Collectors.toList());
-        return feedIds;
+    public Set<Long> isLikeFeedIds(List<Feed> feeds, PrincipalDto principal) {
+        if(principal == null){
+            return Collections.emptySet();
+        }
+        Set<Long> likedFeedIds = feedRepository
+                .findByInFeedsLikesAndLikesUserUserIdAndLikesDeletedIsFalse(feeds, principal.getId())
+                .stream()
+                .map(Feed::getFeedId)
+                .collect(Collectors.toSet());
+        return likedFeedIds;
     }
 
     //카테고리 내 피드리스트 조회
