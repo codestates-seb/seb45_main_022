@@ -1,4 +1,7 @@
+import { CategoryCode } from '../../api/category';
 import icon from '../../assets/icons/status-strength.png';
+import { CATEGORY_STATUS_MAP } from '../../utility/category';
+import { STATUS_ICON } from '../../utility/status';
 
 interface CommentProps {
   comment: {
@@ -9,9 +12,10 @@ interface CommentProps {
     body: string;
     createdDate: string;
   };
+  categoryCode: CategoryCode;
 }
 
-const Comments = ({ comment }: CommentProps) => {
+const Comments = ({ comment, categoryCode }: CommentProps) => {
   return (
     <div key={comment.commentId} className="  p-4  my-2 flex  ">
       {/* <div className="flex flex-col items-center justify-center w-20"> */}
@@ -23,7 +27,11 @@ const Comments = ({ comment }: CommentProps) => {
 
         {/* <div className="flex mt-1 items-center justify-around w-[100%]"> */}
         <div className="flex mt-1 items-center justify-between ">
-          <img src={icon} alt="muscle icon" width={16} />
+          <img
+            src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
+            alt="muscle icon"
+            width={16}
+          />
           <span className="font-[Pretendard] text-sm ml-[0.5rem]">
             Lv. {comment.level}
           </span>
