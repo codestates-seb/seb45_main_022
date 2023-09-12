@@ -21,7 +21,7 @@ interface Comment {
   profileImage: string;
   level: number;
   body: string;
-  createdDate: string;
+  createDate: string;
 }
 
 const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
@@ -76,64 +76,72 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
   return (
     <div
       onClick={handleCloseScreen}
-      className=" overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)] "
+      className="overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
     >
       <div
         onClick={handleContainerClick}
-        // className=" bg-white relative top-[40px] right-0 bottom-[40px] left-0 mx-auto p-[16px] flex flex-col items-center w-[800px] rounded-[12px] border-[20px] border-solid border-[#444657]"
-        className="  bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto  flex justify-evenly  w-[1000px] h-[80vh] rounded-[12px] "
+        className="bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] h-[80vh] rounded-[12px] overflow-hidden"
       >
         <button
           onClick={handleCloseScreen}
-          className="absolute top-[6px] right-[8px] text-3xl "
+          className="absolute top-[6px] right-[8px] text-3xl"
         >
           X
         </button>
-        {/* <div className=" justify-between py-[16px] flex flex-col bg-orange-200"> */}
-        <div className=" justify-between  flex flex-col bg-orange-200">
-          <div className=" flex flex-col items-center  p-4 ">
+        <div className="flex flex-col bg-orange-100 p-4 w-[20rem]">
+          <div className="flex flex-col items-center p-4">
             <img
               src={userFeed.profileImage}
               width={90}
               alt="profile pic"
-              className="mb-[8px]"
+              className="mb-[8px] w-16 h-16 rounded-full object-cover"
             />
-            <span className="font-[Pretendard] font-semibold">
+            <span className="font-[Pretendard] font-semibold text-[20px]">
               {userFeed.nickname}
             </span>
-            <div className="flex mt-1 items-center justify-center w-[100%]">
+            <div className="flex mt-1 items-center ">
               <img
                 src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
                 alt="stat icon"
                 width={20}
               />
-              <span className="ml-4">Lv. {userFeed.level}</span>
+              <span className="font-[Pretendard] ml-2">
+                Lv. {userFeed.level}
+              </span>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between  py-2 w-[500px]">
-            <div
-              dangerouslySetInnerHTML={{ __html: userFeed.data }}
-              className=" font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis"
-            />
+          <div className="flex flex-col items-center justify-between py-2 "></div>
+        </div>
+        <div className="flex flex-col w-[80rem]">
+          <div className=" h-[5.25rem]  flex items-center px-2">
+            {userFeed.feedHashTags.map((hashtag) => {
+              return (
+                <div key={hashtag.hashTagId} className="">
+                  <button className="font-[Pretendard] rounded-xl border-zinc-500 bg-yellow-400 text-sm px-4 py-1  ">
+                    #{hashtag.body}
+                  </button>{' '}
+                </div>
+              );
+            })}
           </div>
-          {/* <div className="flex items-center justify-between p-[16px] border-[1px] border-solid border-gray-400 w-full"> */}
-          <div className="flex items-center justify-end p-[8px] border-[1px] border-solid border-gray-400 w-full">
-            <div className="mr-4">
-              <button
-                // onClick={handleLikePost}
-                className="hover:brightness-110 duration-200 hover:text-green-400 rounded-xl text-xl font-semibold "
-              >
+          <div
+            dangerouslySetInnerHTML={{ __html: userFeed.data }}
+            className="font-[Pretendard] text-lg font-semibold p-6 overflow-auto  h-[100vh] "
+          />
+          <div className="flex  items-center justify-end p-4">
+            <div className="flex items-center mr-4">
+              <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
                 <FaThumbsUp />
               </button>
-              <span className="  top-0 ml-3 text-sm text-gray-500 font-semibold ">
+              <span className="ml-2 text-gray-500 font-semibold">
                 {userFeed.likeCount}
               </span>
             </div>
-            <div className="relative mr-2 ">
-              <button className="hover:brightness-110 duration-200 hover:text-green-400 rounded-xl text-xl font-semibold ">
+            <div className="relative">
+              <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
                 <FaCommentDots />
               </button>
-              <span className="ml-2 text-m text-gray-500 font-semibold">
+              <span className="ml-2 text-gray-500 font-semibold">
                 {userFeed.comments.length}
               </span>
             </div>
@@ -141,8 +149,6 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
         </div>
 
         <div className="flex flex-col w-full mt-[1rem]">
-          <div className="flex items-center justify-between "></div>
-
           {/* <div className="max-w-[800px] w-full"> */}
           <div className="h-screen overflow-auto scrollbar-width-none">
             {userFeed.comments
