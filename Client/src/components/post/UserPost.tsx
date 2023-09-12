@@ -88,15 +88,15 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
         >
           X
         </button>
-        <div className="flex flex-col bg-orange-100 p-4 w-[12rem]">
+        <div className="flex flex-col bg-orange-100  p-4 w-[12rem]">
           <div className="flex flex-col items-center p-4">
             <img
               src={userFeed.profileImage}
               width={90}
               alt="profile pic"
-              className="mb-[8px] w-16 h-16 rounded-full object-cover"
+              className="mb-[8px] w-16 h-16 rounded-full object-cover "
             />
-            <span className="font-[Pretendard] font-semibold text-[20px]">
+            <span className="font-[Pretendard] font-semibold text-[20px] ">
               {userFeed.nickname}
             </span>
             <div className="flex mt-1 items-center ">
@@ -105,7 +105,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                 alt="stat icon"
                 width={20}
               />
-              <span className="font-[Pretendard] ml-2">
+              <span className="font-[Pretendard] ml-2 font-semibold">
                 Lv. {userFeed.level}
               </span>
             </div>
@@ -128,14 +128,14 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
           {/* text +comments */}
           <div className="flex flex-col justify-between  h-full ">
             <div className="flex justify-between  ">
-              <div className="w-[500px] border bg-gray-100 border-gray-400">
+              <div className="w-[400px] border   border-gray-400">
                 <p
                   dangerouslySetInnerHTML={{ __html: userFeed.data }}
                   className="font-[Pretendard] text-m p-4 break-all"
                 />
               </div>
 
-              <div className="flex flex-col w-[20rem] h-full ">
+              <div className="flex flex-col w-[26rem] h-full ">
                 {/* <div className="max-w-[800px] w-full"> */}
                 <div className=" overflow-auto scrollbar-width-none">
                   {userFeed.comments
