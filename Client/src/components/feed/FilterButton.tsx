@@ -1,9 +1,11 @@
 interface FilterProps {
+  tab: string;
   handleFilterNewest: () => void;
   handleFilterByBest: () => void;
 }
 
 const FilterButton = ({
+  tab,
   handleFilterNewest,
   handleFilterByBest,
 }: FilterProps) => {
@@ -14,26 +16,26 @@ const FilterButton = ({
     cursor: 'pointer',
   };
 
-  // const clickedButtonStyle = {
-  //   ...buttonStyle,
-  //   backgroundColor: '#fcebd7',
-  // };
+  const clickedButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: '#fcebd7',
+  };
 
-  // const unclickedButtonStyle = {
-  //   ...buttonStyle,
-  //   backgroundColor: '#e8cead',
-  // };
+  const unclickedButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: '#e8cead',
+  };
 
   return (
     <div className="flex justify-center items-center gap-[20px]">
       <button
-        // style={latestFeeds ? clickedButtonStyle : unclickedButtonStyle}
+        style={tab === 'latest' ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterNewest}
       >
         최신순
       </button>
       <button
-        // style={bestFeeds ? clickedButtonStyle : unclickedButtonStyle}
+        style={tab === 'best' ? clickedButtonStyle : unclickedButtonStyle}
         onClick={handleFilterByBest}
       >
         주간 베스트

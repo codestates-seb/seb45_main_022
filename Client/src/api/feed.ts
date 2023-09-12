@@ -29,12 +29,12 @@ interface FeedApiData {
   };
 }
 
-export const getFeedList = async (categoryCode: CategoryCode) => {
+export const getFeedList = async (categoryCode: CategoryCode, page: number) => {
   try {
     const response = await axios.get(
       `${
         import.meta.env.VITE_APP_BASE_URL
-      }feed/get/${categoryCode}?page=1&size=10`,
+      }feed/get/${categoryCode}?page=${page}&size=10`,
     );
     return response;
   } catch (error) {
@@ -43,12 +43,15 @@ export const getFeedList = async (categoryCode: CategoryCode) => {
 };
 
 // 주간 베스트
-export const getWeeklyBest = async (categoryCode: CategoryCode) => {
+export const getWeeklyBest = async (
+  categoryCode: CategoryCode,
+  page: number,
+) => {
   try {
     const response = await axios.get(
       `${
         import.meta.env.VITE_APP_BASE_URL
-      }feed/weeklybest/${categoryCode}?page=1&size=10`,
+      }feed/weeklybest/${categoryCode}?page=${page}&size=10`,
     );
     return response;
   } catch (error) {
