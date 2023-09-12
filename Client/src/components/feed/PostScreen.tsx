@@ -17,7 +17,11 @@ const PostScreen = () => {
 
   const { mutate: postFeed, isLoading } = usePostFeedMutation(categoryCode);
 
-  const handlePost = async () => {
+  const handlePost = () => {
+    if (body === '' || data === '') {
+      alert('내용을 입력해주세요.');
+      return;
+    }
     postFeed({ body, data, tags, categoryCode });
   };
 
