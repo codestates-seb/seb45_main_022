@@ -108,7 +108,7 @@ public class FeedController {
     }
 
     //카테고리 내 피드 본문 검색
-    @GetMapping("/findByBody/{categoryId}")
+    @GetMapping("/find/body/{categoryId}")
     public ResponseEntity getFeedsByBodyAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                          @RequestParam int size,
@@ -122,7 +122,7 @@ public class FeedController {
     }
 
     //카테고리 내 유저 닉네임으로 피드 검색
-    @GetMapping("/findByUser/{categoryId}")
+    @GetMapping("/find/user/{categoryId}")
     public ResponseEntity getFeedsByUserAndCategory(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                                     @RequestParam int size,
@@ -135,7 +135,7 @@ public class FeedController {
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
     }
     //HashTagID로 검색
-    @GetMapping("/findByHashTag/{categoryId}")
+    @GetMapping("/find/hashTagId/{categoryId}")
     public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                                     @RequestParam int size,
@@ -143,6 +143,18 @@ public class FeedController {
         Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
 
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+    }
+
+    @GetMapping("/find/hashTag/{categoryId}")
+    public ResponseEntity getFeedsByHashTagBody(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
+                                                @RequestParam int page,
+                                                @RequestParam int size,
+                                                @RequestParam String body) {
+        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagBody(categoryId, body, page - 1, size);
+        List<Feed> feeds = pageFeeds.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);

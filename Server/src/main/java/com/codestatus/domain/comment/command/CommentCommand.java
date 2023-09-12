@@ -16,7 +16,7 @@ public class CommentCommand {
     private final CommentRepository commentRepository;
 
     public void deleteCommentAll(long userId){
-        List<Comment> commentList = commentRepository.findAllByUser_UserIdAndDeletedIsFalse(userId);
+        List<Comment> commentList = commentRepository.findAllByUserUserIdAndDeletedIsFalse(userId);
         deleteCommentAll(commentList);
     }
 

@@ -68,7 +68,7 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByCategory_CategoryIdAndBodyContainingAndDeletedIsFalse(categoryId, text, pageable);
+        return feedRepository.findAllByCategoryCategoryIdAndBodyContainingAndDeletedIsFalse(categoryId, text, pageable);
     }
 
     //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 유저가 쓴 피드목록 조회
@@ -84,7 +84,14 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> findFeedByHashTagAndCategory(long categoryId, long hashTagId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCategory_CategoryIdAndFeedHashTags_HashTag_HashTagId(categoryId, hashTagId, pageable);
+        return feedRepository.findByCategoryCategoryIdAndFeedHashTagsHashTagHashTagId(categoryId, hashTagId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Feed> findFeedByHashTagBody(long categoryId, String body, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return feedRepository.findByCategoryCategoryIdAndDeletedIsFalseAndFeedHashTagsHashTagBodyContaining(categoryId, body, pageable);
     }
 
     //삭제되지않은 피드목록 조회
@@ -122,7 +129,7 @@ public class FeedServiceImpl implements FeedService {
     public Page<Feed> myPost(long userId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByUser_UserIdAndDeletedIsFalse(userId, pageable);
+        return feedRepository.findAllByUserUserIdAndDeletedIsFalse(userId, pageable);
     }
 
     //db에서 완전 삭제가 아닌 deleted=true 로 수정
