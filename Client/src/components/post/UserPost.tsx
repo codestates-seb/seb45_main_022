@@ -84,11 +84,11 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
       >
         <button
           onClick={handleCloseScreen}
-          className="absolute top-[6px] right-[8px] text-3xl"
+          className="absolute top-[8px] right-[8px] text-3xl"
         >
           X
         </button>
-        <div className="flex flex-col bg-orange-100 p-4 w-[20rem]">
+        <div className="flex flex-col bg-orange-100 p-4 w-[12rem]">
           <div className="flex flex-col items-center p-4">
             <img
               src={userFeed.profileImage}
@@ -124,43 +124,67 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
               );
             })}
           </div>
-          <div
-            dangerouslySetInnerHTML={{ __html: userFeed.data }}
-            className="font-[Pretendard] text-lg font-semibold p-6 overflow-auto  h-[100vh] "
-          />
-          <div className="flex  items-center justify-end p-4">
-            <div className="flex items-center mr-4">
-              <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
-                <FaThumbsUp />
-              </button>
-              <span className="ml-2 text-gray-500 font-semibold">
-                {userFeed.likeCount}
-              </span>
-            </div>
-            <div className="relative">
-              <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
-                <FaCommentDots />
-              </button>
-              <span className="ml-2 text-gray-500 font-semibold">
-                {userFeed.comments.length}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        <div className="flex flex-col w-full mt-[1rem]">
-          {/* <div className="max-w-[800px] w-full"> */}
-          <div className="h-screen overflow-auto scrollbar-width-none">
-            {userFeed.comments
-              // .slice(0, displayComments)
-              .map((comment: Comment) => (
-                <Comments
-                  key={comment.commentId}
-                  comment={comment}
-                  categoryCode={categoryCode}
+          {/* text +comments */}
+          <div className="flex flex-col justify-between  h-full ">
+            <div className="flex justify-between  ">
+              <div className="w-[500px] border bg-gray-100 border-gray-400">
+                <p
+                  dangerouslySetInnerHTML={{ __html: userFeed.data }}
+                  className="font-[Pretendard] text-m p-4 break-all"
                 />
-              ))}
+              </div>
+
+              <div className="flex flex-col w-[20rem] h-full ">
+                {/* <div className="max-w-[800px] w-full"> */}
+                <div className=" overflow-auto scrollbar-width-none">
+                  {userFeed.comments
+                    // .slice(0, displayComments)
+                    .map((comment: Comment) => (
+                      <Comments
+                        key={comment.commentId}
+                        comment={comment}
+                        categoryCode={categoryCode}
+                      />
+                    ))}
+                </div>
+              </div>
+            </div>
+            {/* input */}
+            <div className="flex  items-center justify-between w-full bg-gray-100">
+              <div className="flex items-center justify-evenly  w-full">
+                <div className="flex items-center ">
+                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
+                    <FaThumbsUp />
+                  </button>
+                  <span className="ml-2 text-gray-500 font-semibold">
+                    {userFeed.likeCount}
+                  </span>
+                </div>
+                <div className="relative">
+                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
+                    <FaCommentDots />
+                  </button>
+                  <span className="ml-2 text-gray-500 font-semibold">
+                    {userFeed.comments.length}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center justify-center  p-4">
+                <input
+                  type="text"
+                  placeholder="댓글"
+                  // onChange={(e) => setAddComment(e.target.value)}
+                  // value={addComment}
+                  className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[40rem]"
+                />
+                <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]">
+                  +
+                </button>
+              </div>
+            </div>
           </div>
+
           {/* <div className="">
             {userFeed.comments.length > 3 && (
               <button
@@ -181,7 +205,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
             )}
           </div> */}
 
-          <div className="flex items-center justify-center mx-auto p-4">
+          {/* <div className="flex items-center justify-center mx-auto p-4">
             <input
               type="text"
               placeholder="댓글"
@@ -192,7 +216,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
             <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]">
               +
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
