@@ -2,6 +2,8 @@ import { useQueryClient, useMutation } from 'react-query';
 import { useNavigate } from 'react-router';
 import { createPost } from '../api/post';
 import { CategoryCode } from '../api/category';
+import { AxiosError } from 'axios';
+import { ERROR_MSG, ErrorType } from '../api/error';
 
 export interface UsePostProps {
   body: string;
@@ -22,8 +24,13 @@ function usePostFeedMutation(categoryCode: CategoryCode) {
       queryClient.invalidateQueries(['weeklyBest', categoryCode]);
       nav(`/feed/${categoryCode}`);
     },
-    onError: () => {
-      alert('게시글 등록에 실패했습니다.');
+    onError: (err: AxiosError<ErrorType>) => {
+      if (err.response) {
+        const { errorCode } = err.response.data;
+        alert(ERROR_MSG[errorCode]);
+        return;
+      }
+      alert('Failed to post feed');
     },
   });
 }
