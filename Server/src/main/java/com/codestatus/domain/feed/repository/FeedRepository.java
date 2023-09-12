@@ -24,6 +24,8 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
 
     Page<Feed> findByCategory_CategoryIdAndFeedHashTags_HashTag_HashTagId(long categoryId, long hashTagId, Pageable pageable);
 
+    Page<Feed> findByCategory_CategoryIdAndDeletedIsFalseAndFeedHashTags_HashTag_BodyContaining(long categoryId, String body, Pageable pageable);
+
     @Query("SELECT f FROM Feed f WHERE f.category.categoryId = :categoryId AND f.deleted = false ")
     Page<Feed> findAllFeedByCategory(long categoryId, Pageable pageable);
 
