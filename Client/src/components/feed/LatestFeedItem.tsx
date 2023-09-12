@@ -32,7 +32,11 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
   return (
     <>
       {openFeedItem && (
-        <UserPost feed={feed} setOpenFeedItem={setOpenFeedItem} />
+        <UserPost
+          categoryCode={categoryCode}
+          feed={feed}
+          setOpenFeedItem={setOpenFeedItem}
+        />
       )}
 
       <div

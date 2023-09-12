@@ -1,38 +1,64 @@
-import icon from '../../assets/icons/status-strength.png';
+import { CategoryCode } from '../../api/category';
+import { CATEGORY_STATUS_MAP } from '../../utility/category';
+import { STATUS_ICON } from '../../utility/status';
 
 interface CommentProps {
-  profileImg: string;
-  nickname: string;
-  label: string;
-  text: string;
-  timeCreated: string;
+  comment: {
+    commentId: number;
+    nickname: string;
+    profileImage: string;
+    level: number;
+    body: string;
+    createDate: string;
+  };
+  categoryCode: CategoryCode;
 }
 
-const Comments = ({
-  profileImg,
-  nickname,
-  label,
-  text,
-  timeCreated,
-}: CommentProps) => {
+const Comments = ({ comment, categoryCode }: CommentProps) => {
   return (
-    <div className="border-[1px] border-solid border-gray-400  py-[8px] flex p-[16px] ">
-      <div className="flex flex-col items-center justify-center w-[80px]">
-        <img src={profileImg} alt="profile image" width={45} />
-        <span className="font-[Pretendard] font-semibold">{nickname}</span>
+    <div
+      key={comment.commentId}
+      className="  p-2  my-2 flex flex-col rounded-lg bg-white shadow-md "
+    >
+      {/* profile pic + text */}
+      {/* <div className="flex flex-col items-center justify-center w-20"> */}
+      <div className="flex  items-center justify-between  ">
+        <div className="flex flex-col items-center w-[3.25rem] ">
+          <img src={comment.profileImage} alt="profile image" width={45} />
 
-        <div className="flex mt-1 items-center justify-around w-[100%]">
-          <img src={icon} alt="muscle icon" width={15} />
-          <span className="font-[Pretendard] text-sm">{label}</span>
+          <span className="font-[Pretendard] font-semibold">
+            {comment.nickname}
+          </span>
+        </div>
+        {/* <div className="flex mt-1 items-center justify-around w-[100%]"> */}
+        <div className="flex text-sm   w-full p-4">
+          <span className="font-[Pretendard] font-normal">{comment.body}</span>
         </div>
       </div>
-      <div className="flex text-sm   w-full p-4">
-        <span className="font-[Pretendard] font-normal">{text}</span>
-      </div>
-      <div className="w-10 text-center">
-        <span className="font-[Pretendard] text-sm text-gray-500 ">
-          {timeCreated}
-        </span>
+      {/* 유조 정보 */}
+      <div className="flex items-center justify-evenly">
+        <div className="flex mt-1 items-center justify-between ">
+          <img
+            src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
+            alt="muscle icon"
+            width={16}
+          />
+          <span className="font-[Pretendard] text-sm ml-[0.5rem]">
+            Lv. {comment.level}
+          </span>
+        </div>
+        <div className=" text-center">
+          <span className="font-[Pretendard] text-sm text-gray-500 ">
+            {/* {comment.createDate} */}
+            {new Date(comment.createDate).toLocaleTimeString('ko-KR', {
+              year: '2-digit',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -1,16 +1,21 @@
-import icon from '../../assets/icons/status-strength.png';
-import { FaThumbsUp } from 'react-icons/fa';
-
+import {
+  FaThumbsUp,
+  FaCommentDots,
+  FaRegArrowAltCircleDown,
+} from 'react-icons/fa';
 import useUserFeed from '../../hooks/useUserFeed';
-// import { STATUS_ICON } from '../../utility/status';
-// import { CATEGORY_STATUS_MAP } from '../../utility/category';
-import { useState } from 'react';
+import { STATUS_ICON } from '../../utility/status';
+import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
-// import { Feed } from '../../api/feed';
+import Comments from './Comments';
+import { CategoryCode } from '../../api/category';
+import { useState } from 'react';
+import useAddComment from '../../hooks/useComment';
 
 interface PostProps {
   feed: Feed;
   setOpenFeedItem: (openFeedItem: boolean) => void;
+  categoryCode: CategoryCode;
 }
 
 interface Comment {
@@ -19,17 +24,21 @@ interface Comment {
   profileImage: string;
   level: number;
   body: string;
-  createdDate: string;
+  createDate: string;
 }
 
-const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
-  // const [likes, setlikes] = useState(3);
+interface Hashtag {
+  hashTagId: number;
+  body: string;
+}
 
-  // const handleLikePost = () => {
-  //   setlikes(likes + 1);
-  // };
-  const [displayComments, setDisplayComments] = useState(3);
-  // const [addComment, setAddComment] = useState('');
+const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
+  const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
+  const [addComment, setAddComent] = useState('');
+
+  const handleExpandComments = () => {
+    setDisplayedCommentCount(3);
+  };
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -37,34 +46,33 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
     isError: boolean;
   };
 
-  // console.log(getUserFeedQuery.data?.data.comments);
+  const { addCommentMutation } = useAddComment();
 
   const userFeed = getUserFeedQuery.data?.data;
   console.log(getUserFeedQuery.data?.data);
   console.log(getUserFeedQuery.data?.data.comments);
 
-  // console.log(userFeed.comments);
-  /// readt query
-
   const handleCloseScreen = () => {
     setOpenFeedItem(false);
   };
 
-  const expandComments = () => {
-    setDisplayComments(displayComments + 3);
-  };
-
-  const hideComments = () => {
-    setDisplayComments(3);
-  };
-
-  // 게시글 컴포넌트 클릭했을 때는 닫힘하지 않기
   const handleContainerClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
   };
 
+  const handleSubmitComment = () => {
+    console.log(addComment);
+
+    addCommentMutation.mutate({
+      feedId: feed.feedId,
+      body: addComment,
+    });
+
+    setAddComent('');
+  };
+
   if (isLoading) {
-    return <p>Loading...</p>;
+    return null;
   }
 
   if (isError) {
@@ -74,133 +82,145 @@ const UserPost = ({ setOpenFeedItem, feed }: PostProps) => {
   return (
     <div
       onClick={handleCloseScreen}
-      className=" overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)] "
+      className="overflow-y-scroll z-2 fixed top-0 right-0 bottom-0 left-0 bg-[rgba(0,0,0,0.5)]"
     >
       <div
         onClick={handleContainerClick}
-        className=" bg-white relative top-[40px] right-0 bottom-[40px] left-0 mx-auto p-[16px] flex flex-col items-center w-[800px] rounded-[12px] border-[20px] border-solid border-[#444657]"
+        className=" bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] min-h-[35rem]  rounded-[12px] overflow-hidden"
       >
         <button
           onClick={handleCloseScreen}
-          className="absolute top-[16px] right-[16px] text-3xl "
+          className="absolute top-[8px] right-[8px] text-3xl"
         >
           X
         </button>
-        <div className="flex justify-between py-[16px]">
-          <div className="px-[16px] flex flex-col items-center border-[1px] border-solid border-gray-400 ">
+        <div className="flex flex-col bg-orange-100  p-4 w-[12rem]">
+          <div className="flex flex-col items-center p-4">
             <img
               src={userFeed.profileImage}
               width={90}
               alt="profile pic"
-              className="mb-[8px]"
+              className="mb-[8px] w-16 h-16 rounded-full object-cover "
             />
-            <span className="font-[Pretendard] font-semibold">
+            <span className="font-[Pretendard] font-semibold text-[20px] ">
               {userFeed.nickname}
             </span>
-            <div className="flex mt-1 items-center justify-around w-[100%]">
+            <div className="flex mt-1 items-center ">
               <img
-                // src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
-                alt="스탯 아이콘"
+                src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
+                alt="stat icon"
+                width={20}
               />
-              <span className="font-[Pretendard]">Lv. {userFeed.level}</span>
+              <span className="font-[Pretendard] ml-2 font-semibold">
+                Lv. {userFeed.level}
+              </span>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between  py-2 w-[500px]">
-            <div
-              dangerouslySetInnerHTML={{ __html: userFeed.data }}
-              className=" font-[Pretendard] p-6 font-semibold overflow-hidden overflow-ellipsis"
-            />
-          </div>
-        </div>
-        <div className="flex items-center justify-between p-[16px] border-[1px] border-solid border-gray-400 w-full">
-          <div>
-            <span className=" text-sm font-semibold  rounded-xl p-3">
-              Total Comments
-            </span>
-            <span className="ml-2 text-m text-gray-500 font-semibold">
-              {userFeed.comments.length}
-            </span>
-          </div>
-          <div className="relative mr-6 ">
-            <button
-              // onClick={handleLikePost}
-              className="hover:brightness-110 duration-200 hover:text-green-400 rounded-xl text-xl font-semibold "
-            >
-              <FaThumbsUp />
-            </button>
-            <span className="absolute  top-0 ml-3 text-sm text-gray-500 font-semibold ">
-              {userFeed.likeCount}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center justify-center border-[1px] border-solid border-gray-400 w-full py-[16px]">
-          <input
-            type="search"
-            // onChange={(e) => setAddComment(e.target.value)}
-            // value={addComment}
-            className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[400px]"
-          />
-          <button className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white py-[8px] px-[12px] text-sm font-semibold ml-[16px] w-[200px] rounded-[12px]">
-            Add a comment
-          </button>
+          <div className="flex flex-col items-center justify-between py-2 "></div>
         </div>
 
-        <div className="max-w-[800px] w-full">
-          {userFeed.comments
-            .slice(0, displayComments)
-            .map((comment: Comment) => (
-              <div
-                key={comment.commentId}
-                className="border-b border-solid border-gray-400  py-2 flex p-4 "
-              >
-                <div className="flex flex-col items-center justify-center w-20">
-                  <img
-                    src={comment.profileImage}
-                    alt="profile image"
-                    width={45}
-                  />
-                  <span className="font-[Pretendard] font-semibold">
-                    {comment.nickname}
-                  </span>
+        {/* text +comments */}
+        <div className="flex flex-col justify-between   ">
+          <div className="flex justify-between ">
+            <div className="w-[400px] oveflow-y-scroll  ">
+              <p
+                dangerouslySetInnerHTML={{ __html: userFeed.data }}
+                className="font-[Pretendard] text-m p-10 break-all"
+              />
+            </div>
 
-                  <div className="flex mt-1 items-center justify-around w-[100%]">
-                    <img src={icon} alt="muscle icon" width={15} />
-                    <span className="font-[Pretendard] text-sm">
-                      Lv. {comment.level}
-                    </span>
+            <div className="flex flex-col w-[400px] py-3 mt-2">
+              <div className="flex flex-col w-[400px]">
+                <div className="overflow-y-auto scrollbar-width-none">
+                  {userFeed.comments
+                    .slice(0, displayedCommentCount)
+                    .map((comment: Comment) => (
+                      <Comments
+                        key={comment.commentId}
+                        comment={comment}
+                        categoryCode={categoryCode}
+                      />
+                    ))}
+                </div>
+                <div className="flex items-center justify-around mx-auto  w-[14rem] font-semibold">
+                  {userFeed.comments.length > displayedCommentCount && (
+                    <button
+                      className="cursor-pointer bg-blue-500 text-white w-[5rem] h-[2rem]  rounded-xl mt-1 text-sm font-[Pretendard]"
+                      onClick={() =>
+                        setDisplayedCommentCount(displayedCommentCount + 4)
+                      }
+                    >
+                      {/* <FaRegArrowAltCircleDown />
+                       */}
+                      더 보기
+                    </button>
+                  )}
+                  {displayedCommentCount > 3 && (
+                    <button
+                      className="cursor-pointer bg-red-500 text-white w-[5rem] h-[2rem]  rounded-xl mt-1 text-sm font-[Pretendard]"
+                      onClick={() =>
+                        setDisplayedCommentCount(displayedCommentCount - 4)
+                      }
+                    >
+                      숨기기
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* input */}
+
+          <div className="flex flex-col ml-[-3px]">
+            <div className=" h-[4.25rem]  flex items-center justify-evenly px-4">
+              {userFeed.feedHashTags?.map((hashtag: Hashtag) => {
+                return (
+                  <div key={hashtag.hashTagId} className="">
+                    <button className="font-[Pretendard] rounded-xl border-zinc-500 bg-yellow-400 text-sm px-4 py-2  ">
+                      #{hashtag.body}
+                    </button>{' '}
                   </div>
-                </div>
-                <div className="flex text-sm   w-full p-4">
-                  <span className="font-[Pretendard] font-normal">
-                    {comment.body}
+                );
+              })}
+            </div>
+
+            <div className="flex  items-center justify-between  bg-gray-100">
+              <div className="flex items-center justify-evenly  w-full">
+                <div className="flex items-center ">
+                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
+                    <FaThumbsUp />
+                  </button>
+                  <span className="ml-2 text-gray-500 font-semibold">
+                    {userFeed.likeCount}
                   </span>
                 </div>
-                <div className="w-10 text-center">
-                  <span className="font-[Pretendard] text-sm text-gray-500 ">
-                    {comment.createdDate}
+                <div className="relative">
+                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
+                    <FaCommentDots />
+                  </button>
+                  <span className="ml-2 text-gray-500 font-semibold">
+                    {userFeed.comments.length}
                   </span>
                 </div>
               </div>
-            ))}
-        </div>
-        <div className="mt-5">
-          {userFeed.comments.length > 3 && (
-            <button
-              onClick={expandComments}
-              className=" hover:brightness-110 duration-300 cursor-pointer border border-solid bg-emerald-500 text-white p-[12px] font-semibold text-sm ml-[16px] rounded-[12px]"
-            >
-              View More Comments
-            </button>
-          )}
-
-          {displayComments > 3 && (
-            <button
-              onClick={hideComments}
-              className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-red-400 text-white p-[12px] font-semibold text-sm ml-[16px] rounded-[12px]"
-            >
-              Hide Comments
-            </button>
-          )}
+              <div className="flex items-center justify-center  p-4">
+                <input
+                  type="text"
+                  placeholder="댓글"
+                  value={addComment}
+                  onChange={(e) => setAddComent(e.target.value)}
+                  className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[30rem]"
+                />
+                <button
+                  onClick={handleSubmitComment}
+                  className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
