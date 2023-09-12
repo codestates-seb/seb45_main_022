@@ -1,4 +1,3 @@
-import icon from '../../assets/icons/status-strength.png';
 import { FaThumbsUp, FaCommentDots } from 'react-icons/fa';
 
 import useUserFeed from '../../hooks/useUserFeed';
@@ -146,37 +145,39 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
             {userFeed.comments
               .slice(0, displayComments)
               .map((comment: Comment) => (
-                <div key={comment.commentId} className="  p-4  my-2 flex  ">
-                  {/* <div className="flex flex-col items-center justify-center w-20"> */}
-                  <div className="flex flex-col items-center justify-center  w-[8rem] ">
-                    <img
-                      src={comment.profileImage}
-                      alt="profile image"
-                      width={45}
-                    />
-                    <span className="font-[Pretendard] font-semibold">
-                      {comment.nickname}
-                    </span>
+                <Comments key={comment.commentId} comment={comment} />
 
-                    {/* <div className="flex mt-1 items-center justify-around w-[100%]"> */}
-                    <div className="flex mt-1 items-center justify-between ">
-                      <img src={icon} alt="muscle icon" width={16} />
-                      <span className="font-[Pretendard] text-sm ml-[0.5rem]">
-                        Lv. {comment.level}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex text-sm   w-full p-4">
-                    <span className="font-[Pretendard] font-normal">
-                      {comment.body}
-                    </span>
-                  </div>
-                  <div className="w-10 text-center">
-                    <span className="font-[Pretendard] text-sm text-gray-500 ">
-                      {comment.createdDate}
-                    </span>
-                  </div>
-                </div>
+                // <div key={comment.commentId} className="  p-4  my-2 flex  ">
+                //   {/* <div className="flex flex-col items-center justify-center w-20"> */}
+                //   <div className="flex flex-col items-center justify-center  w-[8rem] ">
+                //     <img
+                //       src={comment.profileImage}
+                //       alt="profile image"
+                //       width={45}
+                //     />
+                //     <span className="font-[Pretendard] font-semibold">
+                //       {comment.nickname}
+                //     </span>
+
+                //     {/* <div className="flex mt-1 items-center justify-around w-[100%]"> */}
+                //     <div className="flex mt-1 items-center justify-between ">
+                //       <img src={icon} alt="muscle icon" width={16} />
+                //       <span className="font-[Pretendard] text-sm ml-[0.5rem]">
+                //         Lv. {comment.level}
+                //       </span>
+                //     </div>
+                //   </div>
+                //   <div className="flex text-sm   w-full p-4">
+                //     <span className="font-[Pretendard] font-normal">
+                //       {comment.body}
+                //     </span>
+                //   </div>
+                //   <div className="w-10 text-center">
+                //     <span className="font-[Pretendard] text-sm text-gray-500 ">
+                //       {comment.createdDate}
+                //     </span>
+                //   </div>
+                // </div>
               ))}
           </div>
           {/* <div className="">
