@@ -4,12 +4,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './FeedEditor.css';
 import ImageUploadModal from '../common/ImageUploadModal';
+import { uploadImage } from '../../api/post';
 
 interface Props {
-  onEditorBlur: (body?: string, data?: string) => void;
+  onEditorChange: (body?: string, data?: string) => void;
 }
 
-const FeedEditor = ({ onEditorBlur }: Props) => {
+const FeedEditor = ({ onEditorChange }: Props) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const quillRef = useRef<ReactQuill>(null);
 
@@ -35,8 +36,8 @@ const FeedEditor = ({ onEditorBlur }: Props) => {
       <ReactQuill
         ref={quillRef}
         theme="snow"
-        onBlur={() => {
-          onEditorBlur(
+        onChange={() => {
+          onEditorChange(
             quillRef.current?.getEditor().getText(),
             quillRef.current?.getEditorContents() as string,
           );
@@ -50,8 +51,16 @@ const FeedEditor = ({ onEditorBlur }: Props) => {
           onCloseBtnClick={() => {
             setShowImageModal(false);
           }}
-          onConfirmBtnClick={(imageURL) => {
-            if (imageURL) {
+          onConfirmBtnClick={async (encodedImage) => {
+            if (encodedImage) {
+              let imageURL;
+              try {
+                imageURL = await uploadImage(encodedImage);
+              } catch (error) {
+                alert('이미지 업로드에 실패했습니다.');
+                return;
+              }
+
               const quill = quillRef.current?.getEditor();
               const rangeIndex = quill?.getSelection(true)?.index || 0; // 에디터 커서 위치
               const nextIndex = rangeIndex + 1;

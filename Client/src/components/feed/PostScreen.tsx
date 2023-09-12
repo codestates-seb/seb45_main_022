@@ -18,9 +18,8 @@ const PostScreen = () => {
   const { postMutation } = usePost(categoryCode);
   const { mutate: post, isLoading, isError } = postMutation;
 
-  const handlePost = () => {
+  const handlePost = async () => {
     post({ body, data, tags, categoryCode });
-    alert(`body: ${body}data: ${data}\ntags: ${tags}`);
   };
 
   if (isLoading)
@@ -39,7 +38,7 @@ const PostScreen = () => {
       <div className="w-screen h-screen flex flex-col justify-center items-center gap-[12px]">
         <div className="w-[580px] h-[755px] bg-[url('/src/assets/common/modal-frame-post.png')] bg-no-repeat bg-cover flex flex-col justify-center items-center pl-[40px] gap-[16px]">
           <FeedEditor
-            onEditorBlur={(body, data) => {
+            onEditorChange={(body, data) => {
               setBody(body || '');
               setData(data || '');
             }}
