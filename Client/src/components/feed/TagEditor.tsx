@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 interface Props {
   tags: string[];
@@ -7,6 +7,14 @@ interface Props {
 
 const TagEditor = ({ tags, setTags }: Props) => {
   const tagInputRef = useRef<HTMLInputElement | null>(null);
+
+  const addTag = (e: FormEvent | FocusEvent) => {
+    e.preventDefault();
+    if (!tagInputRef.current?.value) return;
+    setTags([...tags, tagInputRef.current?.value]);
+    tagInputRef.current.value = '';
+  };
+
   return (
     <div className="w-[430px] h-fit bg-[#f2b888] rounded-[8px] flex flex-col justify-evenly items-start gap-[4px] p-[8px] font-[Pretendard] ">
       <div className="flex flex-row flex-wrap gap-[8px]">
@@ -24,14 +32,7 @@ const TagEditor = ({ tags, setTags }: Props) => {
         ))}
       </div>
       {tags.length < 5 && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!tagInputRef.current?.value) return;
-            setTags([...tags, tagInputRef.current?.value]);
-            tagInputRef.current.value = '';
-          }}
-        >
+        <form onSubmit={addTag} onBlur={addTag}>
           <input
             ref={tagInputRef}
             size={30}
