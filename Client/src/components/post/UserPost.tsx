@@ -1,4 +1,8 @@
-import { FaThumbsUp, FaCommentDots } from 'react-icons/fa';
+import {
+  FaThumbsUp,
+  FaCommentDots,
+  FaRegArrowAltCircleDown,
+} from 'react-icons/fa';
 import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
@@ -29,8 +33,12 @@ interface Hashtag {
 }
 
 const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
+  const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
   const [addComment, setAddComent] = useState('');
-  const [areCommentsShown, setAreCommentsShown] = useState(false);
+
+  const handleExpandComments = () => {
+    setDisplayedCommentCount(3);
+  };
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -78,7 +86,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
     >
       <div
         onClick={handleContainerClick}
-        className="bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] min-h-[35rem]  rounded-[12px] overflow-hidden"
+        className=" bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] min-h-[35rem]  rounded-[12px] overflow-hidden"
       >
         <button
           onClick={handleCloseScreen}
@@ -125,7 +133,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
               <div className="flex flex-col w-[400px]">
                 <div className="overflow-y-auto scrollbar-width-none">
                   {userFeed.comments
-                    .slice(0, areCommentsShown ? userFeed.comments.length : 3)
+                    .slice(0, displayedCommentCount)
                     .map((comment: Comment) => (
                       <Comments
                         key={comment.commentId}
@@ -134,22 +142,30 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                       />
                     ))}
                 </div>
-                {!areCommentsShown && userFeed.comments.length > 3 && (
-                  <button
-                    className="cursor-pointer bg-blue-500 text-white w-[5rem] h-[2rem] mx-auto rounded-xl mt-1 text-sm"
-                    onClick={() => setAreCommentsShown(true)}
-                  >
-                    더 보기
-                  </button>
-                )}
-                {areCommentsShown && (
-                  <button
-                    className="cursor-pointer bg-red-500 text-white w-[5rem] h-[2rem] mx-auto rounded-xl mt-1 text-sm"
-                    onClick={() => setAreCommentsShown(false)}
-                  >
-                    숨기기
-                  </button>
-                )}
+                <div className="flex items-center justify-around mx-auto  w-[14rem] font-semibold">
+                  {userFeed.comments.length > displayedCommentCount && (
+                    <button
+                      className="cursor-pointer bg-blue-500 text-white w-[5rem] h-[2rem]  rounded-xl mt-1 text-sm font-[Pretendard]"
+                      onClick={() =>
+                        setDisplayedCommentCount(displayedCommentCount + 4)
+                      }
+                    >
+                      {/* <FaRegArrowAltCircleDown />
+                       */}
+                      더 보기
+                    </button>
+                  )}
+                  {displayedCommentCount > 3 && (
+                    <button
+                      className="cursor-pointer bg-red-500 text-white w-[5rem] h-[2rem]  rounded-xl mt-1 text-sm font-[Pretendard]"
+                      onClick={() =>
+                        setDisplayedCommentCount(displayedCommentCount - 4)
+                      }
+                    >
+                      숨기기
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
