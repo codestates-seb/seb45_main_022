@@ -26,6 +26,8 @@ public class FeedsResponseDto {
 
     private List<HashTagResponseDto> feedHashTags;
 
+    private boolean isLike;
+
     private int likeCount;
 
     private int commentCount;

@@ -30,6 +30,8 @@ public class FeedResponseDto {
 
     private List<HashTagResponseDto> feedHashTags;
 
+    private boolean isLike;
+
     private int likeCount;
 
 //    private String feedImages;

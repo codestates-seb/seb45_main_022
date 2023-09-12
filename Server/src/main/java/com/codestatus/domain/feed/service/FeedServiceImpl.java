@@ -5,6 +5,7 @@ import com.codestatus.domain.feed.command.FeedCommand;
 import com.codestatus.domain.hashTag.command.FeedHashTagCommand;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.repository.FeedRepository;
+import com.codestatus.domain.like.likeCommand.LikeCommand;
 import com.codestatus.global.utils.CheckUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -28,6 +31,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedCommand feedCommand;
     private final FeedHashTagCommand feedHashTagCommand;
     private final CommentCommand commentCommand;
+    private final LikeCommand likeCommand;
 
     @Override
     public void createEntity(Feed feed) {
@@ -36,6 +40,16 @@ public class FeedServiceImpl implements FeedService {
 
     public Feed findEntity(long feedId) {
         return feedCommand.findVerifiedFeed(feedId);
+    }
+
+    public boolean isLikeUser(long feedId, long userId) {
+        return likeCommand.checkIsLikeUser(feedId, userId);
+    }
+
+    public List<Long> isLikeFeedIds(long userId) {
+        List<Feed> feeds = feedRepository.findByLikesUserUserIdAndLikesDeletedIsFalse(userId);
+        List<Long> feedIds = feeds.stream().map(Feed::getFeedId).collect(Collectors.toList());
+        return feedIds;
     }
 
     //카테고리 내 피드리스트 조회
