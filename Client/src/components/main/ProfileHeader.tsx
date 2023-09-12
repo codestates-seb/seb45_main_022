@@ -35,19 +35,20 @@ const ProfileHeader = ({ userInfo }: Props) => {
 
   const changeNickname = async () => {
     setShowNicknameInput(false);
-    if (nicknameInputRef.current?.value === userInfo.nickname) {
+    if (
+      !nicknameInputRef.current ||
+      !nicknameInputRef.current.value ||
+      nicknameInputRef.current.value === userInfo.nickname
+    ) {
       return;
     }
-    if (!validateNickname(nicknameInputRef.current?.value || '')) {
+    if (!validateNickname(nicknameInputRef.current.value)) {
       alert('닉네임은 2~6자의 한글, 영문만 가능합니다.');
       return;
     }
     try {
-      const res = await postNickname(nicknameInputRef.current?.value || '');
-      console.log(res);
-      if (res === 'nickname patch success') {
-        queryClient.invalidateQueries('userInfo');
-      }
+      await postNickname(nicknameInputRef.current.value);
+      queryClient.invalidateQueries('userInfo');
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error) && error.response?.status === 409) {

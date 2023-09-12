@@ -12,8 +12,8 @@ import {
 import LoadingBar from '../common/LoadingBar';
 import { AxiosError } from 'axios';
 import useRegisterMutation from '../../hooks/useRegisterMutation';
-import { RegisterError, REGISTER_ERR_MSG } from '../../api/auth';
 import Backdrop from '../common/Backdrop';
+import { ERROR_MSG, ErrorType } from '../../api/error';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -27,11 +27,11 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const onRegisterError = (err: AxiosError<RegisterError>) => {
+  const onRegisterError = (err: AxiosError<ErrorType>) => {
     console.log(err, 'onError Catched');
     if (err.response) {
       const { errorCode } = err.response.data;
-      setErrMsg(REGISTER_ERR_MSG[errorCode]);
+      setErrMsg(ERROR_MSG[errorCode]);
     }
   };
 

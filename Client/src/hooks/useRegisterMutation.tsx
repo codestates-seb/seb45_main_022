@@ -1,10 +1,11 @@
 import { useMutation } from 'react-query';
-import { RegisterError, registerAuth } from '../api/auth';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
+import { ErrorType } from '../api/error';
+import { registerAuth } from '../api/auth';
 
 interface Params {
-  onError: (err: AxiosError<RegisterError>) => void;
+  onError: (err: AxiosError<ErrorType>) => void;
 }
 
 export default function useRegisterMutation({ onError }: Params) {
