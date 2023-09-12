@@ -1,27 +1,29 @@
+import { useEffect, useState, useRef } from 'react';
 import FilterButton from './FilterButton';
 import SearchBar from './SearchBar';
 import { Feed } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import LatestFeedItem from './LatestFeedItem';
 import useFeedList from '../../hooks/useFeedList';
 import Backdrop from '../common/Backdrop';
 import LoadingBar from '../common/LoadingBar';
 import useInfiniteScroll from '../../utility/scrollUtils';
-import { useRef } from 'react';
 
 interface Props {
   categoryCode: CategoryCode;
 }
 
 const Main = ({ categoryCode }: Props) => {
-  const [currentNewestPage, setCurrentNewestPage] = useState(1);
-  const [currentBestPage, setCurrentBestPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<{
+    latest: number;
+    best: number;
+  }>({ latest: 1, best: 1 });
+
   const { feedListQuery, bestFeedQuery } = useFeedList(
     categoryCode,
-    currentNewestPage,
-    currentBestPage,
+    currentPage.latest,
+    currentPage.best,
   );
   const QUERY_MAP = { latest: feedListQuery, best: bestFeedQuery };
   const [feedList, setFeedList] = useState<Feed[]>([]);
@@ -32,14 +34,16 @@ const Main = ({ categoryCode }: Props) => {
 
   const plusFeed = () => {
     setFeedList((prev) => {
-      const newFeedList = [...prev, ...showFeed];
+      const newFeedList = [...prev, ...(showFeed || [])];
       return newFeedList;
     });
   };
 
   const fetchNextPage = () => {
-    setCurrentNewestPage((prevPage) => prevPage + 1);
-    setCurrentBestPage((prevPage) => prevPage + 1);
+    setCurrentPage((prev) => ({
+      ...prev,
+      [tab]: prev[tab] + 1,
+    }));
   };
 
   useInfiniteScroll(flexBox, fetchNextPage);
@@ -50,6 +54,18 @@ const Main = ({ categoryCode }: Props) => {
     }
   }, [showFeed]);
 
+  const handleFilter = (selectedTab: 'latest' | 'best') => {
+    if (tab !== selectedTab) {
+      setTab(selectedTab);
+      setCurrentPage((prev) => ({
+        ...prev,
+        [selectedTab]: 1,
+      }));
+      setFeedList([]);
+      console.log(selectedTab === 'latest' ? '최신순' : '주간 베스트');
+    }
+  };
+
   if (feedListQuery.isLoading || bestFeedQuery.isLoading) {
     return (
       <Backdrop>
@@ -58,32 +74,10 @@ const Main = ({ categoryCode }: Props) => {
     );
   }
 
-  const handleFilterNewest = () => {
-    if (tab !== 'latest') {
-      setTab('latest');
-      setCurrentNewestPage(1);
-      setFeedList([]);
-      console.log('최신순');
-    }
-  };
-
-  const handleFilterByBest = () => {
-    if (tab !== 'best') {
-      setTab('best');
-      setCurrentBestPage(1);
-      setFeedList([]);
-      console.log('주간 베스트');
-    }
-  };
-
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
       <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
-        <FilterButton
-          tab={tab}
-          handleFilterNewest={handleFilterNewest}
-          handleFilterByBest={handleFilterByBest}
-        />
+        <FilterButton tab={tab} handleFilter={handleFilter} />
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div
