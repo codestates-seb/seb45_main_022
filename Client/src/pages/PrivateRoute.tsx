@@ -1,11 +1,10 @@
 import { Navigate, Outlet } from 'react-router';
 import Backdrop from '../components/common/Backdrop';
 import LoadingBar from '../components/common/LoadingBar';
-import useUserInfo from '../hooks/useUserInfo';
+import useUserInfoQuery from '../hooks/useUserInfoQuery';
 
 const PrivateRoute = () => {
-  const { userInfoQuery } = useUserInfo();
-  const { data, isLoading } = userInfoQuery;
+  const { data: userInfo, isLoading } = useUserInfoQuery();
 
   if (isLoading) {
     return (
@@ -15,7 +14,7 @@ const PrivateRoute = () => {
     );
   }
 
-  if (!data) {
+  if (!userInfo) {
     return <Navigate to="/auth/login" />;
   }
 
