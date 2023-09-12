@@ -1,5 +1,5 @@
 import axios from '../utility/axios';
-import { UsePostProps } from '../hooks/usePost';
+import { UsePostProps } from '../hooks/usePostFeedMutation';
 import { convertEncodedImageToFile } from '../utility/image';
 
 const token = localStorage.getItem('token');
