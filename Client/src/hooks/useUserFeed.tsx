@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Feed, getUserFeed } from '../api/feed';
 
 function useUserFeed(feedId: Feed['feedId']) {

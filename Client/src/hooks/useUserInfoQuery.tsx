@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getUserInfo } from '../api/user';
 import { AxiosError } from 'axios';
 import { ERROR_MSG, ErrorType } from '../api/error';

@@ -1,4 +1,4 @@
-import { useQueryClient, useMutation } from 'react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { createPost } from '../api/post';
 import { CategoryCode } from '../api/category';

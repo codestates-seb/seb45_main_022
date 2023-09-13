@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { UserInfo, postNickname, postProfileImage } from '../../api/user';
 import { FormEvent, useRef, useState } from 'react';
 import Button from '../common/Button';
@@ -28,7 +28,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
       }
       return;
     }
-    queryClient.invalidateQueries('userInfo');
+    queryClient.invalidateQueries(['userInfo']);
     setShowImageModal(false);
   };
 
@@ -52,7 +52,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
     }
     try {
       await postNickname(nicknameInputRef.current.value);
-      queryClient.invalidateQueries('userInfo');
+      queryClient.invalidateQueries(['userInfo']);
     } catch (err) {
       if (axios.isAxiosError<ErrorType>(err) && err.response) {
         const { errorCode } = err.response.data;
