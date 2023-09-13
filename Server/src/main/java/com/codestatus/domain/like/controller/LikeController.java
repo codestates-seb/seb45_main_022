@@ -1,7 +1,7 @@
 package com.codestatus.domain.like.controller;
 
-import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.domain.like.service.LikeService;
+import com.codestatus.global.auth.dto.PrincipalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

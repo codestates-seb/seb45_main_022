@@ -1,5 +1,6 @@
 package com.codestatus.domain.user.dto;
 
+import com.codestatus.domain.status.dto.StatusResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

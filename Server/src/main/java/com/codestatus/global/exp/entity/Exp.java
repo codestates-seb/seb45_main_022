@@ -1,4 +1,4 @@
-package com.codestatus.domain.user.entity;
+package com.codestatus.global.exp.entity;
 
 import lombok.Getter;
 

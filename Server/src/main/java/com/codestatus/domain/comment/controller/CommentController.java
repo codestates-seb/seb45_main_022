@@ -1,5 +1,6 @@
 package com.codestatus.domain.comment.controller;
 
+import com.codestatus.domain.comment.service.CommentService;
 import com.codestatus.domain.feed.mapper.FeedMapper;
 import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.auth.dto.PrincipalDto;
@@ -7,7 +8,6 @@ import com.codestatus.domain.comment.dto.CommentPostDto;
 import com.codestatus.domain.comment.dto.CommnetPatchDto;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.mapper.CommentMapper;
-import com.codestatus.domain.comment.service.CommentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-    private final CommentServiceImpl commentServiceImpl;
+    private final CommentService commentService;
     private final CommentMapper commentMapper;
     private final UserMapper userMapper;
     private final FeedMapper feedMapper;
@@ -36,7 +36,7 @@ public class CommentController {
                 feedMapper.feedIdToFeed(feedId),
                 userMapper.userIdToUser(principal.getId()));
 
-        commentServiceImpl.createEntity(comment);
+        commentService.createEntity(comment);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -47,7 +47,7 @@ public class CommentController {
                                        @AuthenticationPrincipal PrincipalDto principal){
         Comment comment = commentMapper.commentPatchDtoToComment(requestBody, commentId);
 
-        commentServiceImpl.updateEntity(comment, principal.getId());
+        commentService.updateEntity(comment, principal.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity deleteComment(@PathVariable("commentId") long commentId,
                                        @AuthenticationPrincipal PrincipalDto principal){
-        commentServiceImpl.deleteEntity(commentId, principal.getId());
+        commentService.deleteEntity(commentId, principal.getId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

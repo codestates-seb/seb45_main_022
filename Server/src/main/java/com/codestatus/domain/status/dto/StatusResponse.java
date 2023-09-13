@@ -1,4 +1,4 @@
-package com.codestatus.domain.user.dto;
+package com.codestatus.domain.status.dto;
 
 import lombok.Getter;
 import lombok.Setter;

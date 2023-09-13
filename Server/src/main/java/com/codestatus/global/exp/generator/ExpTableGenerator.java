@@ -1,10 +1,4 @@
-package com.codestatus.global.utils;
-
-import com.codestatus.domain.user.entity.Exp;
-import com.codestatus.domain.user.repository.ExpTableRepository;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+package com.codestatus.global.exp.generator;
 
 //@Component
 //@EnableScheduling

@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
 
     // comment가 존재하는지 검사
     @Transactional(readOnly = true)
-    public Comment findVerifiedComment(long commentId){
+    public Comment findVerifiedComment(long commentId) {
         Optional<Comment> optionalComment = commentRepository.findCommentByCommentIdAndDeleted(commentId, false);
         return optionalComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
