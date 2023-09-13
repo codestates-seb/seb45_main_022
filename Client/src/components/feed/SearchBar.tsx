@@ -64,7 +64,7 @@ const SearchBar = ({ categoryCode }: Props) => {
           내용
         </option>
         <option value="user">작성자</option>
-        <option value="hashTag">해시태그</option>
+        <option value="hashTag">#</option>
       </select>
       <input
         ref={inputRef}

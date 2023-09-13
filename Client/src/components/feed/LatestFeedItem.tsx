@@ -49,11 +49,15 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
             <div className="w-[35px] h-[35px] mt-[3px] ml-[10px]">
               <img src={profileImage} alt="profile" />
             </div>
-            <div className="w-[60px] mt-[4px] ml-[6px] text-[1rem]">
+            <div
+              className={`w-full flex justify-center ${
+                nickname.length > 3 ? 'text-xs' : 'text-sm'
+              }`}
+            >
               {nickname}
             </div>
-            <div className="w-full flex justify-start items-center -mt-[4px]">
-              <div className="w-[10px]">
+            <div className="w-full flex justify-start items-center -mt-[4px] gap-[2px]">
+              <div className="w-[10px] -mt-[3px]">
                 <img
                   src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
                   alt="스탯 아이콘"
@@ -65,9 +69,8 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
 
           {/* 오른쪽 구간 (전체 너비 2/3) */}
           <div className="w-full h-full flex flex-col justify-between items-end">
-            <div className="w-full h-[35px] font-[Pretendard] cursor-pointer">
-              {/* {body.length > 20 ? `${body.slice(0, 20)}...` : body} */}
-              {body.slice(0, 20)}
+            <div className="w-full h-[35px] -mr-[7px] -mt-[2px] font-[Pretendard] cursor-pointer">
+              {body.length > 23 ? `${body.slice(0, 23)}...` : body}
             </div>
             <div className="w-full flex justify-end items-center gap-[6px]">
               <div className="text-[0.625rem] font-[Pretendard]">
