@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
-import LatestFeedItem from './LatestFeedItem';
+import FeedItem from './FeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
 import { FeedSearchType } from '../../api/feed';
@@ -56,11 +56,7 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
         {feedList.length > 0 ? (
           feedList.map((feed, index) => {
             return (
-              <LatestFeedItem
-                categoryCode={categoryCode}
-                feed={feed}
-                key={index}
-              />
+              <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
             );
           })
         ) : (

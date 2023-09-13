@@ -4,7 +4,7 @@ import SearchBar from './SearchBar';
 import { FeedFilterType } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
-import LatestFeedItem from './LatestFeedItem';
+import FeedItem from './FeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
 // import { useQueryClient } from '@tanstack/react-query';
@@ -54,11 +54,7 @@ const FeedListWrapper = ({ categoryCode }: Props) => {
         {feedList &&
           feedList.map((feed, index) => {
             return (
-              <LatestFeedItem
-                categoryCode={categoryCode}
-                feed={feed}
-                key={index}
-              />
+              <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
             );
           })}
         <div

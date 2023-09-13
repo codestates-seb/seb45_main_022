@@ -4,8 +4,6 @@ import { CategoryCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
-import UserPost from '../post/UserPost';
-import { useState } from 'react';
 
 interface FeedItemProps {
   feed: Feed;
@@ -23,26 +21,9 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
     createdAt,
   } = feed;
 
-  const [openFeedItem, setOpenFeedItem] = useState(false);
-
-  const handleShowPost = () => {
-    setOpenFeedItem(true);
-  };
-
   return (
     <>
-      {openFeedItem && (
-        <UserPost
-          categoryCode={categoryCode}
-          feed={feed}
-          setOpenFeedItem={setOpenFeedItem}
-        />
-      )}
-
-      <div
-        onClick={handleShowPost}
-        className="w-[295px] h-[137px] hover:cursor-pointer m-[12px] bg-cover bg-center bg-feedBox"
-      >
+      <div className="w-[295px] h-[137px] hover:cursor-pointer m-[12px] bg-cover bg-center bg-feedBox">
         <div className="w-full h-full p-[28px] flex">
           {/* 왼쪽 구간 (전체 너비 1/3) */}
           <div className="w-[70px] h-full flex flex-col justify-between items-start gap-[4px] cursor-pointer">
