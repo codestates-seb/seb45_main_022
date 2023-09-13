@@ -17,8 +17,12 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     @Query("SELECT f FROM Feed f WHERE f.feedId = :feedId AND f.deleted = false ")
     Optional<Feed> findFeedByFeedIdAndDeletedIsFalse(long feedId);
 
-    @Query("SELECT DISTINCT f FROM Feed f WHERE f IN :feeds AND f IN (SELECT l.feed FROM likes l WHERE l.user.userId = :userId AND l.deleted = false)")
-    Set<Feed> findByInFeedsLikesAndLikesUserUserIdAndLikesDeletedIsFalse(List<Feed> feeds, long userId);
+//    @Query("SELECT f FROM Feed f WHERE f IN :feeds AND f IN (SELECT l.feed FROM likes l WHERE l.user.userId = :userId AND l.deleted = false)")
+//    Set<Feed> findByInFeedsLikesAndLikesUserUserIdAndLikesDeletedIsFalse(List<Feed> feeds, long userId);
+
+    @Query("SELECT f FROM Feed f JOIN f.likes l WHERE l.user.userId = :userId AND l.deleted = false AND f IN :feeds")
+    Set<Feed> findFeedsLikedByUserInList(long userId, List<Feed> feeds);
+
 
     @Query(nativeQuery = true, value = "SELECT f FROM Feed f WHERE f.body LIKE %:body% AND f.deleted = false ")
     Page<Feed> findByBodyAndDeletedIsFalse(@Param("body") String body, Pageable pageable);

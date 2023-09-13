@@ -54,7 +54,7 @@ public class FeedServiceImpl implements FeedService {
             return Collections.emptySet();
         }
         Set<Long> likedFeedIds = feedRepository
-                .findByInFeedsLikesAndLikesUserUserIdAndLikesDeletedIsFalse(feeds, principal.getId())
+                .findFeedsLikedByUserInList(principal.getId(), feeds)
                 .stream()
                 .map(Feed::getFeedId)
                 .collect(Collectors.toSet());
