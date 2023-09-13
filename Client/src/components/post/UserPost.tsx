@@ -1,8 +1,4 @@
-import {
-  FaThumbsUp,
-  FaCommentDots,
-  FaRegArrowAltCircleDown,
-} from 'react-icons/fa';
+import { FaThumbsUp, FaCommentDots } from 'react-icons/fa';
 import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
@@ -35,10 +31,6 @@ interface Hashtag {
 const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
   const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
   const [addComment, setAddComent] = useState('');
-
-  const handleExpandComments = () => {
-    setDisplayedCommentCount(3);
-  };
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -86,7 +78,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
     >
       <div
         onClick={handleContainerClick}
-        className=" bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] min-h-[35rem]  rounded-[12px] overflow-hidden"
+        className=" bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[75rem] min-h-[35rem]  rounded-2xl overflow-hidden"
       >
         <button
           onClick={handleCloseScreen}
@@ -122,15 +114,15 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
         {/* text +comments */}
         <div className="flex flex-col justify-between   ">
           <div className="flex justify-between ">
-            <div className="w-[400px] oveflow-y-scroll  ">
+            <div className="w-[31.25rem] oveflow-y-scroll  ">
               <p
                 dangerouslySetInnerHTML={{ __html: userFeed.data }}
                 className="font-[Pretendard] text-m p-10 break-all"
               />
             </div>
 
-            <div className="flex flex-col w-[400px] py-3 mt-2">
-              <div className="flex flex-col w-[400px]">
+            <div className="flex flex-col w-[31.25rem] py-3 mt-2">
+              <div className="flex flex-col w-[31.25rem]">
                 <div className="overflow-y-auto scrollbar-width-none">
                   {userFeed.comments
                     .slice(0, displayedCommentCount)
@@ -186,18 +178,18 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
             </div>
 
             <div className="flex  items-center justify-between  bg-gray-100">
-              <div className="flex items-center justify-evenly  w-full">
+              <div className="flex items-center justify-evenly w-[10rem]">
                 <div className="flex items-center ">
-                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
-                    <FaThumbsUp />
+                  <button className=" rounded-xl text-xl font-semibold">
+                    <FaThumbsUp size={24} />
                   </button>
                   <span className="ml-2 text-gray-500 font-semibold">
                     {userFeed.likeCount}
                   </span>
                 </div>
                 <div className="relative">
-                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
-                    <FaCommentDots />
+                  <button className=" rounded-xl text-xl font-semibold">
+                    <FaCommentDots size={24} />
                   </button>
                   <span className="ml-2 text-gray-500 font-semibold">
                     {userFeed.comments.length}
