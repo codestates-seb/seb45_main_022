@@ -29,46 +29,26 @@ interface FeedApiData {
   };
 }
 
-export const getFeedList = async (categoryCode: CategoryCode, page: number) => {
-  try {
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_APP_BASE_URL
-      }feed/get/${categoryCode}?page=${page}&size=10`,
-    );
-    return response;
-  } catch (error) {
-    console.log('Cannot GET latest posts due to Error', error);
-  }
-};
+export type FeedListType = 'latest' | 'weekly';
 
-// 주간 베스트
-export const getWeeklyBest = async (
-  categoryCode: CategoryCode,
-  page: number,
-) => {
-  try {
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_APP_BASE_URL
-      }feed/weeklybest/${categoryCode}?page=${page}&size=10`,
-    );
-    return response;
-  } catch (error) {
-    console.log('Cannot GET weekly best due to Error', error);
-  }
-};
+interface GetFeedListParams {
+  categoryCode: CategoryCode;
+  page: number;
+  type: FeedListType;
+}
 
-// 상세 피드
-export const getUserFeed = async (feedId: Feed['feedId']) => {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
-    );
-    return response;
-  } catch (error) {
-    console.log("Cannot GET user's feed due to error", error);
-  }
+export const getFeedList = async ({
+  categoryCode,
+  page,
+  type,
+}: GetFeedListParams) => {
+  const API_URL = {
+    latest: `feed/get/${categoryCode}?page=${page}&size=10`,
+    weekly: `feed/weeklybest/${categoryCode}?page=${page}&size=10`,
+  };
+
+  const response = await axios.get<FeedApiData>(API_URL[type]);
+  return response.data;
 };
 
 export const getFilterdFeedList = async (
@@ -84,4 +64,15 @@ export const getFilterdFeedList = async (
   console.log(categoryCode);
 
   return feedList;
+};
+
+export const getUserFeed = async (feedId: Feed['feedId']) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
+    );
+    return response;
+  } catch (error) {
+    console.log("Cannot GET user's feed due to error", error);
+  }
 };

@@ -9,10 +9,9 @@ import { CategoryCode } from '../../api/category';
 
 interface Props {
   categoryCode: CategoryCode;
-  removeFeed: () => void;
 }
 
-const Header = ({ categoryCode, removeFeed }: Props) => {
+const Header = ({ categoryCode }: Props) => {
   const nav = useNavigate();
 
   return (
@@ -31,7 +30,6 @@ const Header = ({ categoryCode, removeFeed }: Props) => {
       <div
         className="w-[250px] flex justify-between items-center cursor-pointer ml-[8px]"
         onClick={() => {
-          removeFeed();
           nav(`/map/${CATEGORY_STATUS_MAP[categoryCode]}`);
         }}
       >

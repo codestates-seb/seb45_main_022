@@ -5,15 +5,13 @@ import { CATEGORY_STATUS_MAP } from '../../utility/category';
 
 interface Props {
   categoryCode: CategoryCode;
-  removeFeed: () => void;
 }
 
-export function BackButton({ categoryCode, removeFeed }: Props) {
+export function BackButton({ categoryCode }: Props) {
   const nav = useNavigate();
 
   const handleBackClick = () => {
     if (categoryCode > 1) {
-      removeFeed();
       nav(`/feed/${categoryCode - 1}`);
     }
   };
@@ -30,12 +28,11 @@ export function BackButton({ categoryCode, removeFeed }: Props) {
   );
 }
 
-export function FrontButton({ categoryCode, removeFeed }: Props) {
+export function FrontButton({ categoryCode }: Props) {
   const nav = useNavigate();
 
   const handleFrontClick = () => {
     if (categoryCode < Object.keys(CATEGORY_STATUS_MAP).length) {
-      removeFeed();
       nav(`/feed/${categoryCode + 1}`);
     }
   };
