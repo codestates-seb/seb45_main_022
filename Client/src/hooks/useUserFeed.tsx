@@ -5,7 +5,6 @@ function useUserFeed(feedId: Feed['feedId']) {
   const getUserFeedQuery = useQuery(
     ['userFeed', feedId],
     () => getUserFeed(feedId),
-
     {
       staleTime: 1000 * 60,
       cacheTime: 1000 * 60 * 10,

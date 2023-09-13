@@ -3,7 +3,7 @@ import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { STATUS_ICON } from '../../utility/status';
 import { editCommentData, deleteCommentData } from '../../api/comment';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface CommentProps {
   comment: {
@@ -15,14 +15,17 @@ interface CommentProps {
     createDate: string;
   };
   categoryCode: CategoryCode;
+  feedId: number;
 }
 
-const Comments = ({ comment, categoryCode }: CommentProps) => {
+const Comments = ({ comment, categoryCode, feedId }: CommentProps) => {
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
   const [commentText, setCommentText] = useState(comment.body);
   const [isEdited, setIsEdited] = useState(false);
 
   const { data: userInfo } = useQuery(['userInfo']);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (userInfo) {
@@ -38,6 +41,8 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
   const handleDeleteComment = async (commentId: number) => {
     try {
       await deleteCommentData({ commentId });
+      console.log(feedId);
+      queryClient.invalidateQueries(['userFeed', feedId]);
       alert('댓글 삭제완료');
     } catch (error) {
       alert('삭제 실패');
@@ -52,6 +57,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
       });
       setCommentText(commentText);
       setIsEdited(false);
+      queryClient.invalidateQueries(['userFeed', feedId]);
       alert('댓글 수정완료');
     } catch {
       alert('수정 실패');
@@ -71,7 +77,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
             {comment.nickname}
           </span>
         </div>
-        <div className=" text-sm w-full">
+        <div className=" text-sm w-[300px]">
           {isEdited ? (
             <input
               type="text"
@@ -80,7 +86,9 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
               className="font-[Pretendard] font-normal bg-gray-100 p-3 "
             />
           ) : (
-            <span className="font-[Pretendard] font-normal">{commentText}</span>
+            <p className="w-full font-[Pretendard] font-normal break-words">
+              {comment.body}
+            </p>
           )}
         </div>
       </div>
