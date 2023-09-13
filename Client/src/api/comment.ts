@@ -7,7 +7,7 @@ interface UseCommentProps {
 
 interface useEditComment {
     commentId: number;
-    body: string;
+    body?: string;
 }
 
 

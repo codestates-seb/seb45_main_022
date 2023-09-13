@@ -4,7 +4,6 @@ import { STATUS_ICON } from '../../utility/status';
 import { editCommentData, deleteCommentData } from '../../api/comment';
 import { getUserInfo } from '../../api/user';
 import { useState } from 'react';
-import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 
 interface CommentProps {
   comment: {
