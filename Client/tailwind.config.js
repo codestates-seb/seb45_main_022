@@ -9,6 +9,8 @@ export default {
         feed: "url('/src/assets/bg/village.png')",
         feedBox: "url('/src/assets/feed/feedItem.png')",
         board: "url('/src/assets/feed/board.png')",
+        searchBar: "url('/src/assets/feed/searchBar.png')",
+        clickedSearchBar: "url('/src/assets/feed/clickedSearchBar.png')",
       },
     },
     fontFamily: {
