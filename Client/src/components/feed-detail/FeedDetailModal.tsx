@@ -1,29 +1,14 @@
-import {
-  FaThumbsUp,
-  FaCommentDots,
-  FaRegArrowAltCircleDown,
-} from 'react-icons/fa';
 import useFeedDetailQuery from '../../hooks/useFeedDetailQuery';
-import { STATUS_ICON } from '../../utility/status';
-import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { CategoryCode } from '../../api/category';
-import { useEffect, useState } from 'react';
-import usePostCommentMutation from '../../hooks/usePostCommentMutation';
-import { deleteFeedData } from '../../api/editFeed';
 import { Link, useParams } from 'react-router-dom';
 import LoadingBar from '../common/LoadingBar';
 import Backdrop from '../common/Backdrop';
-import CommentItem from './CommentItem';
-import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import Button from '../common/Button';
+import CommentSection from './CommentSection';
+import UserInfoSection from './UserInfoSection';
+import FeedContentSection from './FeedContentSection';
 
 const UserPost = () => {
-  const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
-  const [addComment, setAddComent] = useState('');
-  const [isNicknameMatched, setIsNicknameMatched] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [feedText, setFeedText] = useState('');
-
   const { categoryCodeParam, feedIdParam } = useParams();
   const categoryCode = Number(categoryCodeParam) as CategoryCode;
   const feedId = Number(feedIdParam);
@@ -33,43 +18,6 @@ const UserPost = () => {
     isLoading,
     isFetching,
   } = useFeedDetailQuery(feedId);
-  const { mutate: postComment } = usePostCommentMutation({ feedId });
-  const { data: userInfo } = useUserInfoQuery();
-
-  // 로그인 사용자 === 작성자 ? true : false
-  useEffect(() => {
-    if (userInfo && feedDetail) {
-      const loggedInUser = userInfo.nickname;
-      setFeedText(feedDetail.data);
-      console.log(feedDetail);
-
-      if (feedDetail.nickname === loggedInUser) {
-        console.log('feed user and logged in user are the same');
-        setIsNicknameMatched(true);
-      }
-    }
-  }, [userInfo, feedDetail]);
-
-  const handleDeleteFeed = async (feedId: number) => {
-    try {
-      await deleteFeedData({ feedId });
-      alert('피드 삭제완료');
-    } catch (error) {
-      alert('삭제 실패');
-    }
-  };
-
-  const handleContainerClick = (e: { stopPropagation: () => void }) => {
-    e.stopPropagation();
-  };
-
-  const handleSubmitComment = () => {
-    console.log(addComment);
-
-    postComment(addComment);
-
-    setAddComent('');
-  };
 
   if (isLoading || isFetching) return <LoadingBar />;
 
@@ -78,172 +26,20 @@ const UserPost = () => {
   return (
     <Backdrop>
       <div className="flex flex-col justify-center items-center gap-[20px]">
-        <div
-          onClick={handleContainerClick}
-          className=" bg-white relative flex justify-evenly w-[1200px] h-[600px] rounded-2xl overflow-hidden"
-        >
-          <div className="flex flex-col bg-orange-100  p-4 w-[12rem]">
-            <div className="flex flex-col items-center p-4">
-              <img
-                src={feedDetail.profileImage}
-                width={90}
-                alt="profile pic"
-                className="mb-[8px] w-16 h-16 rounded-full object-cover "
-              />
-              <span className="font-[Pretendard] font-semibold text-[20px] ">
-                {feedDetail.nickname}
-              </span>
-              <div className="flex mt-1 items-center ">
-                <img
-                  src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
-                  alt="stat icon"
-                  width={20}
-                />
-                <span className="font-[Pretendard] ml-2 font-semibold">
-                  Lv. {feedDetail.level}
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-between py-2 "></div>
-          </div>
-
-          {/* text +comments */}
-          <div className="flex flex-col justify-between   ">
-            <div className="flex justify-between ">
-              <div className="w-[31.25rem] oveflow-y-scroll  ">
-                <div className=" flex items-center justify-around w-[8rem] text-sm font-semibold   p-4">
-                  {isNicknameMatched && (
-                    <>
-                      {isEditing ? (
-                        <button className="font-[Pretendard] text-sm text-gray-500">
-                          저장
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => setIsEditing(true)}
-                          className="font-[Pretendard] text-sm text-gray-500"
-                        >
-                          수정
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDeleteFeed(feedId)}
-                        className="font-[Pretendard] text-sm text-gray-500"
-                      >
-                        삭제
-                      </button>
-                    </>
-                  )}
-                </div>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={feedText}
-                    onChange={(e) => {
-                      setFeedText(e.target.value);
-                    }}
-                    className="font-[Pretendard] font-normal bg-gray-100 p-3"
-                  />
-                ) : (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: feedDetail.data }}
-                    className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
-                  />
-                )}
-              </div>
-
-              <div className="flex flex-col w-[31.25rem] py-3 mt-2">
-                <div className="flex flex-col w-[31.25rem]">
-                  <div className="overflow-y-auto scrollbar-width-none">
-                    {feedDetail.comments
-                      .slice(0, displayedCommentCount)
-                      .map((comment) => (
-                        <CommentItem
-                          key={comment.commentId}
-                          comment={comment}
-                          categoryCode={categoryCode}
-                          feedId={feedId}
-                        />
-                      ))}
-                  </div>
-                  <div className="flex items-center justify-around mx-auto  w-[14rem] font-semibold">
-                    {feedDetail.comments.length > displayedCommentCount && (
-                      <button
-                        className="cursor-pointer bg-blue-500 text-white w-[5rem] h-[2rem]  rounded-xl mt-1 text-sm font-[Pretendard] flex flex-row justify-evenly items-center"
-                        onClick={() =>
-                          setDisplayedCommentCount(displayedCommentCount + 4)
-                        }
-                      >
-                        <FaRegArrowAltCircleDown /> 더 보기
-                      </button>
-                    )}
-                    {displayedCommentCount > 3 && (
-                      <button
-                        className="cursor-pointer bg-red-500 text-white w-[5rem] h-[2rem]  rounded-xl mt-1 text-sm font-[Pretendard]"
-                        onClick={() =>
-                          setDisplayedCommentCount(displayedCommentCount - 4)
-                        }
-                      >
-                        숨기기
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* input */}
-
-            <div className="flex flex-col ml-[-3px]">
-              <div className=" h-[4.25rem]  flex items-center justify-evenly px-4">
-                {feedDetail.feedHashTags.map((hashtag) => {
-                  return (
-                    <div key={hashtag.hashTagId} className="">
-                      <button className="font-[Pretendard] rounded-xl border-zinc-500 bg-yellow-400 text-sm px-4 py-2  ">
-                        #{hashtag.body}
-                      </button>{' '}
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="flex  items-center justify-between  bg-gray-100">
-                <div className="flex items-center justify-evenly w-[10rem]">
-                  <div className="flex items-center ">
-                    <button className=" rounded-xl text-xl font-semibold">
-                      <FaThumbsUp size={24} />
-                    </button>
-                    <span className="ml-2 text-gray-500 font-semibold">
-                      {feedDetail.likeCount}
-                    </span>
-                  </div>
-                  <div className="relative">
-                    <button className=" rounded-xl text-xl font-semibold">
-                      <FaCommentDots size={24} />
-                    </button>
-                    <span className="ml-2 text-gray-500 font-semibold">
-                      {feedDetail.comments.length}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center  p-4">
-                  <input
-                    type="text"
-                    placeholder="댓글"
-                    value={addComment}
-                    onChange={(e) => setAddComent(e.target.value)}
-                    className="border border-solid border-gray-400 rounded-xl p-2 font-[Pretendard] w-[30rem]"
-                  />
-                  <button
-                    onClick={handleSubmitComment}
-                    className="hover:brightness-110 duration-300 cursor-pointer border border-solid bg-sky-500 text-white h-[2.5rem] w-[2.5rem] ml-[1rem] text-sm font-semibold rounded-[12px]"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="bg-white flex flex-row justify-between w-[1200px] h-[600px] rounded-2xl overflow-hidden">
+          <UserInfoSection
+            feedDetail={feedDetail}
+            categoryCode={categoryCode}
+          />
+          <FeedContentSection
+            feedDetail={feedDetail}
+            categoryCode={categoryCode}
+          />
+          <CommentSection
+            comments={feedDetail.comments}
+            categoryCode={categoryCode}
+            feedId={feedId}
+          />
         </div>
         <Link to="..">
           <Button>Close</Button>

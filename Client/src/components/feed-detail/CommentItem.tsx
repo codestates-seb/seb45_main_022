@@ -43,7 +43,7 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
     try {
       await deleteCommentData({ commentId });
       console.log(feedId);
-      queryClient.invalidateQueries(['userFeed', feedId]);
+      queryClient.invalidateQueries(['feedDetail', feedId]);
       alert('댓글 삭제완료');
     } catch (error) {
       alert('삭제 실패');
@@ -58,7 +58,7 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
       });
       setCommentText(commentText);
       setIsEdited(false);
-      queryClient.invalidateQueries(['userFeed', feedId]);
+      queryClient.invalidateQueries(['feedDetail', feedId]);
       alert('댓글 수정완료');
     } catch {
       alert('수정 실패');

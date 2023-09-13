@@ -50,15 +50,16 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
       </div>
       <div
         ref={feedListContainerRef}
-        className="flex items-center justify-around w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
+        className="flex items-center justify-start w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
       >
         {feedList.length > 0 ? (
           feedList.map((feed, index) => {
             return (
               <Link
+                key={index}
                 to={`/feed/${categoryCode}/search/${searchType}/${keyword}/detail/${feed.feedId}`}
               >
-                <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
+                <FeedItem categoryCode={categoryCode} feed={feed} />
               </Link>
             );
           })
