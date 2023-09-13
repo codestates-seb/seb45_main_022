@@ -1,97 +1,55 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import FilterButton from './FilterButton';
 import SearchBar from './SearchBar';
-import { Feed } from '../../api/feed';
+import { FeedListType } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
 import LatestFeedItem from './LatestFeedItem';
-import useFeedList from '../../hooks/useFeedList';
-import Backdrop from '../common/Backdrop';
-import LoadingBar from '../common/LoadingBar';
-import useInfiniteScroll from '../../utility/scrollUtils';
+import useFeedListQuery from '../../hooks/useFeedListQuery';
+import useInfinteScroll from '../../hooks/useInfiniteScroll';
+// import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
-  feedList: Feed[];
-  setFeedList: React.Dispatch<React.SetStateAction<Feed[]>>;
-  currentPage: { latest: number; best: number };
-  setCurrentPage: React.Dispatch<
-    React.SetStateAction<{
-      latest: number;
-      best: number;
-    }>
-  >;
 }
 
-const Main = ({
-  categoryCode,
-  feedList,
-  setFeedList,
-  currentPage,
-  setCurrentPage,
-}: Props) => {
-  const { feedListQuery, bestFeedQuery } = useFeedList(
-    categoryCode,
-    currentPage.latest,
-    currentPage.best,
-  );
-  const QUERY_MAP = { latest: feedListQuery, best: bestFeedQuery };
-  const [tab, setTab] = useState<'latest' | 'best'>('latest');
-  const flexBox = useRef<HTMLDivElement | null>(null);
-
-  const showFeed = QUERY_MAP[tab].data?.data.data;
-
-  const plusFeed = () => {
-    setFeedList((prev) => {
-      const newFeedList = [...prev, ...(showFeed || [])];
-      return newFeedList;
+const Main = ({ categoryCode }: Props) => {
+  const [type, setType] = useState<FeedListType>('latest');
+  const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
+    useFeedListQuery({
+      categoryCode,
+      type,
     });
-  };
+  const fetchTriggerRef = useRef<HTMLDivElement>(null);
+  const feedListContainerRef = useRef<HTMLDivElement>(null);
 
-  const fetchNextPage = () => {
-    setCurrentPage((prev) => ({
-      ...prev,
-      [tab]: prev[tab] + 1,
-    }));
-  };
+  const feedList = data?.pages.map((page) => page.data).flat();
 
-  useInfiniteScroll(flexBox, fetchNextPage);
+  useInfinteScroll({
+    targetEl: fetchTriggerRef.current,
+    hasMore: hasNextPage || false,
+    onIntersect: fetchNextPage,
+  });
 
   useEffect(() => {
-    if (showFeed && showFeed.length > 0) {
-      plusFeed();
-    }
-  }, [showFeed]);
+    feedListContainerRef.current?.scrollTo(0, 0);
+  }, [type]);
 
-  const handleFilter = (selectedTab: 'latest' | 'best') => {
-    if (tab !== selectedTab) {
-      setTab(selectedTab);
-      setCurrentPage((prev) => ({
-        ...prev,
-        [selectedTab]: 1,
-      }));
-      setFeedList([]);
-      console.log(selectedTab === 'latest' ? '최신순' : '주간 베스트');
-    }
-  };
-
-  if (feedListQuery.isLoading || bestFeedQuery.isLoading) {
-    return (
-      <Backdrop>
-        <LoadingBar />
-      </Backdrop>
-    );
-  }
+  // 페이지 이동 시 캐시 삭제하고 싶다면
+  // const queryClient = useQueryClient();
+  // useEffect(() => {
+  //   queryClient.removeQueries(['feedList']);
+  // }, [queryClient]);
 
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
       <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
-        <FilterButton tab={tab} handleFilter={handleFilter} />
+        <FilterButton type={type} setType={setType} />
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div
+        ref={feedListContainerRef}
         className="flex items-center justify-around w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
-        ref={flexBox}
       >
         {feedList &&
           feedList.map((feed, index) => {
@@ -103,6 +61,13 @@ const Main = ({
               />
             );
           })}
+        <div
+          ref={fetchTriggerRef}
+          onClick={() => {
+            fetchNextPage();
+          }}
+        ></div>
+        {isLoading || (isFetching && <p>Loading...</p>)}
       </div>
       <Link to={`/feed/${categoryCode}/post`}>
         <button className="absolute bottom-[20px] right-[20px] w-[50px] h-[50px] bg-[#f8d8ae] bg-[url('/src/assets/icons/btn-pencil.png')] bg-no-repeat bg-cover rounded-full p-[8px] duration-300 shadow-[0_0_5px_#e1772d] hover:brightness-110 hover:scale-110" />
