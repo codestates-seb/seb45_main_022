@@ -20,8 +20,8 @@ function usePostFeedMutation(categoryCode: CategoryCode) {
     onSuccess: () => {
       alert('게시글이 등록되었습니다.');
       console.log(categoryCode);
-      queryClient.invalidateQueries(['feedList', categoryCode]);
-      queryClient.invalidateQueries(['weeklyBest', categoryCode]);
+      queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+      queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
       nav(`/feed/${categoryCode}`);
     },
     onError: (err: AxiosError<ErrorType>) => {
