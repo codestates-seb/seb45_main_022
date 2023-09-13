@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import FilterButton from './FilterButton';
 import SearchBar from './SearchBar';
-import { FeedListType } from '../../api/feed';
+import { FeedFilterType } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
 import LatestFeedItem from './LatestFeedItem';
@@ -13,8 +13,8 @@ interface Props {
   categoryCode: CategoryCode;
 }
 
-const Main = ({ categoryCode }: Props) => {
-  const [type, setType] = useState<FeedListType>('latest');
+const FeedListWrapper = ({ categoryCode }: Props) => {
+  const [type, setType] = useState<FeedFilterType>('latest');
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
       categoryCode,
@@ -76,4 +76,4 @@ const Main = ({ categoryCode }: Props) => {
   );
 };
 
-export default Main;
+export default FeedListWrapper;
