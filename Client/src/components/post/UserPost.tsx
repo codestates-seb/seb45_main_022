@@ -1,21 +1,22 @@
-import {
-  FaThumbsUp,
-  FaCommentDots,
-  FaRegArrowAltCircleDown,
-} from 'react-icons/fa';
+import { FaThumbsUp, FaCommentDots } from 'react-icons/fa';
 import useUserFeed from '../../hooks/useUserFeed';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
 import Comments from './Comments';
 import { CategoryCode } from '../../api/category';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAddComment from '../../hooks/useComment';
+import { UserInfo } from '../../api/user';
+import { useQuery } from 'react-query';
+import { deleteFeedData, editFeedData } from '../../api/editFeed';
 
 interface PostProps {
   feed: Feed;
+  feedId: Feed['feedId'];
   setOpenFeedItem: (openFeedItem: boolean) => void;
   categoryCode: CategoryCode;
+  userId: UserInfo;
 }
 
 interface Comment {
@@ -32,25 +33,71 @@ interface Hashtag {
   body: string;
 }
 
-const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
+const UserPost = ({
+  setOpenFeedItem,
+  feed,
+  categoryCode,
+  feedId,
+}: PostProps) => {
   const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
   const [addComment, setAddComent] = useState('');
-
-  const handleExpandComments = () => {
-    setDisplayedCommentCount(3);
-  };
+  const [isNicknameMatched, setIsNicknameMatched] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [feedText, setFeedText] = useState('.......수정 필요');
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
     isLoading: boolean;
     isError: boolean;
   };
-
-  const { addCommentMutation } = useAddComment();
-
   const userFeed = getUserFeedQuery.data?.data;
-  console.log(getUserFeedQuery.data?.data);
-  console.log(getUserFeedQuery.data?.data.comments);
+  const { addCommentMutation } = useAddComment();
+  //게시글 업로즈한 사용자 조회
+  // const userNickname = userFeed.nickname;
+  // console.log(userNickname);
+
+  const { data: userInfo } = useQuery(['userInfo']);
+
+  // console.log(userFeed.feedId, 'feedId is called here');
+
+  // 로그인 사용자 === 작성자 ? true : false
+  useEffect(() => {
+    if (userInfo && userFeed) {
+      const loggedInUser = userInfo.nickname;
+
+      if (userFeed.nickname === loggedInUser) {
+        console.log('feed user and logged in user are the same');
+        // setFeedText(userFeed.body);
+        setIsNicknameMatched(true);
+      } else {
+        console.log('feed user and logged in user are different');
+        setIsNicknameMatched(false);
+      }
+    }
+  }, [userInfo, userFeed]);
+
+  const handleDeleteFeed = async (feedId: number) => {
+    try {
+      await deleteFeedData({ feedId });
+      alert('피드 삭제완료');
+    } catch (error) {
+      alert('살제 실패');
+    }
+  };
+
+  const handleEditFeed = async (feedId: number) => {
+    try {
+      await editFeedData({
+        feedId,
+        body: feedText,
+      });
+      // setFeedText(userFeed.body);
+      setIsEditing(false);
+      alert('댓글 수정완료');
+    } catch {
+      alert('수정 실패');
+    }
+  };
 
   const handleCloseScreen = () => {
     setOpenFeedItem(false);
@@ -86,7 +133,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
     >
       <div
         onClick={handleContainerClick}
-        className=" bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[1000px] min-h-[35rem]  rounded-[12px] overflow-hidden"
+        className=" bg-white relative top-[50px] right-0 bottom-[40px] left-0 mx-auto flex justify-evenly w-[75rem] min-h-[35rem]  rounded-2xl overflow-hidden"
       >
         <button
           onClick={handleCloseScreen}
@@ -122,15 +169,51 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
         {/* text +comments */}
         <div className="flex flex-col justify-between   ">
           <div className="flex justify-between ">
-            <div className="w-[400px] oveflow-y-scroll  ">
-              <p
-                dangerouslySetInnerHTML={{ __html: userFeed.data }}
-                className="font-[Pretendard] text-m p-10 break-all"
-              />
+            <div className="w-[31.25rem] oveflow-y-scroll  ">
+              <div className=" flex items-center justify-around w-[8rem] text-sm font-semibold   p-4">
+                {isNicknameMatched && (
+                  <>
+                    {isEditing ? (
+                      <button
+                        onClick={() => handleEditFeed(userFeed.feedId)}
+                        className="font-[Pretendard] text-sm text-gray-500"
+                      >
+                        저장
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="font-[Pretendard] text-sm text-gray-500"
+                      >
+                        수정
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDeleteFeed(userFeed.feedId)}
+                      className="font-[Pretendard] text-sm text-gray-500"
+                    >
+                      삭제
+                    </button>
+                  </>
+                )}
+              </div>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={feedText}
+                  onChange={(e) => setFeedText(e.target.value)}
+                  className="font-[Pretendard] font-normal bg-gray-100 p-3"
+                />
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{ __html: feedText }}
+                  className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
+                />
+              )}
             </div>
 
-            <div className="flex flex-col w-[400px] py-3 mt-2">
-              <div className="flex flex-col w-[400px]">
+            <div className="flex flex-col w-[31.25rem] py-3 mt-2">
+              <div className="flex flex-col w-[31.25rem]">
                 <div className="overflow-y-auto scrollbar-width-none">
                   {userFeed.comments
                     .slice(0, displayedCommentCount)
@@ -186,18 +269,18 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
             </div>
 
             <div className="flex  items-center justify-between  bg-gray-100">
-              <div className="flex items-center justify-evenly  w-full">
+              <div className="flex items-center justify-evenly w-[10rem]">
                 <div className="flex items-center ">
-                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
-                    <FaThumbsUp />
+                  <button className=" rounded-xl text-xl font-semibold">
+                    <FaThumbsUp size={24} />
                   </button>
                   <span className="ml-2 text-gray-500 font-semibold">
                     {userFeed.likeCount}
                   </span>
                 </div>
                 <div className="relative">
-                  <button className="hover:text-green-400 rounded-xl text-xl font-semibold">
-                    <FaCommentDots />
+                  <button className=" rounded-xl text-xl font-semibold">
+                    <FaCommentDots size={24} />
                   </button>
                   <span className="ml-2 text-gray-500 font-semibold">
                     {userFeed.comments.length}
