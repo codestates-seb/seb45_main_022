@@ -33,7 +33,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
         setIsNicknameMatched(false);
       }
     }
-  }, [userInfo, comment.nickname]);
+  }, [comment.nickname]);
 
   const handleDeleteComment = async (commentId: number) => {
     try {
@@ -77,7 +77,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
               type="text"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className='font-[Pretendard] font-normal"'
+              className='font-[Pretendard] font-normal w-full "'
             />
           ) : (
             <span className="font-[Pretendard] font-normal">{commentText}</span>
