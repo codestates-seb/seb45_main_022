@@ -6,7 +6,7 @@ import { Feed } from '../../api/feed';
 import Comments from './Comments';
 import { CategoryCode } from '../../api/category';
 import { useEffect, useState } from 'react';
-import useAddComment from '../../hooks/useComment';
+import usePostCommentMutation from '../../hooks/usePostCommentMutation';
 import { UserInfo } from '../../api/user';
 import { useQuery } from '@tanstack/react-query';
 
@@ -52,7 +52,9 @@ const UserPost = ({
     isError: boolean;
   };
   const userFeed = getUserFeedQuery.data?.data;
-  const { addCommentMutation } = useAddComment();
+  const { mutate: postComment } = usePostCommentMutation({
+    feedId: feed.feedId,
+  });
   //게시글 업로즈한 사용자 조회
   // const userNickname = userFeed.nickname;
   // console.log(userNickname);
@@ -111,10 +113,7 @@ const UserPost = ({
   const handleSubmitComment = () => {
     console.log(addComment);
 
-    addCommentMutation.mutate({
-      feedId: feed.feedId,
-      body: addComment,
-    });
+    postComment(addComment);
 
     setAddComent('');
   };
@@ -223,6 +222,7 @@ const UserPost = ({
                         key={comment.commentId}
                         comment={comment}
                         categoryCode={categoryCode}
+                        feedId={userFeed.feedId}
                       />
                     ))}
                 </div>
