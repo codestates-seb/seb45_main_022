@@ -8,7 +8,8 @@ import { CategoryCode } from '../../api/category';
 import { useEffect, useState } from 'react';
 import useAddComment from '../../hooks/useComment';
 import { UserInfo } from '../../api/user';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+
 import { deleteFeedData, editFeedData } from '../../api/editFeed';
 
 interface PostProps {
