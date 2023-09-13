@@ -14,4 +14,7 @@ ENV JWT_SECRET_KEY $JWT_SECRET_KEY
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} Code-State-Main-Project-0.0.1-SNAPSHOT.jar
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+
 ENTRYPOINT ["java", "-jar", "/Code-State-Main-Project-0.0.1-SNAPSHOT.jar"]
