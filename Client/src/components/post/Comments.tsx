@@ -33,7 +33,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
         setIsNicknameMatched(false);
       }
     }
-  }, [comment.nickname]);
+  }, [userInfo, comment.nickname]);
 
   const handleDeleteComment = async (commentId: number) => {
     try {
