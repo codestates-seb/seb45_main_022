@@ -41,8 +41,9 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
   const { addCommentMutation } = useAddComment();
 
   const userFeed = getUserFeedQuery.data?.data;
-  console.log(getUserFeedQuery.data?.data);
-  console.log(getUserFeedQuery.data?.data.comments);
+  // console.log(getUserFeedQuery.data?.data);
+  // console.log(getUserFeedQuery.data?.data.comments);
+  // console.log(getUserFeedQuery.data?.data);
 
   const handleCloseScreen = () => {
     setOpenFeedItem(false);
