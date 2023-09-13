@@ -63,7 +63,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
       key={comment.commentId}
       className="  p-2  my-2 flex flex-col rounded-lg bg-white shadow-md "
     >
-      <div className="flex  items-center justify-between  ">
+      <div className="flex  items-center   ">
         <div className="flex flex-col items-center w-[7.5rem]  ">
           <img src={comment.profileImage} alt="profile image" width={45} />
 
@@ -71,13 +71,13 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
             {comment.nickname}
           </span>
         </div>
-        <div className="flex text-sm   w-full p-4">
+        <div className=" text-sm w-full">
           {isEditing ? (
             <input
               type="text"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className='font-[Pretendard] font-normal w-full "'
+              className="font-[Pretendard] font-normal bg-gray-100 p-3 "
             />
           ) : (
             <span className="font-[Pretendard] font-normal">{commentText}</span>
