@@ -2,7 +2,6 @@ import { CategoryCode } from '../../api/category';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { STATUS_ICON } from '../../utility/status';
 import { editCommentData, deleteCommentData } from '../../api/comment';
-import { getUserInfo } from '../../api/user';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
@@ -19,13 +18,11 @@ interface CommentProps {
 }
 
 const Comments = ({ comment, categoryCode }: CommentProps) => {
-  // console.log('comment nickname....', comment.nickname);
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
   const [commentText, setCommentText] = useState(comment.body);
   const [isEditing, setIsEditing] = useState(false);
 
   const { data: userInfo } = useQuery(['userInfo']);
-  // console.log(userInfo.nickname);
 
   useEffect(() => {
     if (userInfo) {
@@ -43,7 +40,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
       await deleteCommentData({ commentId });
       alert('댓글 삭제완료');
     } catch (error) {
-      alert(error);
+      alert('삭제 실패');
     }
   };
 
@@ -56,8 +53,8 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
       setCommentText(commentText);
       setIsEditing(false);
       alert('댓글 수정완료');
-    } catch (error) {
-      console.error('수정 실패', error);
+    } catch {
+      alert('수정 실패');
     }
   };
 
@@ -66,8 +63,6 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
       key={comment.commentId}
       className="  p-2  my-2 flex flex-col rounded-lg bg-white shadow-md "
     >
-      {/* profile pic + text */}
-      {/* <div className="flex flex-col items-center justify-center w-20"> */}
       <div className="flex  items-center justify-between  ">
         <div className="flex flex-col items-center w-[7.5rem]  ">
           <img src={comment.profileImage} alt="profile image" width={45} />
@@ -76,9 +71,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
             {comment.nickname}
           </span>
         </div>
-        {/* <div className="flex mt-1 items-center justify-around w-[100%]"> */}
         <div className="flex text-sm   w-full p-4">
-          {/* <span className="font-[Pretendard] font-normal">{comment.body}</span> */}
           {isEditing ? (
             <input
               type="text"
@@ -91,7 +84,6 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
           )}
         </div>
       </div>
-      {/* 유조 정보 */}
       <div className="flex items-center justify-evenly">
         <div className="flex mt-1 items-center justify-between ">
           <img
@@ -105,7 +97,6 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
         </div>
         <div className=" text-center">
           <span className="font-[Pretendard] text-sm text-gray-500 ">
-            {/* {comment.createDate} */}
             {new Date(comment.createDate).toLocaleTimeString('ko-KR', {
               year: '2-digit',
               month: '2-digit',
