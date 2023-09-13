@@ -7,6 +7,7 @@ export default function useUserInfoQuery() {
   return useQuery(['userInfo'], getUserInfo, {
     staleTime: 1000 * 60,
     retry: 1,
+    refetchOnWindowFocus: false,
     onError: (err: AxiosError<ErrorType>) => {
       if (err.response) {
         const { errorCode } = err.response.data;

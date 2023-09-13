@@ -107,9 +107,7 @@ const Login = () => {
             }}
           />
         </div>
-        <button className="my-[4px]">
-          <Button>Login</Button>
-        </button>
+        <Button>Login</Button>
       </form>
       <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
         <button className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
