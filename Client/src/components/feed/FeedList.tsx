@@ -43,7 +43,7 @@ const FeedListWrapper = ({ categoryCode }: Props) => {
 
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
-      <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
+      <div className="w-full h-[50px] p-[10px] flex justify-between items-center bg-[#f8d8ae] shadow-[0_5px_5px_#f8d8ae]">
         <FilterButton type={type} setType={setType} />
         <SearchBar categoryCode={categoryCode} />
       </div>
@@ -54,7 +54,9 @@ const FeedListWrapper = ({ categoryCode }: Props) => {
         {feedList &&
           feedList.map((feed, index) => {
             return (
-              <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
+              <Link to={`/feed/${categoryCode}/detail/${feed.feedId}`}>
+                <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
+              </Link>
             );
           })}
         <div

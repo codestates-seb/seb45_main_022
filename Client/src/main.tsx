@@ -21,6 +21,7 @@ import CheckInScreen from './components/main/CheckInScreen';
 import ProfileScreen from './components/main/ProfileScreen';
 import StatusScreen from './components/main/StatusScreen';
 import PrivateRoute from './pages/PrivateRoute';
+import FeedDetailModal from './components/feed-detail/FeedDetailModal';
 
 const queryClient = new QueryClient();
 
@@ -77,11 +78,21 @@ const router = createBrowserRouter([
             path: 'post',
             element: <PostScreen />,
           },
+          {
+            path: 'detail/:feedIdParam',
+            element: <FeedDetailModal />,
+          },
         ],
       },
       {
         path: '/feed/:categoryCodeParam/search/:searchType/:keyword',
         element: <SearchPage />,
+        children: [
+          {
+            path: 'detail/:feedIdParam',
+            element: <FeedDetailModal />,
+          },
+        ],
       },
     ],
   },

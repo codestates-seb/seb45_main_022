@@ -45,8 +45,7 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
 
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
-      <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
-        <div></div>
+      <div className="w-full h-[50px] p-[10px] flex justify-end items-center bg-[#f8d8ae] shadow-[0_5px_5px_#f8d8ae]">
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div
@@ -56,7 +55,11 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
         {feedList.length > 0 ? (
           feedList.map((feed, index) => {
             return (
-              <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
+              <Link
+                to={`/feed/${categoryCode}/search/${searchType}/${keyword}/detail/${feed.feedId}`}
+              >
+                <FeedItem categoryCode={categoryCode} feed={feed} key={index} />
+              </Link>
             );
           })
         ) : (

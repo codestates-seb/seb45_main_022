@@ -58,13 +58,37 @@ export const getFeedList = async ({
   return response.data;
 };
 
-export const getUserFeed = async (feedId: Feed['feedId']) => {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
-    );
-    return response;
-  } catch (error) {
-    console.log("Cannot GET user's feed due to error", error);
-  }
+interface FeedDetail {
+  feedId: number;
+  nickname: string;
+  profileImage: string;
+  statId: number;
+  level: number;
+  data: string;
+  feedHashTags: HashTag[];
+  likeCount: number;
+  comments: Comment[];
+  createdAt: string;
+  modifiedAt: string;
+}
+
+interface HashTag {
+  hashTagId: number;
+  body: string;
+}
+
+interface Comment {
+  commentId: number;
+  nickname: string;
+  profileImage: string;
+  level: number;
+  body: string;
+  createDate: string;
+}
+
+export const getFeedDetail = async (feedId: Feed['feedId']) => {
+  const response = await axios.get<FeedDetail>(
+    `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
+  );
+  return response.data;
 };
