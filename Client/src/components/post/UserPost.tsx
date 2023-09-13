@@ -8,7 +8,7 @@ import { CategoryCode } from '../../api/category';
 import { useEffect, useState } from 'react';
 import usePostCommentMutation from '../../hooks/usePostCommentMutation';
 import { UserInfo } from '../../api/user';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { deleteFeedData, editFeedData } from '../../api/editFeed';
 
@@ -44,7 +44,9 @@ const UserPost = ({
   const [addComment, setAddComent] = useState('');
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [feedText, setFeedText] = useState('.......수정 필요');
+  const [feedText, setFeedText] = useState('');
+
+  const queryClient = useQueryClient();
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -67,10 +69,12 @@ const UserPost = ({
   useEffect(() => {
     if (userInfo && userFeed) {
       const loggedInUser = userInfo.nickname;
+      setFeedText(userFeed.data);
+      console.log(userFeed);
 
       if (userFeed.nickname === loggedInUser) {
         console.log('feed user and logged in user are the same');
-        // setFeedText(userFeed.body);
+        // setFeedText(userFeed.data);
         setIsNicknameMatched(true);
       } else {
         console.log('feed user and logged in user are different');
@@ -90,11 +94,12 @@ const UserPost = ({
 
   const handleEditFeed = async (feedId: number) => {
     try {
+      console.log(feedText);
       await editFeedData({
         feedId,
         body: feedText,
       });
-      // setFeedText(userFeed.body);
+      queryClient.invalidateQueries(['userFeed', userFeed.feedId]);
       setIsEditing(false);
       alert('댓글 수정완료');
     } catch {
@@ -201,12 +206,14 @@ const UserPost = ({
                 <input
                   type="text"
                   value={feedText}
-                  onChange={(e) => setFeedText(e.target.value)}
+                  onChange={(e) => {
+                    setFeedText(e.target.value);
+                  }}
                   className="font-[Pretendard] font-normal bg-gray-100 p-3"
                 />
               ) : (
                 <div
-                  dangerouslySetInnerHTML={{ __html: feedText }}
+                  dangerouslySetInnerHTML={{ __html: userFeed.data }}
                   className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
                 />
               )}

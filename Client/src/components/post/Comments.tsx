@@ -77,7 +77,7 @@ const Comments = ({ comment, categoryCode, feedId }: CommentProps) => {
             {comment.nickname}
           </span>
         </div>
-        <div className=" text-sm w-full">
+        <div className=" text-sm w-[300px]">
           {isEdited ? (
             <input
               type="text"
@@ -86,9 +86,9 @@ const Comments = ({ comment, categoryCode, feedId }: CommentProps) => {
               className="font-[Pretendard] font-normal bg-gray-100 p-3 "
             />
           ) : (
-            <span className="font-[Pretendard] font-normal">
+            <p className="w-full font-[Pretendard] font-normal break-words">
               {comment.body}
-            </span>
+            </p>
           )}
         </div>
       </div>
