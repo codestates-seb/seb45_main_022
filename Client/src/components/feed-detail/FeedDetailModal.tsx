@@ -13,7 +13,7 @@ import { deleteFeedData } from '../../api/editFeed';
 import { Link, useParams } from 'react-router-dom';
 import LoadingBar from '../common/LoadingBar';
 import Backdrop from '../common/Backdrop';
-import Comments from './Comments';
+import CommentItem from './CommentItem';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import Button from '../common/Button';
 
@@ -158,7 +158,7 @@ const UserPost = () => {
                     {feedDetail.comments
                       .slice(0, displayedCommentCount)
                       .map((comment) => (
-                        <Comments
+                        <CommentItem
                           key={comment.commentId}
                           comment={comment}
                           categoryCode={categoryCode}

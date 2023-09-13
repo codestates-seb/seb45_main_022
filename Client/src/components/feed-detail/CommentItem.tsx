@@ -3,7 +3,8 @@ import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { STATUS_ICON } from '../../utility/status';
 import { editCommentData, deleteCommentData } from '../../api/comment';
 import { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 
 interface CommentProps {
   comment: {
@@ -18,12 +19,12 @@ interface CommentProps {
   feedId: number;
 }
 
-const Comments = ({ comment, categoryCode, feedId }: CommentProps) => {
+const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
   const [commentText, setCommentText] = useState(comment.body);
   const [isEdited, setIsEdited] = useState(false);
 
-  const { data: userInfo } = useQuery(['userInfo']);
+  const { data: userInfo } = useUserInfoQuery();
 
   const queryClient = useQueryClient();
 
@@ -145,4 +146,4 @@ const Comments = ({ comment, categoryCode, feedId }: CommentProps) => {
   );
 };
 
-export default Comments;
+export default CommentItem;
