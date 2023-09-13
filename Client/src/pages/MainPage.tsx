@@ -1,8 +1,11 @@
+import { useQueryClient } from 'react-query';
 import { Outlet, Link } from 'react-router-dom';
 
 const MainPage = () => {
+  const queryClient = useQueryClient();
   const handleLogout = () => {
     localStorage.removeItem('token');
+    queryClient.removeQueries();
     alert('로그아웃 되었습니다.');
   };
   return (

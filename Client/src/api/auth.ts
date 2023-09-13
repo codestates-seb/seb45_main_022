@@ -14,10 +14,10 @@ interface NewUserData {
 export const registerAuth = async (userData: NewUserData) => {
   const response = await axios.post(`user/signup`, userData);
   console.log(response);
-  return response;
+  return response.data;
 };
 
 export const loginAuth = async (userData: LoginUserData) => {
   const response = await axios.post(`login`, userData);
-  return response;
+  return response.data;
 };

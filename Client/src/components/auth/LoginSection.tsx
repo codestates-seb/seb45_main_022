@@ -5,8 +5,9 @@ import shield from '../../assets/common/shield.png';
 import Button from '../common/Button';
 import LoadingBar from '../common/LoadingBar';
 import { useNavigate } from 'react-router';
-import { AxiosError, AxiosResponse } from 'axios';
-import useLogin from '../../hooks/useLogin';
+import { AxiosError } from 'axios';
+import useLoginMutation from '../../hooks/useLoginMutation';
+import { ErrorType } from '../../api/error';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,28 +18,19 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const onLoginSuccess = (data: AxiosResponse) => {
-    console.log(data);
-    if (data.status === 200) {
-      const token = data.data.token;
-      localStorage.setItem('token', token);
-      navigate('/main');
-      return;
-    }
-    alert('User authentication error');
-  };
-
-  const onLoginError = (err: AxiosError) => {
+  const onLoginError = (err: AxiosError<ErrorType>) => {
     console.log('Login fail', err);
+    localStorage.removeItem('token');
     if (err.response?.status === 401) {
       setShowLoginErrMsg(true);
       return;
     }
     alert('User authentication error');
   };
-  const { loginMutation } = useLogin(onLoginSuccess, onLoginError);
 
-  const { isLoading, mutate: login } = loginMutation;
+  const { isLoading, mutate: login } = useLoginMutation({
+    onError: onLoginError,
+  });
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
