@@ -28,6 +28,7 @@
   padding: 0;
   border: 0px;
   box-sizing: border-box;
+  word-wrap: break-word;
 }
 
 a,
