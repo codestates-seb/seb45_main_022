@@ -5,13 +5,16 @@ import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
 import Comments from './Comments';
 import { CategoryCode } from '../../api/category';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAddComment from '../../hooks/useComment';
+import { UserInfo } from '../../api/user';
+import { useQuery } from 'react-query';
 
 interface PostProps {
   feed: Feed;
   setOpenFeedItem: (openFeedItem: boolean) => void;
   categoryCode: CategoryCode;
+  userId: UserInfo;
 }
 
 interface Comment {
@@ -28,9 +31,15 @@ interface Hashtag {
   body: string;
 }
 
-const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
+const UserPost = ({
+  setOpenFeedItem,
+  feed,
+  categoryCode,
+  userId,
+}: PostProps) => {
   const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
   const [addComment, setAddComent] = useState('');
+  const [isNicknameMatched, setIsNicknameMatched] = useState(false);
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
@@ -39,11 +48,27 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
   };
 
   const { addCommentMutation } = useAddComment();
-
   const userFeed = getUserFeedQuery.data?.data;
-  // console.log(getUserFeedQuery.data?.data);
-  // console.log(getUserFeedQuery.data?.data.comments);
-  // console.log(getUserFeedQuery.data?.data);
+
+  //게시글 업로즈한 사용자 조회
+  // const userNickname = userFeed.nickname;
+  // console.log(userNickname);
+
+  const { data: userInfo } = useQuery(['userInfo']);
+
+  // 로그인 사용자 === 작성자 ? true : false
+  useEffect(() => {
+    if (userInfo && userFeed) {
+      const loggedInUser = userInfo.nickname;
+      if (userFeed.nickname === loggedInUser) {
+        console.log('feed user and logged in user are the same');
+        setIsNicknameMatched(true);
+      } else {
+        console.log('feed user and logged in user are different');
+        setIsNicknameMatched(false);
+      }
+    }
+  }, [userInfo, userFeed]);
 
   const handleCloseScreen = () => {
     setOpenFeedItem(false);
@@ -116,9 +141,17 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
         <div className="flex flex-col justify-between   ">
           <div className="flex justify-between ">
             <div className="w-[31.25rem] oveflow-y-scroll  ">
-              <p
+              <div className=" flex items-center justify-around w-[8rem] text-sm font-semibold   p-4">
+                {isNicknameMatched && (
+                  <>
+                    <button className="underline ">수정</button>
+                    <button className="underline">삭제</button>
+                  </>
+                )}
+              </div>
+              <div
                 dangerouslySetInnerHTML={{ __html: userFeed.data }}
-                className="font-[Pretendard] text-m p-10 break-all"
+                className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
               />
             </div>
 
