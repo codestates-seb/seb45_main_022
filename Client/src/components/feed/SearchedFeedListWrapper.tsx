@@ -1,24 +1,25 @@
-import { useState, useRef, useEffect } from 'react';
-import FilterButton from './FilterButton';
+import { useRef, useEffect } from 'react';
 import SearchBar from './SearchBar';
-import { FeedListType } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
 import LatestFeedItem from './LatestFeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import { FeedSearchType } from '../../api/feed';
 // import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
+  searchType: string;
+  keyword: string;
 }
 
-const Main = ({ categoryCode }: Props) => {
-  const [type, setType] = useState<FeedListType>('latest');
+const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
       categoryCode,
-      type,
+      type: searchType as FeedSearchType,
+      keyword: keyword,
     });
   const fetchTriggerRef = useRef<HTMLDivElement>(null);
   const feedListContainerRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ const Main = ({ categoryCode }: Props) => {
 
   useEffect(() => {
     feedListContainerRef.current?.scrollTo(0, 0);
-  }, [type]);
+  }, []);
 
   // 페이지 이동 시 캐시 삭제하고 싶다면
   // const queryClient = useQueryClient();
@@ -44,7 +45,7 @@ const Main = ({ categoryCode }: Props) => {
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
       <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
-        <FilterButton type={type} setType={setType} />
+        <div></div>
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div
@@ -76,4 +77,4 @@ const Main = ({ categoryCode }: Props) => {
   );
 };
 
-export default Main;
+export default FeedListWrapper;

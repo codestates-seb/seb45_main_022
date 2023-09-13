@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { FeedListType } from '../../api/feed';
+import { FeedFilterType } from '../../api/feed';
 
 interface FilterProps {
-  type: FeedListType;
-  setType: Dispatch<SetStateAction<FeedListType>>;
+  type: FeedFilterType;
+  setType: Dispatch<SetStateAction<FeedFilterType>>;
 }
 
 const FilterButton: React.FC<FilterProps> = ({ type, setType }) => {
