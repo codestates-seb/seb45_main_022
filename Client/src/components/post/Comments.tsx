@@ -3,7 +3,8 @@ import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { STATUS_ICON } from '../../utility/status';
 import { editCommentData, deleteCommentData } from '../../api/comment';
 import { getUserInfo } from '../../api/user';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
 interface CommentProps {
   comment: {
@@ -23,19 +24,19 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
   const [commentText, setCommentText] = useState(comment.body);
   const [isEditing, setIsEditing] = useState(false);
 
-  const getUserData = async () => {
-    const userInfo = await getUserInfo();
-    const userNickname = userInfo.nickname;
+  const { data: userInfo } = useQuery(['userInfo']);
+  // console.log(userInfo.nickname);
 
-    if (userNickname === comment.nickname) {
-      // console.log('같은 닉네임');
-      setIsNicknameMatched(true);
-    } else {
-      // console.log('다른 닉네임');
-      setIsNicknameMatched(false);
+  useEffect(() => {
+    if (userInfo) {
+      const userNickname = userInfo.nickname;
+      if (userNickname === comment.nickname) {
+        setIsNicknameMatched(true);
+      } else {
+        setIsNicknameMatched(false);
+      }
     }
-  };
-  getUserData();
+  }, [userInfo, comment.nickname]);
 
   const handleDeleteComment = async (commentId: number) => {
     try {
