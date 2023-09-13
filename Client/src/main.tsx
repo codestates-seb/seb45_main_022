@@ -80,7 +80,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: '/feed/:categoryCodeParam/search/:keyword',
+        path: '/feed/:categoryCodeParam/search/:searchType/:keyword',
         element: <SearchPage />,
       },
     ],

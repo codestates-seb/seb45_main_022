@@ -7,7 +7,7 @@ import { CATEGORY_STATUS_MAP } from '../utility/category';
 import SearchedFeedListWrapper from '../components/feed/SearchedFeedListWrapper';
 
 const SearchPage = () => {
-  const { categoryCodeParam, keyword } = useParams();
+  const { categoryCodeParam, searchType, keyword } = useParams();
   const categoryCode = Number(categoryCodeParam);
 
   return (
@@ -18,6 +18,7 @@ const SearchPage = () => {
             <Header categoryCode={categoryCode} />
             <SearchedFeedListWrapper
               categoryCode={categoryCode}
+              searchType={searchType || ''}
               keyword={keyword || ''}
             />
           </div>

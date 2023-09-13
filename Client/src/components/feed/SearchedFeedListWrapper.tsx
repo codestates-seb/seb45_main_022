@@ -5,18 +5,20 @@ import { Link } from 'react-router-dom';
 import LatestFeedItem from './LatestFeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import { FeedSearchType } from '../../api/feed';
 // import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
+  searchType: string;
   keyword: string;
 }
 
-const FeedListWrapper = ({ categoryCode, keyword }: Props) => {
+const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
       categoryCode,
-      type: 'content',
+      type: searchType as FeedSearchType,
       keyword: keyword,
     });
   const fetchTriggerRef = useRef<HTMLDivElement>(null);
@@ -43,6 +45,7 @@ const FeedListWrapper = ({ categoryCode, keyword }: Props) => {
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
       <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
+        <div></div>
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div

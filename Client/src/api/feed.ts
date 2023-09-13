@@ -51,7 +51,7 @@ export const getFeedList = async ({
     weekly: `feed/weeklybest/${categoryCode}?page=${page}&size=10`,
     content: `feed/find/body/${categoryCode}?page=${page}&size=10&query=${keyword}`,
     user: `feed/find/user/${categoryCode}?page=${page}&size=10&query=${keyword}`,
-    hashTag: `feed/find/hashTag/${categoryCode}?page=${page}&size=10&query=${keyword}`,
+    hashTag: `feed/find/hashTag/${categoryCode}?page=${page}&size=10&body=${keyword}`,
   };
 
   const response = await axios.get<FeedApiData>(API_URL[type]);
