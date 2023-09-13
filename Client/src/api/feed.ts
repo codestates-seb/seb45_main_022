@@ -3,7 +3,7 @@ import { CategoryCode } from './category';
 
 export interface Feed {
   feedId: number;
-  nickName: string;
+  nickname: string;
   profileImage: string;
   statId: number;
   level: number;
