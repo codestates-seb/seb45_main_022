@@ -23,7 +23,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
       {/* profile pic + text */}
       {/* <div className="flex flex-col items-center justify-center w-20"> */}
       <div className="flex  items-center justify-between  ">
-        <div className="flex flex-col items-center w-[3.25rem] ">
+        <div className="flex flex-col items-center w-[7.5rem]  ">
           <img src={comment.profileImage} alt="profile image" width={45} />
 
           <span className="font-[Pretendard] font-semibold">
