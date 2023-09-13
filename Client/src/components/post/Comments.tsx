@@ -20,7 +20,7 @@ interface CommentProps {
 const Comments = ({ comment, categoryCode }: CommentProps) => {
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
   const [commentText, setCommentText] = useState(comment.body);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
 
   const { data: userInfo } = useQuery(['userInfo']);
 
@@ -51,7 +51,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
         body: commentText,
       });
       setCommentText(commentText);
-      setIsEditing(false);
+      setIsEdited(false);
       alert('댓글 수정완료');
     } catch {
       alert('수정 실패');
@@ -72,7 +72,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
           </span>
         </div>
         <div className=" text-sm w-full">
-          {isEditing ? (
+          {isEdited ? (
             <input
               type="text"
               value={commentText}
@@ -109,7 +109,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
         </div>
         {isNicknameMatched && (
           <>
-            {isEditing ? (
+            {isEdited ? (
               <button
                 onClick={() => handleEditComment(comment.commentId)}
                 className="font-[Pretendard] text-sm text-gray-500"
@@ -118,7 +118,7 @@ const Comments = ({ comment, categoryCode }: CommentProps) => {
               </button>
             ) : (
               <button
-                onClick={() => setIsEditing(true)}
+                onClick={() => setIsEdited(true)}
                 className="font-[Pretendard] text-sm text-gray-500"
               >
                 수정

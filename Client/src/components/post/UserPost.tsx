@@ -9,9 +9,11 @@ import { useEffect, useState } from 'react';
 import useAddComment from '../../hooks/useComment';
 import { UserInfo } from '../../api/user';
 import { useQuery } from 'react-query';
+import { deleteFeedData, editFeedData } from '../../api/editFeed';
 
 interface PostProps {
   feed: Feed;
+  feedId: Feed['feedId'];
   setOpenFeedItem: (openFeedItem: boolean) => void;
   categoryCode: CategoryCode;
   userId: UserInfo;
@@ -31,21 +33,18 @@ interface Hashtag {
   body: string;
 }
 
-const UserPost = ({
-  setOpenFeedItem,
-  feed,
-  categoryCode,
-  userId,
-}: PostProps) => {
+const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
   const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
   const [addComment, setAddComent] = useState('');
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
     isLoading: boolean;
     isError: boolean;
   };
+  const [feedText, setFeedText] = useState('');
 
   const { addCommentMutation } = useAddComment();
   const userFeed = getUserFeedQuery.data?.data;
@@ -69,6 +68,29 @@ const UserPost = ({
       }
     }
   }, [userInfo, userFeed]);
+
+  const handleDeleteFeed = async (feedId: number) => {
+    try {
+      await deleteFeedData({ feedId });
+      alert('피드 삭제완료');
+    } catch (error) {
+      alert('살제 실패');
+    }
+  };
+
+  const handleEditFeed = async (feedId: number) => {
+    try {
+      await editFeedData({
+        feedId,
+        body: feedText,
+      });
+      // setCommentText(commentText);
+      setIsEdited(false);
+      alert('댓글 수정완료');
+    } catch {
+      alert('수정 실패');
+    }
+  };
 
   const handleCloseScreen = () => {
     setOpenFeedItem(false);
@@ -144,15 +166,43 @@ const UserPost = ({
               <div className=" flex items-center justify-around w-[8rem] text-sm font-semibold   p-4">
                 {isNicknameMatched && (
                   <>
-                    <button className="underline ">수정</button>
-                    <button className="underline">삭제</button>
+                    {isEdited ? (
+                      <button
+                        onClick={() => handleEditFeed(userFeed.feedId)}
+                        className="font-[Pretendard] text-sm text-gray-500"
+                      >
+                        저장
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setIsEdited(true)}
+                        className="font-[Pretendard] text-sm text-gray-500"
+                      >
+                        수정
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDeleteFeed(userFeed.feedId)}
+                      className="font-[Pretendard] text-sm text-gray-500"
+                    >
+                      삭제
+                    </button>
                   </>
                 )}
               </div>
-              <div
-                dangerouslySetInnerHTML={{ __html: userFeed.data }}
-                className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
-              />
+              {isEdited ? (
+                <input
+                  type="text"
+                  onChange={(e) => setFeedText(e.target.value)}
+                  value={feedText}
+                  className="font-[Pretendard] font-normal bg-gray-100 p-3 "
+                />
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{ __html: userFeed.data }}
+                  className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
+                />
+              )}
             </div>
 
             <div className="flex flex-col w-[31.25rem] py-3 mt-2">
