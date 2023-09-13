@@ -1,66 +1,107 @@
+import { useEffect, useState, useRef } from 'react';
 import FilterButton from './FilterButton';
 import SearchBar from './SearchBar';
 import { Feed } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import LatestFeedItem from './LatestFeedItem';
-// import BestFeedItem from './BestFeedItem';
 import useFeedList from '../../hooks/useFeedList';
 import Backdrop from '../common/Backdrop';
 import LoadingBar from '../common/LoadingBar';
+import useInfiniteScroll from '../../utility/scrollUtils';
 
 interface Props {
   categoryCode: CategoryCode;
+  feedList: Feed[];
+  setFeedList: React.Dispatch<React.SetStateAction<Feed[]>>;
+  currentPage: { latest: number; best: number };
+  setCurrentPage: React.Dispatch<
+    React.SetStateAction<{
+      latest: number;
+      best: number;
+    }>
+  >;
 }
 
-const Main = ({ categoryCode }: Props) => {
-  const { feedListQuery, bestFeedQuery } = useFeedList(categoryCode);
+const Main = ({
+  categoryCode,
+  feedList,
+  setFeedList,
+  currentPage,
+  setCurrentPage,
+}: Props) => {
+  const { feedListQuery, bestFeedQuery } = useFeedList(
+    categoryCode,
+    currentPage.latest,
+    currentPage.best,
+  );
   const QUERY_MAP = { latest: feedListQuery, best: bestFeedQuery };
-  const [feedList, setFeedList] = useState<Feed[]>([]);
   const [tab, setTab] = useState<'latest' | 'best'>('latest');
+  const flexBox = useRef<HTMLDivElement | null>(null);
+
+  const showFeed = QUERY_MAP[tab].data?.data.data;
+
+  const plusFeed = () => {
+    setFeedList((prev) => {
+      const newFeedList = [...prev, ...(showFeed || [])];
+      return newFeedList;
+    });
+  };
+
+  const fetchNextPage = () => {
+    setCurrentPage((prev) => ({
+      ...prev,
+      [tab]: prev[tab] + 1,
+    }));
+  };
+
+  useInfiniteScroll(flexBox, fetchNextPage);
 
   useEffect(() => {
-    if (QUERY_MAP[tab].data?.data?.data) {
-      setFeedList(QUERY_MAP[tab].data?.data.data);
+    if (showFeed && showFeed.length > 0) {
+      plusFeed();
     }
-  }, [tab, feedListQuery.isLoading, bestFeedQuery.isLoading]);
+  }, [showFeed]);
+
+  const handleFilter = (selectedTab: 'latest' | 'best') => {
+    if (tab !== selectedTab) {
+      setTab(selectedTab);
+      setCurrentPage((prev) => ({
+        ...prev,
+        [selectedTab]: 1,
+      }));
+      setFeedList([]);
+      console.log(selectedTab === 'latest' ? '최신순' : '주간 베스트');
+    }
+  };
 
   if (feedListQuery.isLoading || bestFeedQuery.isLoading) {
-    <Backdrop>
-      <LoadingBar />
-    </Backdrop>;
+    return (
+      <Backdrop>
+        <LoadingBar />
+      </Backdrop>
+    );
   }
-
-  // latest | tab
-  const handleFilterNewest = () => {
-    setTab('latest');
-    console.log('최신순');
-  };
-
-  const handleFilterByBest = () => {
-    setTab('best');
-    console.log('주간 베스트');
-  };
-
-  console.log(feedList, 'feedlist;;;;;sfa;fa;fa;fsa;');
 
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
       <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
-        <FilterButton
-          // latestFeeds={latestFeeds}
-          // bestFeeds={bestFeeds}
-
-          handleFilterNewest={handleFilterNewest}
-          handleFilterByBest={handleFilterByBest}
-        />
+        <FilterButton tab={tab} handleFilter={handleFilter} />
         <SearchBar categoryCode={categoryCode} />
       </div>
-      <div className="flex items-center justify-around w-[1000px] flex-wrap p-[12px] overflow-y-scroll">
+      <div
+        className="flex items-center justify-around w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
+        ref={flexBox}
+      >
         {feedList &&
-          feedList.map((feed) => {
-            return <LatestFeedItem categoryCode={categoryCode} feed={feed} />;
+          feedList.map((feed, index) => {
+            return (
+              <LatestFeedItem
+                categoryCode={categoryCode}
+                feed={feed}
+                key={index}
+              />
+            );
           })}
       </div>
       <Link to={`/feed/${categoryCode}/post`}>
