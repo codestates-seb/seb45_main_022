@@ -33,34 +33,41 @@ interface Hashtag {
   body: string;
 }
 
-const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
+const UserPost = ({
+  setOpenFeedItem,
+  feed,
+  categoryCode,
+  feedId,
+}: PostProps) => {
   const [displayedCommentCount, setDisplayedCommentCount] = useState(3);
   const [addComment, setAddComent] = useState('');
   const [isNicknameMatched, setIsNicknameMatched] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [feedText, setFeedText] = useState('.......수정 필요');
 
   const { getUserFeedQuery } = useUserFeed(feed.feedId);
   const { isLoading, isError } = getUserFeedQuery as {
     isLoading: boolean;
     isError: boolean;
   };
-  const [feedText, setFeedText] = useState('');
-
-  const { addCommentMutation } = useAddComment();
   const userFeed = getUserFeedQuery.data?.data;
-
+  const { addCommentMutation } = useAddComment();
   //게시글 업로즈한 사용자 조회
   // const userNickname = userFeed.nickname;
   // console.log(userNickname);
 
   const { data: userInfo } = useQuery(['userInfo']);
 
+  // console.log(userFeed.feedId, 'feedId is called here');
+
   // 로그인 사용자 === 작성자 ? true : false
   useEffect(() => {
     if (userInfo && userFeed) {
       const loggedInUser = userInfo.nickname;
+
       if (userFeed.nickname === loggedInUser) {
         console.log('feed user and logged in user are the same');
+        // setFeedText(userFeed.body);
         setIsNicknameMatched(true);
       } else {
         console.log('feed user and logged in user are different');
@@ -84,8 +91,8 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
         feedId,
         body: feedText,
       });
-      // setCommentText(commentText);
-      setIsEdited(false);
+      // setFeedText(userFeed.body);
+      setIsEditing(false);
       alert('댓글 수정완료');
     } catch {
       alert('수정 실패');
@@ -166,7 +173,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
               <div className=" flex items-center justify-around w-[8rem] text-sm font-semibold   p-4">
                 {isNicknameMatched && (
                   <>
-                    {isEdited ? (
+                    {isEditing ? (
                       <button
                         onClick={() => handleEditFeed(userFeed.feedId)}
                         className="font-[Pretendard] text-sm text-gray-500"
@@ -175,7 +182,7 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                       </button>
                     ) : (
                       <button
-                        onClick={() => setIsEdited(true)}
+                        onClick={() => setIsEditing(true)}
                         className="font-[Pretendard] text-sm text-gray-500"
                       >
                         수정
@@ -190,16 +197,16 @@ const UserPost = ({ setOpenFeedItem, feed, categoryCode }: PostProps) => {
                   </>
                 )}
               </div>
-              {isEdited ? (
+              {isEditing ? (
                 <input
                   type="text"
-                  onChange={(e) => setFeedText(e.target.value)}
                   value={feedText}
-                  className="font-[Pretendard] font-normal bg-gray-100 p-3 "
+                  onChange={(e) => setFeedText(e.target.value)}
+                  className="font-[Pretendard] font-normal bg-gray-100 p-3"
                 />
               ) : (
                 <div
-                  dangerouslySetInnerHTML={{ __html: userFeed.data }}
+                  dangerouslySetInnerHTML={{ __html: feedText }}
                   className="font-[Pretendard] text-m p-6 break-all mt-[-1.25rem]"
                 />
               )}
