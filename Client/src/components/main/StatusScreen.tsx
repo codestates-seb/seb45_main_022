@@ -2,13 +2,12 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import StatusChart from './StatusChart';
 import StatusListItem from './StatusListItem';
-import useUserInfo from '../../hooks/useUserInfo';
+import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import LoadingBar from '../common/LoadingBar';
 import { Link, useNavigate } from 'react-router-dom';
 
 const StatusScreen = () => {
-  const { userInfoQuery } = useUserInfo();
-  const { isLoading, data } = userInfoQuery;
+  const { isLoading, data } = useUserInfoQuery();
   const statusData = data?.statuses;
 
   const navigate = useNavigate();

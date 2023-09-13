@@ -1,4 +1,4 @@
-import useUserInfo from '../../hooks/useUserInfo';
+import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useState } from 'react';
@@ -10,8 +10,7 @@ import ProfileHeader from './ProfileHeader';
 const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
 
-  const { userInfoQuery } = useUserInfo();
-  const { isLoading, data: userInfo } = userInfoQuery;
+  const { isLoading, data: userInfo } = useUserInfoQuery();
 
   const navigate = useNavigate();
 

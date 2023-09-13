@@ -4,6 +4,7 @@ import { FormEvent, useRef, useState } from 'react';
 import Button from '../common/Button';
 import ImageUploadModal from '../common/ImageUploadModal';
 import { validateNickname } from '../../utility/validation';
+import { ERROR_MSG, ErrorType } from '../../api/error';
 import axios from 'axios';
 
 interface Props {
@@ -20,8 +21,11 @@ const ProfileHeader = ({ userInfo }: Props) => {
   const changeProfileImage = async (encodedImage: string) => {
     try {
       await postProfileImage(encodedImage);
-    } catch (error) {
-      alert('프로필 이미지 변경에 실패했습니다.');
+    } catch (err) {
+      if (axios.isAxiosError<ErrorType>(err) && err.response) {
+        const { errorCode } = err.response.data;
+        alert(ERROR_MSG[errorCode]);
+      }
       return;
     }
     queryClient.invalidateQueries('userInfo');
@@ -35,26 +39,25 @@ const ProfileHeader = ({ userInfo }: Props) => {
 
   const changeNickname = async () => {
     setShowNicknameInput(false);
-    if (nicknameInputRef.current?.value === userInfo.nickname) {
+    if (
+      !nicknameInputRef.current ||
+      !nicknameInputRef.current.value ||
+      nicknameInputRef.current.value === userInfo.nickname
+    ) {
       return;
     }
-    if (!validateNickname(nicknameInputRef.current?.value || '')) {
-      alert('닉네임은 2~6자의 한글, 영문만 가능합니다.');
+    if (!validateNickname(nicknameInputRef.current.value)) {
+      alert('Nickname must be 2-6 characters, Korean or English');
       return;
     }
     try {
-      const res = await postNickname(nicknameInputRef.current?.value || '');
-      console.log(res);
-      if (res === 'nickname patch success') {
-        queryClient.invalidateQueries('userInfo');
+      await postNickname(nicknameInputRef.current.value);
+      queryClient.invalidateQueries('userInfo');
+    } catch (err) {
+      if (axios.isAxiosError<ErrorType>(err) && err.response) {
+        const { errorCode } = err.response.data;
+        alert(ERROR_MSG[errorCode]);
       }
-    } catch (error) {
-      console.log(error);
-      if (axios.isAxiosError(error) && error.response?.status === 409) {
-        alert('이미 사용 중인 닉네임입니다.');
-        return;
-      }
-      alert('닉네임 변경에 실패했습니다.');
     }
   };
 
