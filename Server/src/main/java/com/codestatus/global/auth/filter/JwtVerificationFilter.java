@@ -6,6 +6,8 @@ import com.codestatus.global.auth.userdetails.UsersDetailService;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.auth.utils.JwtResponseUtil;
 import com.codestatus.domain.user.entity.User;
+import com.codestatus.global.exception.BusinessLogicException;
+import com.codestatus.global.exception.ExceptionCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
@@ -49,6 +52,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                 request.setAttribute("exception", new JwtException("Access token has expired"));
             } catch (ExpiredJwtException refreshEx) {
                 request.setAttribute("exception", new JwtException("Refresh token has expired"));
+            } catch (JwtException jwtException) {
+                request.setAttribute("exception", jwtException);
             }
         } catch (Exception e) {
             request.setAttribute("exception", e);
@@ -69,7 +74,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private String verifyRefreshJWS(HttpServletRequest request) {
         String jws = "";
-        for(Cookie cookie:request.getCookies()) {
+        Cookie[] cookies = Optional.ofNullable(request.getCookies()).orElseThrow(() -> new JwtException("RefreshToken doesn't exists"));
+        for(Cookie cookie:cookies) {
             if(cookie.getName().equals("Refresh")){
                 jws = cookie.getValue();
                 break;
