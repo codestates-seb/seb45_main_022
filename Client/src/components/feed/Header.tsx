@@ -9,9 +9,10 @@ import { CategoryCode } from '../../api/category';
 
 interface Props {
   categoryCode: CategoryCode;
+  removeFeed: () => void;
 }
 
-const Header = ({ categoryCode }: Props) => {
+const Header = ({ categoryCode, removeFeed }: Props) => {
   const nav = useNavigate();
 
   return (
@@ -29,7 +30,10 @@ const Header = ({ categoryCode }: Props) => {
       {/* 아이콘, 카테고리 이름 */}
       <div
         className="w-[250px] flex justify-between items-center cursor-pointer ml-[8px]"
-        onClick={() => nav(`/map/${CATEGORY_STATUS_MAP[categoryCode]}`)}
+        onClick={() => {
+          removeFeed();
+          nav(`/map/${CATEGORY_STATUS_MAP[categoryCode]}`);
+        }}
       >
         <img
           className="w-[50px] h-[50px]"

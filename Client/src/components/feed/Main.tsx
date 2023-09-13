@@ -12,21 +12,30 @@ import useInfiniteScroll from '../../utility/scrollUtils';
 
 interface Props {
   categoryCode: CategoryCode;
+  feedList: Feed[];
+  setFeedList: React.Dispatch<React.SetStateAction<Feed[]>>;
+  currentPage: { latest: number; best: number };
+  setCurrentPage: React.Dispatch<
+    React.SetStateAction<{
+      latest: number;
+      best: number;
+    }>
+  >;
 }
 
-const Main = ({ categoryCode }: Props) => {
-  const [currentPage, setCurrentPage] = useState<{
-    latest: number;
-    best: number;
-  }>({ latest: 1, best: 1 });
-
+const Main = ({
+  categoryCode,
+  feedList,
+  setFeedList,
+  currentPage,
+  setCurrentPage,
+}: Props) => {
   const { feedListQuery, bestFeedQuery } = useFeedList(
     categoryCode,
     currentPage.latest,
     currentPage.best,
   );
   const QUERY_MAP = { latest: feedListQuery, best: bestFeedQuery };
-  const [feedList, setFeedList] = useState<Feed[]>([]);
   const [tab, setTab] = useState<'latest' | 'best'>('latest');
   const flexBox = useRef<HTMLDivElement | null>(null);
 
