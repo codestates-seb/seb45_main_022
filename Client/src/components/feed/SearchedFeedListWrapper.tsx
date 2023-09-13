@@ -6,6 +6,7 @@ import LatestFeedItem from './LatestFeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
 import { FeedSearchType } from '../../api/feed';
+import NotFoundFeedItem from './NotFoundFeedItem';
 // import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
@@ -24,7 +25,7 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
   const fetchTriggerRef = useRef<HTMLDivElement>(null);
   const feedListContainerRef = useRef<HTMLDivElement>(null);
 
-  const feedList = data?.pages.map((page) => page.data).flat();
+  const feedList = data?.pages.map((page) => page.data).flat() || [];
 
   useInfinteScroll({
     targetEl: fetchTriggerRef.current,
@@ -52,7 +53,7 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
         ref={feedListContainerRef}
         className="flex items-center justify-around w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
       >
-        {feedList &&
+        {feedList.length > 0 ? (
           feedList.map((feed, index) => {
             return (
               <LatestFeedItem
@@ -61,7 +62,10 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
                 key={index}
               />
             );
-          })}
+          })
+        ) : (
+          <NotFoundFeedItem />
+        )}
         <div
           ref={fetchTriggerRef}
           onClick={() => {

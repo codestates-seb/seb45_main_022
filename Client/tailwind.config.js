@@ -11,6 +11,7 @@ export default {
         board: "url('/src/assets/feed/board.png')",
         searchBar: "url('/src/assets/feed/searchBar.png')",
         clickedSearchBar: "url('/src/assets/feed/clickedSearchBar.png')",
+        notFoundFeed: "url('/src/assets/feed/notFound.gif')",
       },
     },
     fontFamily: {
