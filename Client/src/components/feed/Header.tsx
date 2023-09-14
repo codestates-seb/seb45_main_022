@@ -9,6 +9,8 @@ import { CategoryCode } from '../../api/category';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import Backdrop from '../common/Backdrop';
 import LoadingBar from '../common/LoadingBar';
+import { BackButton } from '../../components/common/BackButton';
+import { FrontButton } from '../../components/common/BackButton';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -28,30 +30,29 @@ const Header = ({ categoryCode }: Props) => {
 
   if (userInfo) {
     return (
-      <div
-        className={`w-full h-[60px] flex justify-center items-center gap-[220px]`}
-      >
+      <div className={`w-full h-[60px] flex justify-between items-center`}>
         {/* 닉네임 */}
-        <p
-          className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer"
-          style={{ fontFamily: 'Pretendard' }}
-        >
+        <p className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]">
           ⚔️ {userInfo.nickname}_님
         </p>
 
         {/* 아이콘, 카테고리 이름 */}
-        <div
-          className="w-[250px] flex justify-between items-center cursor-pointer ml-[8px]"
-          onClick={() => {
-            nav(`/map/${CATEGORY_STATUS_MAP[categoryCode]}`);
-          }}
-        >
+        <div className="mt-[60px] w-[35px] ml-3">
+          {categoryCode !== 1 && <BackButton categoryCode={categoryCode} />}
+        </div>
+
+        <div className="w-[250px] flex justify-between items-center cursor-pointer -ml-3">
           <img
             className="w-[50px] h-[50px]"
             src={CATEGORY_ICON[categoryCode]}
             alt="Icon"
           />
-          <span className="text-[2rem] font-bold mb-[8px]">
+          <span
+            className="text-[2rem] font-bold mb-[8px]"
+            onClick={() => {
+              nav(`/map/${CATEGORY_STATUS_MAP[categoryCode]}`);
+            }}
+          >
             {CATEGORY_NAME[categoryCode]}
           </span>
           <img
@@ -59,6 +60,12 @@ const Header = ({ categoryCode }: Props) => {
             src={CATEGORY_ICON[categoryCode]}
             alt="Icon"
           />
+        </div>
+
+        <div className="mt-[60px] w-[35px]">
+          {categoryCode !== Object.keys(CATEGORY_STATUS_MAP).length && (
+            <FrontButton categoryCode={categoryCode} />
+          )}
         </div>
 
         {/* 스탯 아이콘, 레벨, 경험치 바 */}
