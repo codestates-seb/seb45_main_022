@@ -13,7 +13,7 @@ interface Props {
   categoryCode: CategoryCode;
 }
 
-const FeedListWrapper = ({ categoryCode }: Props) => {
+const FeedList = ({ categoryCode }: Props) => {
   const [type, setType] = useState<FeedFilterType>('latest');
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
@@ -77,4 +77,4 @@ const FeedListWrapper = ({ categoryCode }: Props) => {
   );
 };
 
-export default FeedListWrapper;
+export default FeedList;

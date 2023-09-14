@@ -15,7 +15,7 @@ interface Props {
   keyword: string;
 }
 
-const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
+const SearchResult = ({ categoryCode, searchType, keyword }: Props) => {
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
       categoryCode,
@@ -81,4 +81,4 @@ const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
   );
 };
 
-export default FeedListWrapper;
+export default SearchResult;
