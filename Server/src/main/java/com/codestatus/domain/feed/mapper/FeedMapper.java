@@ -40,7 +40,7 @@ public interface FeedMapper {
                                 .commentId(comment.getCommentId())
                                 .nickname(comment.getUser().getNickname())
                                 .profileImage(comment.getUser().getProfileImage())
-                                .level(comment.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue()).getStatLevel())
+                                .level(comment.getUser().getStatuses().get(feed.getCategory().getStat().getStatId().intValue() - 1).getStatLevel())
                                 .body(comment.getBody())
                                 .createDate(comment.getCreatedAt())
                                 .build())

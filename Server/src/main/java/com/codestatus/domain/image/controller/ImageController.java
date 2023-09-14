@@ -12,12 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
-    private final ImageService service;
+    private final ImageService imageService;
     private final ImageMapper mapper;
 
     @PostMapping("/upload")
     public ResponseEntity uploadFeedImage(@RequestParam("image") MultipartFile image) {
-        ImageResponseDto url = mapper.ImageUrlToResponseDto(service.uploadFeedImage(image));
+        ImageResponseDto url = mapper.ImageUrlToResponseDto(imageService.uploadFeedImage(image));
         return ResponseEntity.ok().body(url);
     }
 }

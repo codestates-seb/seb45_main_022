@@ -2,7 +2,7 @@ package com.codestatus.domain.user.mapper;
 
 import com.codestatus.domain.status.entity.Stat;
 import com.codestatus.domain.status.entity.Status;
-import com.codestatus.domain.user.dto.StatusResponse;
+import com.codestatus.domain.status.dto.StatusResponse;
 import com.codestatus.domain.user.dto.UserDto;
 import com.codestatus.domain.user.entity.User;
 import org.springframework.context.annotation.Configuration;

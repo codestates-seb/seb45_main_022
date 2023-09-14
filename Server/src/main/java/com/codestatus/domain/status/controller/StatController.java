@@ -4,6 +4,7 @@ import com.codestatus.domain.status.dto.StatResponseDto;
 import com.codestatus.domain.status.entity.Stat;
 import com.codestatus.domain.status.mapper.StatMapper;
 import com.codestatus.domain.status.service.StatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,16 +17,12 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Validated
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/stat")
 public class StatController {
     private final StatService statService;
     private final StatMapper statMapper;
-
-    public StatController(StatService statService, StatMapper statMapper) {
-        this.statService = statService;
-        this.statMapper = statMapper;
-    }
 
     @GetMapping("/{statId}")
     public ResponseEntity getStatCategory(@PathVariable("statId")@Min(1)@Max(5) long statId) {

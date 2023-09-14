@@ -1,13 +1,8 @@
 package com.codestatus.domain.user.service;
 
 import com.codestatus.domain.comment.command.CommentCommand;
-import com.codestatus.domain.comment.entity.Comment;
-import com.codestatus.domain.comment.repository.CommentRepository;
 import com.codestatus.domain.feed.command.FeedCommand;
-import com.codestatus.domain.feed.entity.Feed;
-import com.codestatus.domain.feed.repository.FeedRepository;
 import com.codestatus.domain.hashTag.command.FeedHashTagCommand;
-import com.codestatus.domain.hashTag.repository.FeedHashTagRepository;
 import com.codestatus.domain.user.command.UserCommand;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.aws.FileStorageService;
@@ -48,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final FileStorageService fileStorageService;
 
     // 유저 생성
+    @Override
     public void createEntity(User user) {
         verifyExistsEmail(user.getEmail()); // 이메일 중복 검사
         verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
@@ -70,6 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 유저 조회
+    @Override
     public User findEntity(long userId) {
         User user = userCommand.findVerifiedUser(userId); // 유저 정보를 가져옴
         if (user.getUserStatus() == User.UserStatus.USER_ACTIVE) { // 유저가 활성화 상태라면 유저 정보 반환
@@ -81,12 +78,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void updateEntity(User updateEntity, long userId) {
-
-    }
-
     // 유저 닉네임 수정
+    @Override
     public void updateUserNickname(User user, long loginUserId) {
         User findUser = userCommand.findVerifiedUser(loginUserId);
 
@@ -98,6 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 비밀번호 변경
+    @Override
     public void updatePassword(User user, long loginUserId) {
         User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
@@ -111,7 +105,8 @@ public class UserServiceImpl implements UserService {
     }
 
     // 유저 탈퇴
-    public void deleteEntity(long loginUserId, long userId) {
+    @Override
+    public void deleteEntity(long loginUserId) {
         User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
 
         findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
@@ -124,6 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 프로필 이미지 업로드
+    @Override
     public void uploadProfileImage(MultipartFile imageFile, long loginUserId) {
         User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
         String fileUrl = fileStorageService.storeFile(imageFile); // 파일 업로드

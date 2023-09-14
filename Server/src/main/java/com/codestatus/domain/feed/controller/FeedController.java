@@ -1,6 +1,7 @@
 package com.codestatus.domain.feed.controller;
 
-import com.codestatus.domain.hashTag.service.HashTagServiceImpl;
+import com.codestatus.domain.feed.service.FeedService;
+import com.codestatus.domain.hashTag.service.HashTagService;
 import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.domain.category.mapper.CategoryMapper;
@@ -30,8 +31,8 @@ import java.util.Set;
 @RequestMapping("/feed")
 public class FeedController {
 
-    private final FeedServiceImpl feedServiceImpl;
-    private final HashTagServiceImpl hashTagServiceImpl;
+    private final FeedService feedService;
+    private final HashTagService hashTagService;
     private final FeedMapper feedMapper;
     private final CategoryMapper categoryMapper;
     private final UserMapper userMapper;
@@ -45,8 +46,8 @@ public class FeedController {
                 categoryMapper.categoryIdToCategory(categoryId),
                 requestBody,
                 userMapper.userIdToUser(principal.getId())); //피드조립.
-        feedServiceImpl.createEntity(feed); //피드 생성
-        hashTagServiceImpl.createEntityByString(feed, requestBody.getHashTag()); //해쉬태그와 피드 연결
+        feedService.createEntity(feed); //피드 생성
+        hashTagService.createEntityByString(feed, requestBody.getHashTag()); //해쉬태그와 피드 연결
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -54,8 +55,8 @@ public class FeedController {
     //피드 상세 조회
     @GetMapping("/{feedId}")
     public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId) {
-        Feed feed = feedServiceImpl.findEntity(feedId);
-        boolean isLike = feedServiceImpl.isLikeUser(feedId, feed.getUser().getUserId());
+        Feed feed = feedService.findEntity(feedId);
+        boolean isLike = feedService.isLikeUser(feedId, feed.getUser().getUserId());
 
         FeedResponseDto feedResponseDto =
                 feedMapper.feedToFeedResponseDto(feed, isLike);
@@ -67,9 +68,9 @@ public class FeedController {
     @GetMapping("/get/{categoryId}")
     public ResponseEntity getFeedsByCategory(@PathVariable @Min(0) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size,
                                              @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByCategory(categoryId, page-1, size);
+        Page<Feed> pageFeeds = feedService.findAllFeedByCategory(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -80,9 +81,9 @@ public class FeedController {
     @GetMapping
     public ResponseEntity getFeeds(@RequestParam int page, @RequestParam int size,
                                    @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findAllFeedByDeleted(page-1, size);
+        Page<Feed> pageFeeds = feedService.findAllFeedByDeleted(page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -93,9 +94,9 @@ public class FeedController {
     @GetMapping("/weeklybest/{categoryId}")
     public ResponseEntity getWeeklyBestFeeds(@PathVariable @Min(1) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size,
                                              @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findWeeklyBestFeeds(categoryId, page-1, size);
+        Page<Feed> pageFeeds = feedService.findWeeklyBestFeeds(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -108,9 +109,9 @@ public class FeedController {
                                          @RequestParam int size,
                                          @RequestParam String query,
                                          @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findFeedByBody(query, page-1, size);
+        Page<Feed> pageFeeds = feedService.findFeedByBody(query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -124,9 +125,9 @@ public class FeedController {
                                                     @RequestParam int size,
                                                     @RequestParam String query,
                                                     @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findFeedByBodyAndCategory(categoryId, query, page-1, size);
+        Page<Feed> pageFeeds = feedService.findFeedByBodyAndCategory(categoryId, query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -140,14 +141,15 @@ public class FeedController {
                                                     @RequestParam int size,
                                                     @RequestParam String query,
                                                     @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findFeedByUserAndCategory(categoryId, query, page-1, size);
+        Page<Feed> pageFeeds = feedService.findFeedByUserAndCategory(categoryId, query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
+  
     //HashTagID로 검색
     @GetMapping("/find/hashTagId/{categoryId}")
     public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
@@ -155,24 +157,25 @@ public class FeedController {
                                                     @RequestParam int size,
                                                     @RequestParam long hashTagId,
                                                     @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
+        Page<Feed> pageFeeds = feedService.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
+    // HashTagBody 로 검색
     @GetMapping("/find/hashTag/{categoryId}")
     public ResponseEntity getFeedsByHashTagBody(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                 @RequestParam int page,
                                                 @RequestParam int size,
                                                 @RequestParam String body,
                                                 @AuthenticationPrincipal PrincipalDto principal) {
-        Page<Feed> pageFeeds = feedServiceImpl.findFeedByHashTagBody(categoryId, body, page - 1, size);
+        Page<Feed> pageFeeds = feedService.findFeedByHashTagBody(categoryId, body, page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
-        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
@@ -186,7 +189,7 @@ public class FeedController {
                                     @AuthenticationPrincipal PrincipalDto principal){
         Feed feed = feedMapper.feedPatchDtoToFeed(requestBody);
         feed.setFeedId(feedId);
-        feedServiceImpl.updateEntity(feed, principal.getId());
+        feedService.updateEntity(feed, principal.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -195,7 +198,7 @@ public class FeedController {
     public ResponseEntity myPost(@AuthenticationPrincipal PrincipalDto principal,
                                  @RequestParam int page,
                                  @RequestParam int size) {
-        Page<Feed> pageFeeds = feedServiceImpl.myPost(principal.getId(), page - 1, size);
+        Page<Feed> pageFeeds = feedService.myPost(principal.getId(), page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
         Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
@@ -208,7 +211,7 @@ public class FeedController {
     @DeleteMapping("/{feedId}")
     public ResponseEntity deleteFeed(@PathVariable("feedId") int feedId,
                                      @AuthenticationPrincipal PrincipalDto principal) {
-        feedServiceImpl.deleteEntity(feedId, principal.getId());
+        feedService.deleteEntity(feedId, principal.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

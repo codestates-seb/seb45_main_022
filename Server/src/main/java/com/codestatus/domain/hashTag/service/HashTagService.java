@@ -1,9 +1,13 @@
 package com.codestatus.domain.hashTag.service;
 
+
+import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.hashTag.entity.HashTag;
-import com.codestatus.global.service.BaseService;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface HashTagService extends BaseService<HashTag> {
+public interface HashTagService {
+    void createEntityByString(Feed feed, List<String> hashTags);
+    Page<HashTag> findHashTagByBody(String text, int page, int size);
 }

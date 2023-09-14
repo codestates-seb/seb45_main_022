@@ -1,9 +1,8 @@
 package com.codestatus.domain.hashTag.controller;
 
-import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.hashTag.entity.HashTag;
 import com.codestatus.domain.hashTag.mapper.HashTagMapper;
-import com.codestatus.domain.hashTag.service.HashTagServiceImpl;
+import com.codestatus.domain.hashTag.service.HashTagService;
 import com.codestatus.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,15 +22,14 @@ import java.util.List;
 @RequestMapping("/hashTag")
 public class HashTagController {
 
-    private final HashTagServiceImpl hashTagServiceImpl;
-
+    private final HashTagService hashTagService;
     private final HashTagMapper hashTagMapper;
 
     @GetMapping("/find")
-    public ResponseEntity getHashTagsBybody(@RequestParam int page,
+    public ResponseEntity getHashTagsByBody(@RequestParam int page,
                                          @RequestParam int size,
                                          @RequestParam String query) {
-        Page<HashTag> pageHashTags = hashTagServiceImpl.findHashTagByBody(query, page-1, size);
+        Page<HashTag> pageHashTags = hashTagService.findHashTagByBody(query, page-1, size);
         List<HashTag> hashTags = pageHashTags.getContent();
 
         return new ResponseEntity<>(

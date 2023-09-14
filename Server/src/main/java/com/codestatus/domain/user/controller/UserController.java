@@ -3,7 +3,7 @@ package com.codestatus.domain.user.controller;
 import com.codestatus.domain.user.dto.UserDto;
 import com.codestatus.domain.user.entity.User;
 import com.codestatus.domain.user.mapper.UserMapper;
-import com.codestatus.domain.user.service.UserServiceImpl;
+import com.codestatus.domain.user.service.UserService;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,8 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 @Validated
 @RequiredArgsConstructor
@@ -23,7 +21,7 @@ import javax.validation.constraints.Min;
 @RequestMapping("/user")
 public class UserController {
     private final UserMapper userMapper;
-    private final UserServiceImpl service;
+    private final UserService service;
 
     // 유저 가입 컨트롤러
     @PostMapping("/signup")
@@ -70,7 +68,7 @@ public class UserController {
     // 유저 탈퇴
     @DeleteMapping("/mypage/delete")
     public ResponseEntity deleteUser(@AuthenticationPrincipal PrincipalDto principal) {
-        service.deleteEntity(principal.getId(), principal.getId()); // 유저 탈퇴 메서드 호출
+        service.deleteEntity(principal.getId()); // 유저 탈퇴 메서드 호출
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 유저 탈퇴 성공
     }
 }

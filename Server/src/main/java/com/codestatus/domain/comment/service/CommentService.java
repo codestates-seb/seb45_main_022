@@ -1,9 +1,9 @@
 package com.codestatus.domain.comment.service;
 
 import com.codestatus.domain.comment.entity.Comment;
-import com.codestatus.global.service.BaseService;
 
-import java.util.List;
-
-public interface CommentService extends BaseService<Comment> {
+public interface CommentService {
+    void createEntity(Comment comment);
+    void updateEntity(Comment comment, long userId);
+    void deleteEntity(long commentId, long userId);
 }
