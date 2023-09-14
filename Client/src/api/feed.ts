@@ -123,12 +123,13 @@ export const patchFeed = async ({
   body,
 }: {
   feedId: number;
-  data: string;
   body: string;
+  data: string;
 }) => {
   const response = await axios.patch(`/feed/${feedId}`, {
-    body,
     data,
+    body,
+
   });
   console.log(response);
   return response.data;
