@@ -9,12 +9,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 public interface FeedRepository extends JpaRepository <Feed, Long> {
-
-    @Query("SELECT f FROM Feed f WHERE f.feedId = :feedId AND f.deleted = false ")
-    Optional<Feed> findFeedByFeedIdAndDeletedIsFalse(long feedId);
+    @Query("SELECT f FROM Feed f JOIN f.likes l WHERE f IN :feeds AND l.user.userId = :userId AND l.deleted = false")
+    Set<Feed> findFeedsLikedByUserInList(@Param("userId") long userId, @Param("feeds") List<Feed> feeds);
 
     @Query(nativeQuery = true, value = "SELECT f FROM Feed f WHERE f.body LIKE %:body% AND f.deleted = false ")
     Page<Feed> findByBodyAndDeletedIsFalse(@Param("body") String body, Pageable pageable);

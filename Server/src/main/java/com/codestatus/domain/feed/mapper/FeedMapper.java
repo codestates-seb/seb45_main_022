@@ -12,12 +12,13 @@ import com.codestatus.domain.user.entity.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface FeedMapper {
 
-    default FeedResponseDto feedToFeedResponseDto(Feed feed){
+    default FeedResponseDto feedToFeedResponseDto(Feed feed, boolean isLike){
         return FeedResponseDto.builder()
                 .feedId(feed.getFeedId())
                 .nickname(feed.getUser().getNickname())
@@ -31,6 +32,7 @@ public interface FeedMapper {
                                 .body(feedHashTag.getHashTag().getBody())
                                 .build())
                         .collect(Collectors.toList()))
+                .isLike(isLike)
                 .likeCount((int)feed.getLikes().stream().filter(like -> !like.getDeleted()).count())
                 .comments(feed.getComments().stream()
                         .filter(comment -> !comment.isDeleted())
@@ -48,7 +50,7 @@ public interface FeedMapper {
                 .build();
     }
 
-    default List<FeedsResponseDto> feedsToFeedResponseDtos(List<Feed> feeds){
+    default List<FeedsResponseDto> feedsToFeedResponseDtos(List<Feed> feeds, Set<Long> feedIds){
         return feeds.stream()
                 .map(feed -> FeedsResponseDto
                         .builder()
@@ -64,6 +66,7 @@ public interface FeedMapper {
                                         .body(feedHashTag.getHashTag().getBody())
                                         .build())
                                 .collect(Collectors.toList()))
+                        .isLike(feedIds.contains(feed.getFeedId()))
                         .likeCount((int)feed.getLikes().stream().filter(like -> !like.getDeleted()).count())
                         .commentCount((int) feed.getComments().stream()
                                 .filter(comment -> !comment.isDeleted())
@@ -72,7 +75,6 @@ public interface FeedMapper {
                         .modifiedAt(feed.getModifiedAt())
                         .build())
                 .collect(Collectors.toList());
-
     }
     default Feed feedPostDtoToFeed(Category category, FeedPostDto requestBody, User user){
         Feed feed = new Feed();

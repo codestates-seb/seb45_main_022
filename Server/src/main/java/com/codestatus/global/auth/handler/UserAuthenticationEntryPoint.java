@@ -21,10 +21,11 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         Exception exception = (Exception) request.getAttribute("exception");
 
-        //Access 토큰 만료시 메세지 커스텀
-        if (exception instanceof ExpiredJwtException || exception instanceof SignatureException)
-            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, "JWT Expired");
-        else
-            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+        ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, exception.getMessage());
+//        //Access 토큰 만료시 메세지 커스텀
+//        if (exception instanceof ExpiredJwtException || exception instanceof SignatureException)
+//            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, "JWT Expired");
+//        else
+//            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
     }
 }

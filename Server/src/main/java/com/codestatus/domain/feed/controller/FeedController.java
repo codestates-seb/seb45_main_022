@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Set;
 
 @Validated
 @RestController
@@ -55,58 +56,82 @@ public class FeedController {
     @GetMapping("/{feedId}")
     public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId) {
         Feed feed = feedService.findEntity(feedId);
+        boolean isLike = feedService.isLikeUser(feedId, feed.getUser().getUserId());
 
         FeedResponseDto feedResponseDto =
-                feedMapper.feedToFeedResponseDto(feed);
+                feedMapper.feedToFeedResponseDto(feed, isLike);
 
         return new ResponseEntity<>(feedResponseDto, HttpStatus.OK);
     }
 
     //선택한 카테고리 내의 피드 전체 조회
     @GetMapping("/get/{categoryId}")
-    public ResponseEntity getFeedsByCategory(@PathVariable @Min(0) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity getFeedsByCategory(@PathVariable @Min(0) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size,
+                                             @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findAllFeedByCategory(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     //카테고리 구분없이 피드 전체 조회
     @GetMapping
-    public ResponseEntity getFeeds(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity getFeeds(@RequestParam int page, @RequestParam int size,
+                                   @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findAllFeedByDeleted(page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     //일주일 내에 작성된 피드목록 중에 삭제되지 않은 피드들을 좋아요 순으로 조회
     @GetMapping("/weeklybest/{categoryId}")
-    public ResponseEntity getWeeklyBestFeeds(@PathVariable @Min(1) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity getWeeklyBestFeeds(@PathVariable @Min(1) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size,
+                                             @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findWeeklyBestFeeds(categoryId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
+    }
+
+    //피드 본문 검색
+    @GetMapping("/find")
+    public ResponseEntity getFeedsBybody(@RequestParam int page,
+                                         @RequestParam int size,
+                                         @RequestParam String query,
+                                         @AuthenticationPrincipal PrincipalDto principal) {
+        Page<Feed> pageFeeds = feedService.findFeedByBody(query, page-1, size);
+        List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     //카테고리 내 피드 본문 검색
     @GetMapping("/find/body/{categoryId}")
     public ResponseEntity getFeedsByBodyAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
-                                         @RequestParam int size,
-                                         @RequestParam String query) {
+                                                    @RequestParam int size,
+                                                    @RequestParam String query,
+                                                    @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findFeedByBodyAndCategory(categoryId, query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     //카테고리 내 유저 닉네임으로 피드 검색
@@ -114,26 +139,31 @@ public class FeedController {
     public ResponseEntity getFeedsByUserAndCategory(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                                     @RequestParam int size,
-                                                    @RequestParam String query) {
+                                                    @RequestParam String query,
+                                                    @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findFeedByUserAndCategory(categoryId, query, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
+  
     //HashTagID로 검색
     @GetMapping("/find/hashTagId/{categoryId}")
     public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                     @RequestParam int page,
                                                     @RequestParam int size,
-                                                    @RequestParam long hashTagId) {
+                                                    @RequestParam long hashTagId,
+                                                    @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findFeedByHashTagAndCategory(categoryId, hashTagId, page-1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     // HashTagBody 로 검색
@@ -141,12 +171,15 @@ public class FeedController {
     public ResponseEntity getFeedsByHashTagBody(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
                                                 @RequestParam int page,
                                                 @RequestParam int size,
-                                                @RequestParam String body) {
+                                                @RequestParam String body,
+                                                @AuthenticationPrincipal PrincipalDto principal) {
         Page<Feed> pageFeeds = feedService.findFeedByHashTagBody(categoryId, body, page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
+
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     //피드 본문 수정
@@ -167,10 +200,11 @@ public class FeedController {
                                  @RequestParam int size) {
         Page<Feed> pageFeeds = feedService.myPost(principal.getId(), page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedServiceImpl.isLikeFeedIds(feeds, principal);
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(
-                        feedMapper.feedsToFeedResponseDtos(feeds), pageFeeds), HttpStatus.OK);
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
 
     //피드 삭제(DB삭제아님)
