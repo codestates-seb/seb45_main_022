@@ -54,9 +54,10 @@ public class FeedController {
 
     //피드 상세 조회
     @GetMapping("/{feedId}")
-    public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId) {
+    public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId,
+                                            @AuthenticationPrincipal PrincipalDto principalDto) {
         Feed feed = feedService.findEntity(feedId);
-        boolean isLike = feedService.isLikeUser(feedId, feed.getUser().getUserId());
+        boolean isLike = feedService.isLikeUser(feedId, principalDto.getId());
 
         FeedResponseDto feedResponseDto =
                 feedMapper.feedToFeedResponseDto(feed, isLike);

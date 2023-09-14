@@ -46,11 +46,13 @@ public class FeedServiceImpl implements FeedService {
         return feedCommand.findVerifiedFeed(feedId);
     }
 
+    @Override
     public boolean isLikeUser(long feedId, long userId) {
         return likeCommand.checkIsLikeUser(feedId, userId);
     }
 
     //피드리스트에서 유저가 좋아요한 피드 아이디셋
+    @Override
     public Set<Long> isLikeFeedIds(List<Feed> feeds, PrincipalDto principal) {
         if(principal == null){
             return Collections.emptySet();
