@@ -1,12 +1,13 @@
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
 import { Link, useNavigate } from 'react-router-dom';
 import ChangePwTab from './ChangePwTab';
 import ProfileHeader from './ProfileHeader';
 import useUserFeedListQuery from '../../hooks/useUserFeedListQuery';
+import useInfinteScroll from '../../hooks/useInfiniteScroll';
 
 interface UserFeed {
   feedId: string;
@@ -20,14 +21,30 @@ const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
 
   const { isLoading, data: userInfo } = useUserInfoQuery();
-  const { data: userFeedList, isLoading: isFeedLoading } =
-    useUserFeedListQuery();
+  const {
+    data: userFeedList,
+    isLoading: isFeedLoading,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+  } = useUserFeedListQuery();
 
-  console.log('userFeedList is being listed', userFeedList);
+  const fetchTriggerRef = useRef<HTMLDivElement>(null);
+  const feedListContainerRef = useRef<HTMLDivElement>(null);
 
+  const userFeedItems = userFeedList?.pages.flatMap((page) => page.data) || [];
+
+  useInfinteScroll({
+    targetEl: fetchTriggerRef.current,
+    hasMore: hasNextPage || false,
+    onIntersect: fetchNextPage,
+  });
+
+  useEffect(() => {
+    feedListContainerRef.current?.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
 
-  // loading 안주면 map iteration이 안됨
   if (isFeedLoading)
     return (
       <Backdrop>
@@ -83,25 +100,34 @@ const ProfileScreen = () => {
             <div className="w-full h-[260px] p-[8px] bg-[#bf916b] rounded-b-[6px]">
               {/* 마이포스트 */}
               {tab === 'post' && (
-                <div className="w-full h-full overflow-y-scroll">
-                  {userFeedList.map((feed: UserFeed) => (
-                    <Link to={`/feed/${feed.statId}/detail/${feed.feedId}`}>
-                      <div
-                        className="cursor-pointer font-[Pretendard]  flex flex-col justify-between  text-[10px] w-[90%] h-[3.25rem]  rounded-lg p-2 mx-auto mb-4 border border-black  bg-[#ffc98f]"
+                <div
+                  className="w-full h-full overflow-y-scroll"
+                  ref={feedListContainerRef}
+                >
+                  {userFeedItems &&
+                    userFeedItems.map((feed: UserFeed) => (
+                      <Link
+                        to={`/feed/${feed.statId}/detail/${feed.feedId}`}
                         key={feed.feedId}
                       >
-                        <p className="text-[12px] font-bold">
-                          {feed.body.length > 25
-                            ? feed.body.slice(0, 25) + '...'
-                            : feed.body}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span>{feed.commentCount} comments</span>
-                          <span>{feed.createdAt.slice(0, 10)}</span>
+                        <div className="cursor-pointer font-[Pretendard]  flex flex-col justify-between  text-[10px] w-[90%] h-[3.25rem]  rounded-lg p-2 mx-auto mb-4 border border-black  bg-[#ffc98f]">
+                          <p className="text-[12px] font-bold">
+                            {feed.body.length > 25
+                              ? feed.body.slice(0, 25) + '...'
+                              : feed.body}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span>{feed.commentCount} comments</span>
+                            <span>{feed.createdAt.slice(0, 10)}</span>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
+                  <div
+                    ref={fetchTriggerRef}
+                    onClick={() => fetchNextPage()}
+                  ></div>
+                  {isFetching && <p>Loading...</p>}
                 </div>
               )}
               {tab === 'password' && <ChangePwTab />}
