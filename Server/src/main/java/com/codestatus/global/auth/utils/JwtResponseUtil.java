@@ -17,9 +17,7 @@ public class JwtResponseUtil {
     private final JwtTokenizer jwtTokenizer;
 
     public void setAccessToken(User user, HttpServletResponse response) throws IOException {
-        String accessToken = jwtTokenizer.generateAccessToken(user);
-
-        String responseTokenString = "Bearer " + accessToken;
+        String responseTokenString = getResponseTokenString(user);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(Collections.singletonMap("token", responseTokenString));
 
@@ -30,5 +28,9 @@ public class JwtResponseUtil {
         String refreshToken = jwtTokenizer.generateRefreshToken(user);
         Cookie cookie = new Cookie("Refresh", refreshToken);
         response.addCookie(cookie);
+    }
+
+    public String getResponseTokenString(User user) {
+        return "Bearer " + jwtTokenizer.generateAccessToken(user);
     }
 }
