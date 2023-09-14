@@ -1,10 +1,13 @@
 import likeButton from '../../assets/feed/likeButton.png';
+import clickedLikeButton from '../../assets/feed/clickedLikeButton.png';
 import commentButton from '../../assets/feed/commentButton.png';
 import { CategoryCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import axios from '../../utility/axios';
 
 interface Props {
   feed: Feed;
@@ -16,12 +19,37 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
   const {
     nickname,
     profileImage,
+    feedId,
     level,
     body,
+    like,
     likeCount,
     commentCount,
     createdAt,
   } = feed;
+
+  const [isLiked, setIsLiked] = useState(like);
+  const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+
+  const handleLikeClick = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_BASE_URL}feed/like/${feedId}`,
+      );
+
+      setIsLiked(!isLiked);
+      setCurrentLikeCount(currentLikeCount + 1);
+
+      if (isLiked) {
+        setCurrentLikeCount(currentLikeCount - 1);
+      }
+
+      console.log(response);
+    } catch (error) {
+      console.error('좋아요 클릭 오류:', error);
+      setIsLiked((prevIsLiked) => !prevIsLiked);
+    }
+  };
 
   return (
     <>
@@ -81,10 +109,17 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
                   minute: '2-digit',
                 })}
               </div>
-              <div className="flex gap-[4px] text-[0.625rem]">
-                <img src={likeButton} alt="좋아요 아이콘" width={15} />
-                {likeCount}
-              </div>
+              <button
+                onClick={handleLikeClick}
+                className="flex gap-[4px] text-[0.625rem] mr-[4px]"
+              >
+                <img
+                  src={isLiked ? clickedLikeButton : likeButton}
+                  alt="좋아요 아이콘"
+                  width={15}
+                />
+                {currentLikeCount}
+              </button>
               <div className="flex gap-[4px] text-[0.625rem] mr-[4px]">
                 <img src={commentButton} alt="코멘트 아이콘" width={15} />
                 {commentCount}
