@@ -90,7 +90,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'detail/:feedIdParam',
-            element: <FeedDetailModal />,
+            element: <FeedDetailModal isFromSearchResult />,
           },
         ],
       },

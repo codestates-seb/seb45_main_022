@@ -4,13 +4,15 @@ import { CategoryCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
+import { Link } from 'react-router-dom';
 
-interface FeedItemProps {
+interface Props {
   feed: Feed;
   categoryCode: CategoryCode;
+  detailURL: string;
 }
 
-const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
+const LatestFeedItem = ({ feed, categoryCode, detailURL }: Props) => {
   const {
     nickname,
     profileImage,
@@ -23,7 +25,7 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
 
   return (
     <>
-      <div className="w-[300px] h-[140px] m-[12px] bg-cover bg-center bg-feedBox">
+      <div className="w-[300px] h-[140px] bg-cover bg-center bg-feedBox">
         <div className="w-full h-full p-[28px] flex flex-row justify-between">
           {/* 왼쪽 구간 (전체 너비 1/3) */}
           <div className="w-[60px] h-full flex flex-col justify-between items-center">
@@ -49,9 +51,25 @@ const LatestFeedItem = ({ feed, categoryCode }: FeedItemProps) => {
           </div>
 
           {/* 오른쪽 구간 (전체 너비 2/3) */}
-          <div className="w-[175px] h-full flex flex-col justify-between items-end">
+          <div className="w-[175px] h-full flex flex-col justify-between items-start">
             <div className="w-full h-[50px] pr-[5px] font-[Pretendard] overflow-hidden text-ellipsis whitespace-nowrap">
-              {body}
+              <Link className="hover:underline" to={detailURL}>
+                {body}
+              </Link>
+            </div>
+            <div className="w-[150px] h-[60px] flex flex-row justify-start items-center gap-[5px] overflow-x-auto pb-[10px]">
+              {feed.feedHashTags.map((hashtag) => {
+                return (
+                  <Link
+                    to={`/feed/${categoryCode}/search/hashTag/${hashtag.body}`}
+                    type="button"
+                    key={hashtag.hashTagId}
+                    className="w-fit h-[30px] bg-[#f8d8ae] text-[.5rem] font-[Pretendard] font-bold rounded-[6px] flex justify-center items-center p-[5px] hover:brightness-110 duration-300 cursor-pointer whitespace-nowrap"
+                  >
+                    # {hashtag.body}
+                  </Link>
+                );
+              })}
             </div>
             <div className="w-full flex justify-end items-center gap-[6px]">
               <div className="text-[0.625rem] font-[Pretendard]">

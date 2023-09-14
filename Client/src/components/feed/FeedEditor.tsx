@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './FeedEditor.css';
@@ -8,9 +8,10 @@ import { uploadImage } from '../../api/post';
 
 interface Props {
   onEditorChange: (body?: string, data?: string) => void;
+  value?: string;
 }
 
-const FeedEditor = ({ onEditorChange }: Props) => {
+const FeedEditor = ({ onEditorChange, value }: Props) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const quillRef = useRef<ReactQuill>(null);
 
@@ -31,11 +32,19 @@ const FeedEditor = ({ onEditorChange }: Props) => {
     };
   }, []);
 
+  useEffect(() => {
+    onEditorChange(
+      quillRef.current?.getEditor().getText(),
+      quillRef.current?.getEditorContents() as string,
+    );
+  }, [onEditorChange]);
+
   return (
-    <div>
+    <>
       <ReactQuill
         ref={quillRef}
         theme="snow"
+        defaultValue={value}
         onChange={() => {
           onEditorChange(
             quillRef.current?.getEditor().getText(),
@@ -75,7 +84,7 @@ const FeedEditor = ({ onEditorChange }: Props) => {
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,10 @@
 import axios from '../utility/axios';
 import { CategoryCode } from './category';
 
+export interface HashTag {
+  hashTagId: number;
+  body: string;
+}
 export interface Feed {
   feedId: number;
   nickname: string;
@@ -9,10 +13,7 @@ export interface Feed {
   level: number;
   body: string;
   statName: string;
-  feedHashTags: {
-    hashTagId: number;
-    body: string;
-  }[];
+  feedHashTags: HashTag[];
   likeCount: number;
   commentCount: number;
   createdAt: string;
@@ -72,11 +73,6 @@ export interface FeedDetail {
   modifiedAt: string;
 }
 
-export interface HashTag {
-  hashTagId: number;
-  body: string;
-}
-
 export interface Comment {
   commentId: number;
   nickname: string;
@@ -129,7 +125,6 @@ export const patchFeed = async ({
   const response = await axios.patch(`/feed/${feedId}`, {
     data,
     body,
-
   });
   console.log(response);
   return response.data;
