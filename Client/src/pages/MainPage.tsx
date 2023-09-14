@@ -14,14 +14,14 @@ const MainPage = () => {
     alert('로그아웃 되었습니다.');
   };
 
-  const { data: isCheckedIn } = useCheckInQuery();
+  const { data: isCheckedIn, isLoading, isFetching } = useCheckInQuery();
 
   useEffect(() => {
-    if (isCheckedIn === false) {
+    if (!isLoading && !isFetching && isCheckedIn === false) {
       console.log(isCheckedIn);
       navigate('/main/checkin');
     }
-  }, [isCheckedIn, navigate]);
+  }, [isLoading, isFetching, isCheckedIn, navigate]);
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] z-10">
