@@ -32,13 +32,17 @@ const PostScreen = () => {
           <LoadingBar />
         ) : (
           <div className="w-[580px] h-[755px] bg-[url('/src/assets/common/modal-frame-post.png')] bg-no-repeat bg-cover flex flex-col justify-center items-center pl-[40px] gap-[16px]">
-            <FeedEditor
-              onEditorChange={(body, data) => {
-                setBody(body || '');
-                setData(data || '');
-              }}
-            />
-            <TagEditor tags={tags} setTags={setTags} />
+            <div className="w-[430px] h-[500px]">
+              <FeedEditor
+                onEditorChange={(body, data) => {
+                  setBody(body || '');
+                  setData(data || '');
+                }}
+              />
+            </div>
+            <div className="w-[430px]">
+              <TagEditor tags={tags} setTags={setTags} />
+            </div>
             <div className="flex flex-row gap-[28px]">
               <Button onClick={handlePost}>Post</Button>
               <Link to={`/feed/${categoryCode}`}>

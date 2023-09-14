@@ -7,8 +7,12 @@ import Button from '../common/Button';
 import CommentSection from './CommentSection';
 import UserInfoSection from './UserInfoSection';
 import FeedContentSection from './FeedContentSection';
+import { useState } from 'react';
+import FeedContentEditSection from './FeedContentEditSection';
 
-const UserPost = () => {
+const FeedDetailModal = () => {
+  const [isEditing, setIsEditing] = useState(false);
+
   const { categoryCodeParam, feedIdParam } = useParams();
   const categoryCode = Number(categoryCodeParam) as CategoryCode;
   const feedId = Number(feedIdParam);
@@ -31,10 +35,21 @@ const UserPost = () => {
             feedDetail={feedDetail}
             categoryCode={categoryCode}
           />
-          <FeedContentSection
-            feedDetail={feedDetail}
-            categoryCode={categoryCode}
-          />
+          {isEditing ? (
+            <FeedContentEditSection
+              categoryCode={categoryCode}
+              feedDetail={feedDetail}
+              finishEditing={() => {
+                setIsEditing(false);
+              }}
+            />
+          ) : (
+            <FeedContentSection
+              feedDetail={feedDetail}
+              categoryCode={categoryCode}
+              onEditBtnClick={() => setIsEditing(true)}
+            />
+          )}
           <CommentSection
             comments={feedDetail.comments}
             categoryCode={categoryCode}
@@ -49,4 +64,4 @@ const UserPost = () => {
   );
 };
 
-export default UserPost;
+export default FeedDetailModal;
