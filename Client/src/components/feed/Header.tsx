@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { STATUS_ICON } from '../../utility/status';
 import {
   CATEGORY_ICON,
@@ -11,6 +12,8 @@ import Backdrop from '../common/Backdrop';
 import LoadingBar from '../common/LoadingBar';
 import { BackButton } from '../../components/common/BackButton';
 import { FrontButton } from '../../components/common/BackButton';
+import ProfileScreen from '../main/ProfileScreen';
+import StatusScreen from '../main/StatusScreen';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -18,8 +21,18 @@ interface Props {
 
 const Header = ({ categoryCode }: Props) => {
   const nav = useNavigate();
+  const [isProfileModalOpen, setProfileModalOpen] = useState<boolean>(false);
+  const [isStatModalOpen, setIsStatModalOpen] = useState<boolean>(false);
 
   const { isLoading, data: userInfo } = useUserInfoQuery();
+
+  const handleNicknameClick = () => {
+    setProfileModalOpen((prev) => !prev);
+  };
+
+  const handleLevelClick = () => {
+    setIsStatModalOpen((prev) => !prev);
+  };
 
   if (isLoading)
     return (
@@ -32,15 +45,20 @@ const Header = ({ categoryCode }: Props) => {
     return (
       <div className={`w-full h-[60px] flex justify-between items-center`}>
         {/* 닉네임 */}
-        <p className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]">
+        <p
+          className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]"
+          onClick={handleNicknameClick}
+        >
           ⚔️ {userInfo.nickname}_님
         </p>
+
+        {/* 프로필 모달 표시 */}
+        {isProfileModalOpen && <ProfileScreen />}
 
         {/* 아이콘, 카테고리 이름 */}
         <div className="mt-[60px] w-[35px] ml-3">
           {categoryCode !== 1 && <BackButton categoryCode={categoryCode} />}
         </div>
-
         <div className="w-[250px] flex justify-between items-center cursor-pointer -ml-3">
           <img
             className="w-[50px] h-[50px]"
@@ -61,15 +79,16 @@ const Header = ({ categoryCode }: Props) => {
             alt="Icon"
           />
         </div>
-
         <div className="mt-[60px] w-[35px]">
           {categoryCode !== Object.keys(CATEGORY_STATUS_MAP).length && (
             <FrontButton categoryCode={categoryCode} />
           )}
         </div>
-
         {/* 스탯 아이콘, 레벨, 경험치 바 */}
-        <div className="flex flex-col justify-center items-end gap-[8px] cursor-pointer mt-[100px]">
+        <div
+          className="flex flex-col justify-center items-end gap-[8px] cursor-pointer mt-[100px]"
+          onClick={handleLevelClick}
+        >
           <div className="flex gap-[16px]">
             <img
               className="w-[16px] h-[16px]"
@@ -111,6 +130,8 @@ const Header = ({ categoryCode }: Props) => {
             </div>
           </div>
         </div>
+        {/* 레벨 모달 표시 */}
+        {isStatModalOpen && <StatusScreen />}
       </div>
     );
   }
