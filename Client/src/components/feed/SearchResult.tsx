@@ -1,29 +1,31 @@
-import { useState, useRef, useEffect } from 'react';
-import FilterButton from './FilterButton';
+import { useRef, useEffect } from 'react';
 import SearchBar from './SearchBar';
-import { FeedFilterType } from '../../api/feed';
 import { CategoryCode } from '../../api/category';
 import { Link } from 'react-router-dom';
-import LatestFeedItem from './LatestFeedItem';
+import FeedItem from './FeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import { FeedSearchType } from '../../api/feed';
+import NotFoundFeedItem from './NotFoundFeedItem';
 // import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
+  searchType: string;
+  keyword: string;
 }
 
-const FeedListWrapper = ({ categoryCode }: Props) => {
-  const [type, setType] = useState<FeedFilterType>('latest');
+const FeedListWrapper = ({ categoryCode, searchType, keyword }: Props) => {
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
       categoryCode,
-      type,
+      type: searchType as FeedSearchType,
+      keyword: keyword,
     });
   const fetchTriggerRef = useRef<HTMLDivElement>(null);
   const feedListContainerRef = useRef<HTMLDivElement>(null);
 
-  const feedList = data?.pages.map((page) => page.data).flat();
+  const feedList = data?.pages.map((page) => page.data).flat() || [];
 
   useInfinteScroll({
     targetEl: fetchTriggerRef.current,
@@ -33,7 +35,7 @@ const FeedListWrapper = ({ categoryCode }: Props) => {
 
   useEffect(() => {
     feedListContainerRef.current?.scrollTo(0, 0);
-  }, [type]);
+  }, []);
 
   // 페이지 이동 시 캐시 삭제하고 싶다면
   // const queryClient = useQueryClient();
@@ -43,24 +45,27 @@ const FeedListWrapper = ({ categoryCode }: Props) => {
 
   return (
     <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
-      <div className="w-full h-[48px] flex justify-around items-center bg-[#f8d8ae] gap-[320px]">
-        <FilterButton type={type} setType={setType} />
+      <div className="w-full h-[50px] p-[10px] flex justify-end items-center bg-[#f8d8ae] shadow-[0_5px_5px_#f8d8ae]">
         <SearchBar categoryCode={categoryCode} />
       </div>
       <div
         ref={feedListContainerRef}
-        className="flex items-center justify-around w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
+        className="flex items-center justify-start w-[1000px] flex-wrap p-[12px] overflow-y-scroll flexBox"
       >
-        {feedList &&
+        {feedList.length > 0 ? (
           feedList.map((feed, index) => {
             return (
-              <LatestFeedItem
-                categoryCode={categoryCode}
-                feed={feed}
+              <Link
                 key={index}
-              />
+                to={`/feed/${categoryCode}/search/${searchType}/${keyword}/detail/${feed.feedId}`}
+              >
+                <FeedItem categoryCode={categoryCode} feed={feed} />
+              </Link>
             );
-          })}
+          })
+        ) : (
+          <NotFoundFeedItem />
+        )}
         <div
           ref={fetchTriggerRef}
           onClick={() => {

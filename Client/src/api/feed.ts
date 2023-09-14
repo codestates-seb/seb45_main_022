@@ -58,13 +58,83 @@ export const getFeedList = async ({
   return response.data;
 };
 
-export const getUserFeed = async (feedId: Feed['feedId']) => {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
-    );
-    return response;
-  } catch (error) {
-    console.log("Cannot GET user's feed due to error", error);
-  }
+export interface FeedDetail {
+  feedId: number;
+  nickname: string;
+  profileImage: string;
+  statId: number;
+  level: number;
+  data: string;
+  feedHashTags: HashTag[];
+  likeCount: number;
+  comments: Comment[];
+  createdAt: string;
+  modifiedAt: string;
+}
+
+export interface HashTag {
+  hashTagId: number;
+  body: string;
+}
+
+export interface Comment {
+  commentId: number;
+  nickname: string;
+  profileImage: string;
+  level: number;
+  body: string;
+  createDate: string;
+}
+
+export const getFeedDetail = async (feedId: Feed['feedId']) => {
+  const response = await axios.get<FeedDetail>(
+    `${import.meta.env.VITE_APP_BASE_URL}feed/${feedId}`,
+  );
+  return response.data;
+};
+
+export interface PostFeedData {
+  body: string;
+  data: string;
+  tags: string[];
+  categoryCode: CategoryCode;
+}
+
+export const postFeed = async ({
+  body,
+  data,
+  tags,
+  categoryCode,
+}: PostFeedData) => {
+  const response = await axios.post(
+    `${import.meta.env.VITE_APP_BASE_URL}feed/${categoryCode}`,
+    {
+      body,
+      data,
+      hashTag: tags,
+    },
+  );
+  return response;
+};
+
+export const patchFeed = async ({
+  feedId,
+  data,
+  body,
+}: {
+  feedId: number;
+  data: string;
+  body: string;
+}) => {
+  const response = await axios.patch(`/feed/${feedId}`, {
+    body,
+    data,
+  });
+  console.log(response);
+  return response.data;
+};
+
+export const deleteFeed = async ({ feedId }: { feedId: number }) => {
+  const response = await axios.delete(`/feed/${feedId}`);
+  return response.data;
 };
