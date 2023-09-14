@@ -45,7 +45,7 @@ const FeedContentSection = ({
         {/* 본문 */}
         <div className="w-full h-[420px] font-[Pretendard] text-m p-[20px] ">
           <div
-            className="w-full h-full bg-[#fee1b8] p-[10px] rounded-xl overflow-y-scroll"
+            className="w-full h-full bg-[#fee1b8] p-[10px] rounded-xl overflow-y-auto"
             dangerouslySetInnerHTML={{ __html: feedDetail.data }}
           />
         </div>

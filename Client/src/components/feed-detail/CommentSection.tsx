@@ -25,7 +25,7 @@ const CommentSection = ({ comments, categoryCode, feedId }: Props) => {
 
   return (
     <div className="bg-[#ffedd5] flex flex-col w-[500px] h-[600px]">
-      <div className="w-full h-[530px] overflow-scroll p-[20px]">
+      <div className="w-full h-[530px] overflow-y-auto p-[20px]">
         {comments.length === 0 && (
           <span className="text-gray-500 font-semibold">No Comment</span>
         )}
