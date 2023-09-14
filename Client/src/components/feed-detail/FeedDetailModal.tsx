@@ -10,7 +10,11 @@ import FeedContentSection from './FeedContentSection';
 import { useState } from 'react';
 import FeedContentEditSection from './FeedContentEditSection';
 
-const FeedDetailModal = () => {
+interface Props {
+  isFromSearchResult?: boolean;
+}
+
+const FeedDetailModal = ({ isFromSearchResult }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { categoryCodeParam, feedIdParam } = useParams();
@@ -26,6 +30,14 @@ const FeedDetailModal = () => {
   if (isLoading || isFetching) return <LoadingBar />;
 
   if (!feedDetail) return null;
+
+  if (isFromSearchResult) {
+    window.history.replaceState(
+      null,
+      '',
+      `/feed/${categoryCode}/detail/${feedId}`,
+    );
+  }
 
   return (
     <Backdrop>
