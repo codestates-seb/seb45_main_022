@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -40,7 +41,7 @@ public class FeedController {
     //선택한 카테고리에 피드 작성
     @PostMapping("/{categoryId}")
     public ResponseEntity postFeed(@PathVariable("categoryId") @Min(1) @Max(13) long categoryId,
-                                   @RequestBody FeedPostDto requestBody,
+                                   @Valid @RequestBody FeedPostDto requestBody,
                                    @AuthenticationPrincipal PrincipalDto principal) {
         Feed feed = feedMapper.feedPostDtoToFeed(
                 categoryMapper.categoryIdToCategory(categoryId),
@@ -171,7 +172,7 @@ public class FeedController {
     //피드 본문 수정
     @PatchMapping("/{feedId}")
     public ResponseEntity patchFeed(@PathVariable("feedId") int feedId,
-                                    @RequestBody FeedPatchDto requestBody,
+                                    @Valid @RequestBody FeedPatchDto requestBody,
                                     @AuthenticationPrincipal PrincipalDto principal){
         Feed feed = feedMapper.feedPatchDtoToFeed(requestBody);
         feed.setFeedId(feedId);
