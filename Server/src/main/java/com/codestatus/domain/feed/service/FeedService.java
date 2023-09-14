@@ -1,7 +1,11 @@
 package com.codestatus.domain.feed.service;
 
 import com.codestatus.domain.feed.entity.Feed;
+import com.codestatus.global.auth.dto.PrincipalDto;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.Set;
 
 public interface FeedService {
     void createEntity(Feed feed);
@@ -16,5 +20,7 @@ public interface FeedService {
     void updateEntity(Feed feed, long userId);
     Page<Feed> myPost(long userId, int page, int size);
     void deleteEntity(long feedId, long userId);
+    boolean isLikeUser(long feedId, long userId);
+    Set<Long> isLikeFeedIds(List<Feed> feeds, PrincipalDto principal);
     Page<Feed> findAllEntity(int page, int size);
 }
