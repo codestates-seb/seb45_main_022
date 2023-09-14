@@ -44,3 +44,13 @@ export const changePassword = async (password: string): Promise<string> => {
   });
   return res.data;
 };
+
+export const checkAttendace = async (): Promise<boolean> => {
+  const res = await axios.get<{ attendance: boolean }>('attendance/check');
+  return res.data.attendance;
+};
+
+export const postAttendance = async (StatusCode: StatusCode) => {
+  const res = await axios.post(`attendance/${StatusCode}`);
+  return res.data;
+};
