@@ -6,8 +6,8 @@ import com.codestatus.global.auth.userdetails.UsersDetailService;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.auth.utils.JwtResponseUtil;
 import com.codestatus.domain.user.entity.User;
-import com.codestatus.global.exception.BusinessLogicException;
-import com.codestatus.global.exception.ExceptionCode;
+import com.codestatus.global.exception.AccessTokenExpiredException;
+import com.codestatus.global.exception.RefreshTokenExpiredException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -48,11 +49,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             try {
                 String email = verifyRefreshJWS(request);
                 User user = userService.loadUserByEmail(email);
-                jwtResponseUtil.setAccessToken(user, response);
-                request.setAttribute("exception", new JwtException("Access token has expired"));
+                String generatedToken = jwtResponseUtil.getResponseTokenString(user);
+
+                request.setAttribute("exception", new AccessTokenExpiredException());
+                request.setAttribute("token", generatedToken);
             } catch (ExpiredJwtException refreshEx) {
-                request.setAttribute("exception", new JwtException("Refresh token has expired"));
-            } catch (JwtException jwtException) {
+                request.setAttribute("exception", new RefreshTokenExpiredException());
+            } catch (BadJwtException | JwtException jwtException) {
                 request.setAttribute("exception", jwtException);
             }
         } catch (Exception e) {
@@ -74,7 +77,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private String verifyRefreshJWS(HttpServletRequest request) {
         String jws = "";
-        Cookie[] cookies = Optional.ofNullable(request.getCookies()).orElseThrow(() -> new JwtException("RefreshToken doesn't exists"));
+        Cookie[] cookies = Optional.ofNullable(request.getCookies()).orElseThrow(() -> new BadJwtException("RefreshToken doesn't exists"));
         for(Cookie cookie:cookies) {
             if(cookie.getName().equals("Refresh")){
                 jws = cookie.getValue();

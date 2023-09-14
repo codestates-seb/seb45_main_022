@@ -1,10 +1,12 @@
 package com.codestatus.global.auth.handler;
 
 import com.codestatus.global.auth.utils.ErrorResponseSender;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.codestatus.global.exception.AccessTokenExpiredException;
+import com.codestatus.global.exception.RefreshTokenExpiredException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +22,15 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         Exception exception = (Exception) request.getAttribute("exception");
-
-        ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, exception.getMessage());
 //        //Access 토큰 만료시 메세지 커스텀
-//        if (exception instanceof ExpiredJwtException || exception instanceof SignatureException)
-//            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, "JWT Expired");
-//        else
-//            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+        if (exception instanceof AccessTokenExpiredException) {
+            String token = String.valueOf(request.getAttribute("token"));
+            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, exception.getMessage(), token);
+        }
+        else if (exception instanceof RefreshTokenExpiredException || exception instanceof SignatureException || exception instanceof BadJwtException){
+            ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, exception.getMessage());
+        }
+
+        else ErrorResponseSender.sendResponse(response, HttpStatus.UNAUTHORIZED, authException.getMessage());
     }
 }
