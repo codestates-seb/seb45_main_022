@@ -8,6 +8,13 @@ import ChangePwTab from './ChangePwTab';
 import ProfileHeader from './ProfileHeader';
 import useUserFeedListQuery from '../../hooks/useUserFeedListQuery';
 
+interface UserFeed {
+  feedId: string;
+  body: string;
+  commentCount: number;
+  createdAt: string;
+}
+
 const ProfileScreen = () => {
   const [tab, setTab] = useState<'password' | 'post'>('post');
 
@@ -76,7 +83,7 @@ const ProfileScreen = () => {
               {/* 마이포스트 */}
               {tab === 'post' && (
                 <div className="w-full h-full overflow-y-scroll">
-                  {userFeedList.map((feed) => (
+                  {userFeedList.map((feed: UserFeed) => (
                     <div
                       className="cursor-pointer font-[Pretendard]  flex flex-col justify-between  text-[10px] w-[90%] h-[3.25rem]  rounded-lg p-2 mx-auto mb-4 border border-black  bg-[#ffc98f]"
                       key={feed.feedId}
