@@ -4,7 +4,6 @@ import com.codestatus.domain.attendance.dto.AttendanceDto;
 import com.codestatus.domain.attendance.entity.Attendance;
 import com.codestatus.domain.attendance.mapper.AttendanceMapper;
 import com.codestatus.domain.attendance.service.AttendanceService;
-import com.codestatus.domain.attendance.service.AttendanceServiceImpl;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
