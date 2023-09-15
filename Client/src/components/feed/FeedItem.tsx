@@ -6,8 +6,8 @@ import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import axios from '../../utility/axios';
+import useLikeMutation from '../../hooks/useLikeMutation';
+import { FormEventHandler } from 'react';
 
 interface Props {
   feed: Feed;
@@ -28,27 +28,10 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
     createdAt,
   } = feed;
 
-  const [isLiked, setIsLiked] = useState(like);
-  const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+  const { mutate: postLike } = useLikeMutation({ feedId, categoryCode });
 
-  const handleLikeClick = async () => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_APP_BASE_URL}feed/like/${feedId}`,
-      );
-
-      setIsLiked(!isLiked);
-      setCurrentLikeCount(currentLikeCount + 1);
-
-      if (isLiked) {
-        setCurrentLikeCount(currentLikeCount - 1);
-      }
-
-      console.log(response);
-    } catch (error) {
-      console.error('좋아요 클릭 오류:', error);
-      setIsLiked((prevIsLiked) => !prevIsLiked);
-    }
+  const handlePost: FormEventHandler = () => {
+    postLike();
   };
 
   return (
@@ -92,7 +75,7 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
                     to={`/feed/${categoryCode}/search/hashTag/${hashtag.body}`}
                     type="button"
                     key={hashtag.hashTagId}
-                    className="w-fit h-[30px] bg-[#f8d8ae] text-[.5rem] font-[Pretendard] font-bold rounded-[6px] flex justify-center items-center p-[5px] hover:brightness-110 duration-300 cursor-pointer whitespace-nowrap"
+                    className="w-full h-full bg-[#f8d8ae] text-[.5rem] font-[Pretendard] font-bold rounded-[6px] flex justify-center items-center p-[5px] hover:brightness-110 duration-300 cursor-pointer whitespace-nowrap"
                   >
                     # {hashtag.body}
                   </Link>
@@ -110,15 +93,15 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
                 })}
               </div>
               <button
-                onClick={handleLikeClick}
+                onClick={handlePost}
                 className="flex gap-[4px] text-[0.625rem] mr-[4px]"
               >
                 <img
-                  src={isLiked ? clickedLikeButton : likeButton}
+                  src={like ? clickedLikeButton : likeButton}
                   alt="좋아요 아이콘"
                   width={15}
                 />
-                {currentLikeCount}
+                {likeCount}
               </button>
               <div className="flex gap-[4px] text-[0.625rem] mr-[4px]">
                 <img src={commentButton} alt="코멘트 아이콘" width={15} />
