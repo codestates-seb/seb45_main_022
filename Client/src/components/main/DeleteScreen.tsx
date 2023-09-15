@@ -2,18 +2,43 @@ import Backdrop from '../common/Backdrop';
 import reaper from '../../assets/common/reaper.png';
 import useDeleteUserMutation from '../../hooks/useDeleteUserMutation';
 import LoadingBar from '../common/LoadingBar';
+import { useNavigate } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
 
 interface Props {
   nickname: string;
-  setShowDeleteModal: (showDeleteModal: boolean) => boolean;
+  setShowDeleteModal: (showDeleteModal: boolean) => void;
 }
 
 const DeleteScreen = ({ nickname, setShowDeleteModal }: Props) => {
-  const { isLoading, isError, mutate: deleteUser } = useDeleteUserMutation();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const onDeleteSuccess = (data: AxiosResponse) => {
+    if (data.status === 204) {
+      localStorage.removeItem('token');
+      queryClient.removeQueries();
+      navigate('/auth/login');
+      alert('로그아웃 되었습니다.');
+    }
+  };
+
+  const onDeleteError = () => {
+    alert('회원탈퇴 실패!');
+  };
+
+  const {
+    isLoading,
+    isError,
+    mutate: deleteUser,
+  } = useDeleteUserMutation({
+    onSuccess: onDeleteSuccess,
+    onError: onDeleteError,
+  });
+
   const handleDeleteAccount = () => {
     deleteUser();
-    setShowDeleteModal(false);
-    localStorage.clear();
   };
 
   const handleKeepAccount = () => {

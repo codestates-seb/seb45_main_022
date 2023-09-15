@@ -1,17 +1,17 @@
 // import { useNavigate } from 'react-router';
+
+import { AxiosResponse } from 'axios';
 import { deleteAccount } from '../api/user';
 import { useMutation } from '@tanstack/react-query';
 
-export default function useDeleteUserMutation() {
-  //   const navigate = useNavigate();
+interface Params {
+  onSuccess: (data: AxiosResponse) => void;
+  onError: () => void;
+}
+
+export default function useDeleteUserMutation({ onSuccess, onError }: Params) {
   return useMutation(deleteAccount, {
-    onSuccess: (data) => {
-      console.log(data);
-      //   navigate('/login');
-      return;
-    },
-    onError: (error) => {
-      console.log(error);
-    },
+    onSuccess: onSuccess,
+    onError: onError,
   });
 }
