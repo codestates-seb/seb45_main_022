@@ -6,7 +6,8 @@ import ImageUploadModal from '../common/ImageUploadModal';
 import { validateNickname } from '../../utility/validation';
 import { ERROR_MSG, ErrorType } from '../../api/error';
 import axios from 'axios';
-
+import reaper from '../../assets/common/reaper.png';
+import Backdrop from '../common/Backdrop';
 interface Props {
   userInfo: UserInfo;
 }
@@ -122,6 +123,12 @@ const ProfileHeader = ({ userInfo }: Props) => {
               {userInfo.email}
             </span>
           </h1>
+          {/* delete acc */}
+          <div className="flex ">
+            <button className="font-bold text-[.6rem] text-center text-red-700 hover:text-red-600">
+              Delete my account
+            </button>
+          </div>
         </div>
       </div>
       {showImageModal && (
@@ -132,6 +139,26 @@ const ProfileHeader = ({ userInfo }: Props) => {
           onConfirmBtnClick={changeProfileImage}
         />
       )}
+
+      {/* image */}
+      <Backdrop>
+        <div className="relative  bottom-10 left-0 right-0 m-auto w-[44rem] flex flex-col items-center bg-[rgba(255,255,255,0.2)]  ">
+          <img src={reaper} alt="reaper" height={20} width={200} />
+          <div className=" rounded-xl  bg-[#ffc98f] h-[16rem] p-6 flex flex-col justify-around">
+            <p className="leading-loose">
+              <span className="font-bold text-4xl"> {userInfo.nickname}</span>,
+              Do you wish to permanently delete your account?{' '}
+              <span className="text-red-500">
+                There is no going back once deleted.
+              </span>
+            </p>
+            <div className="flex items-center justify-around">
+              <button className="p-4 bg-red-400 rounded-xl">Yes</button>
+              <button className="p-4 bg-green-400 rounded-xl">No</button>
+            </div>
+          </div>
+        </div>
+      </Backdrop>
     </>
   );
 };
