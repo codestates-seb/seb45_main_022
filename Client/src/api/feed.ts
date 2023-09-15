@@ -14,6 +14,7 @@ export interface Feed {
   body: string;
   statName: string;
   feedHashTags: HashTag[];
+  like: boolean;
   likeCount: number;
   commentCount: number;
   createdAt: string;
