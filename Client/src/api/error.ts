@@ -8,6 +8,7 @@ export enum ErrorCode {
   FILE_SIZE_EXCEEDED = 'f001',
   FILE_NOT_IMAGE = 'I001',
   CATEGORY_ID_EXCEEDED = 'P000',
+  CHECK_IN_ALREADY = 'A000',
 }
 
 export const ERROR_MSG: Record<ErrorCode, string> = {
@@ -19,7 +20,8 @@ export const ERROR_MSG: Record<ErrorCode, string> = {
   [ErrorCode.FILE_NOT_FOUND]: 'File not found',
   [ErrorCode.FILE_SIZE_EXCEEDED]: 'File size exceeded',
   [ErrorCode.FILE_NOT_IMAGE]: 'File is not image',
-  [ErrorCode.CATEGORY_ID_EXCEEDED]: 'Category id exceeded',
+  [ErrorCode.CATEGORY_ID_EXCEEDED]: 'ID exceeded',
+  [ErrorCode.CHECK_IN_ALREADY]: 'Already checked in',
 };
 
 export interface ErrorType {

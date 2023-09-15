@@ -1,15 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import ModalFrame from '../common/ModalFrame';
 import { StatusCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { postAttendance } from '../../api/user';
+import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { ERROR_MSG, ErrorType } from '../../api/error';
+import useCheckInQuery from '../../hooks/useCheckInQuery';
 
 const CheckInScreen = () => {
   const [step, setStep] = useState<'select' | 'confirm'>('select');
   const [selectedStatusCode, setSelectedStatusCode] =
     useState<StatusCode | null>(null);
+
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const statusCodes = [
     StatusCode.STR,
@@ -18,6 +26,15 @@ const CheckInScreen = () => {
     StatusCode.CHARM,
     StatusCode.LIVING,
   ];
+
+  const { data: isCheckedIn } = useCheckInQuery();
+
+  useEffect(() => {
+    if (isCheckedIn === true) {
+      navigate('/main');
+    }
+  }, [isCheckedIn, navigate]);
+
   return (
     <Backdrop>
       <div className="relative w-full h-full flex flex-col justify-center items-center">
@@ -34,8 +51,20 @@ const CheckInScreen = () => {
                 {statusCodes.map((statusCode, i) => (
                   <div
                     className="w-[100px] h-[100px] p-[20px] flex justify-center items-center bg-[#a99886] cursor-pointer rounded-[6px] duration-300 hover:scale-110 hover:brightness-125 hover:shadow-[0_0_10px_#000]"
-                    onClick={() => {
+                    onClick={async () => {
                       setSelectedStatusCode(statusCode);
+                      try {
+                        await postAttendance(statusCode);
+                      } catch (error) {
+                        if (axios.isAxiosError<ErrorType>(error)) {
+                          const errorCode = error.response?.data.errorCode;
+                          if (errorCode) {
+                            alert(ERROR_MSG[errorCode]);
+                            return;
+                          }
+                        }
+                        alert('서버와의 통신에 실패했습니다.');
+                      }
                       setStep('confirm');
                     }}
                     key={i}
@@ -58,9 +87,15 @@ const CheckInScreen = () => {
                     src={STATUS_ICON[selectedStatusCode as StatusCode]}
                   />
                 </div>
-                <h1 className="text-[2rem]">Status EXP Up!</h1>
+                <h1 className="text-[2rem]">10 EXP UP!</h1>
               </div>
-              <Link to="/main">
+              <Link
+                onClick={() => {
+                  queryClient.invalidateQueries(['checkIn']);
+                  queryClient.invalidateQueries(['userInfo']);
+                }}
+                to="/main"
+              >
                 <Button>Confirm</Button>
               </Link>
             </div>
