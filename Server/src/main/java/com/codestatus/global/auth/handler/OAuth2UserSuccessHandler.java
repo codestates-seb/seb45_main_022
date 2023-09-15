@@ -30,7 +30,8 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
-        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+
+        String email = getEmail(oAuth2User);
         String path = "";
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         try {
@@ -42,6 +43,11 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         }
         String uri = createURI(queryParams, path).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
+    }
+    private String getEmail(OAuth2User oAuth2User) {
+        if (oAuth2User.getAttributes().containsKey("email")) return (String) oAuth2User.getAttributes().get("email");
+        Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
+        return (String) kakaoAccount.get("email");
     }
 
     private URI createURI(MultiValueMap<String, String> queryParams, String path) {
