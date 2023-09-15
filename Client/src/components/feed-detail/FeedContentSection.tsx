@@ -1,9 +1,11 @@
-import { FaThumbsUp } from 'react-icons/fa';
 import { FeedDetail, deleteFeed } from '../../api/feed';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
-import { useEffect, useState } from 'react';
+import useLikeMutation from '../../hooks/useLikeMutation';
+import { useEffect, useState, FormEventHandler } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CategoryCode } from '../../api/category';
+import likeButton from '../../assets/feed/likeButton.png';
+import clickedLikeButton from '../../assets/feed/clickedLikeButton.png';
 
 interface Props {
   feedDetail: FeedDetail;
@@ -16,27 +18,35 @@ const FeedContentSection = ({
   categoryCode,
   onEditBtnClick,
 }: Props) => {
-  const [isMyFeed, setIsMyFeed] = useState(false);
+  console.log(feedDetail);
 
-  const { data: userInfo } = useUserInfoQuery();
+  const { feedId, nickname, data, feedHashTags, like, likeCount } = feedDetail;
+  const [isMyFeed, setIsMyFeed] = useState(false);
   const navigate = useNavigate();
 
+  const { data: userInfo } = useUserInfoQuery();
+  const { mutate: postLike } = useLikeMutation({ feedId, categoryCode });
+
   useEffect(() => {
-    if (userInfo?.nickname === feedDetail.nickname) {
+    if (userInfo?.nickname === nickname) {
       setIsMyFeed(true);
     }
-  }, [userInfo, feedDetail]);
+  }, [userInfo, feedDetail, nickname]);
 
   const handleDeleteBtnClick = async () => {
     if (window.confirm('정말로 삭제하시겠습니까?')) {
       try {
-        await deleteFeed({ feedId: feedDetail.feedId });
+        await deleteFeed({ feedId });
         alert('삭제 완료');
         navigate(-1);
       } catch (error) {
         alert('삭제 실패');
       }
     }
+  };
+
+  const handlePost: FormEventHandler = () => {
+    postLike();
   };
 
   return (
@@ -46,16 +56,16 @@ const FeedContentSection = ({
         <div className="w-full h-[420px] font-[Pretendard] text-m p-[20px] ">
           <div
             className="w-full h-full bg-[#fee1b8] p-[10px] rounded-xl overflow-y-auto"
-            dangerouslySetInnerHTML={{ __html: feedDetail.data }}
+            dangerouslySetInnerHTML={{ __html: data }}
           />
         </div>
         {/* 해시태그 */}
         <div className="w-full fit-content px-[20px]">
           <div className="bg-[#fee1b8] w-full min-h-[50px] flex items-center justify-start flex-wrap gap-[10px] rounded-xl p-[10px]">
-            {feedDetail.feedHashTags.length === 0 && (
+            {feedHashTags.length === 0 && (
               <span className="text-gray-500 font-semibold">No Tag</span>
             )}
-            {feedDetail.feedHashTags.map((hashtag) => {
+            {feedHashTags.map((hashtag) => {
               return (
                 <Link
                   to={`/feed/${categoryCode}/search/hashTag/${hashtag.body}`}
@@ -75,10 +85,11 @@ const FeedContentSection = ({
         <button
           className="w-[180px] h-[50px] flex flex-row justify-center items-center bg-[#fee1b8] rounded-xl hover:brightness-125 duration-300"
           type="button"
+          onClick={handlePost}
         >
-          <FaThumbsUp size={20} />
+          <img src={like ? clickedLikeButton : likeButton} alt="likeButton" />
           <span className="ml-2 text-gray-500 font-semibold">
-            Like! {feedDetail.likeCount}
+            Like! {likeCount}
           </span>
         </button>
         {isMyFeed && (

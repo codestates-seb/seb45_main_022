@@ -68,6 +68,7 @@ export interface FeedDetail {
   level: number;
   data: string;
   feedHashTags: HashTag[];
+  like: boolean;
   likeCount: number;
   comments: Comment[];
   createdAt: string;
