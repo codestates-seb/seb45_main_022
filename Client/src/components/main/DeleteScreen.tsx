@@ -20,7 +20,7 @@ const DeleteScreen = ({ nickname, setShowDeleteModal }: Props) => {
       localStorage.removeItem('token');
       queryClient.removeQueries();
       navigate('/auth/login');
-      alert('로그아웃 되었습니다.');
+      alert(`${nickname}님, 회원탈퇴 하셨습니다. 로그인 창으로 이동합니다.`);
     }
   };
 
