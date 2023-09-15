@@ -4,7 +4,7 @@ import StatusChart from './StatusChart';
 import StatusListItem from './StatusListItem';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import LoadingBar from '../common/LoadingBar';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const StatusScreen = () => {
   const { isLoading, data } = useUserInfoQuery();
@@ -39,8 +39,9 @@ const StatusScreen = () => {
             ))}
           </div>
         </div>
-
-        <Button onClick={() => navigate(-1)}>Close</Button>
+        <Link to="..">
+          <Button>Close</Button>
+        </Link>
       </div>
     </Backdrop>
   );

@@ -1,6 +1,6 @@
 import useFeedDetailQuery from '../../hooks/useFeedDetailQuery';
 import { CategoryCode } from '../../api/category';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import LoadingBar from '../common/LoadingBar';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
@@ -16,7 +16,6 @@ interface Props {
 
 const FeedDetailModal = ({ isFromSearchResult }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
-  const nav = useNavigate();
 
   const { categoryCodeParam, feedIdParam } = useParams();
   const categoryCode = Number(categoryCodeParam) as CategoryCode;
@@ -69,8 +68,9 @@ const FeedDetailModal = ({ isFromSearchResult }: Props) => {
             feedId={feedId}
           />
         </div>
-
-        <Button onClick={() => nav(-1)}>Close</Button>
+        <Link to="..">
+          <Button>Close</Button>
+        </Link>
       </div>
     </Backdrop>
   );

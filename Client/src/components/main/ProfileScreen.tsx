@@ -3,12 +3,11 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import { useEffect, useRef, useState } from 'react';
 import LoadingBar from '../common/LoadingBar';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ChangePwTab from './ChangePwTab';
 import ProfileHeader from './ProfileHeader';
 import useUserFeedListQuery from '../../hooks/useUserFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
-import { Link } from 'react-router-dom';
 
 interface UserFeed {
   feedId: string;
@@ -135,7 +134,9 @@ const ProfileScreen = () => {
             </div>
           </div>
         </div>
-        <Button onClick={() => navigate(-1)}>Close</Button>
+        <Link to="..">
+          <Button>Close</Button>
+        </Link>
       </div>
     </Backdrop>
   );
