@@ -5,7 +5,7 @@ import {
   CATEGORY_NAME,
   CATEGORY_STATUS_MAP,
 } from '../../utility/category';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { CategoryCode } from '../../api/category';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import Backdrop from '../common/Backdrop';
@@ -45,13 +45,15 @@ const Header = ({ categoryCode }: Props) => {
     return (
       <div className={`w-full h-[60px] flex justify-between items-center`}>
         {/* 닉네임 */}
-        <p
-          className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]"
-          onClick={handleNicknameClick}
-        >
-          ⚔️ {userInfo.nickname}_님
-        </p>
 
+        <Link to={`/feed/${categoryCode}/profile`}>
+          <p
+            className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]"
+            onClick={handleNicknameClick}
+          >
+            ⚔️ {userInfo.nickname}_님
+          </p>
+        </Link>
         {/* 프로필 모달 표시 */}
         {isProfileModalOpen && <ProfileScreen />}
 
@@ -112,8 +114,10 @@ const Header = ({ categoryCode }: Props) => {
                   width: `${
                     (userInfo.statuses[CATEGORY_STATUS_MAP[categoryCode] - 1]
                       .statExp /
-                      userInfo.statuses[CATEGORY_STATUS_MAP[categoryCode] - 1]
-                        .requiredExp) *
+                      (userInfo.statuses[CATEGORY_STATUS_MAP[categoryCode] - 1]
+                        .requiredExp +
+                        userInfo.statuses[CATEGORY_STATUS_MAP[categoryCode] - 1]
+                          .statExp)) *
                     100
                   }%`,
                 }}
@@ -124,7 +128,9 @@ const Header = ({ categoryCode }: Props) => {
                     .statExp
                 } / ${
                   userInfo.statuses[CATEGORY_STATUS_MAP[categoryCode] - 1]
-                    .requiredExp
+                    .requiredExp +
+                  userInfo.statuses[CATEGORY_STATUS_MAP[categoryCode] - 1]
+                    .statExp
                 }`}
               </span>
             </div>

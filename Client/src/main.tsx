@@ -75,6 +75,14 @@ const router = createBrowserRouter([
         element: <FeedPage />,
         children: [
           {
+            path: 'profile',
+            element: <ProfileScreen />,
+          },
+          {
+            path: 'status',
+            element: <StatusScreen />,
+          },
+          {
             path: 'post',
             element: <PostScreen />,
           },
