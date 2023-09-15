@@ -8,6 +8,7 @@ import ChangePwTab from './ChangePwTab';
 import ProfileHeader from './ProfileHeader';
 import useUserFeedListQuery from '../../hooks/useUserFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import { Link } from 'react-router-dom';
 
 interface UserFeed {
   feedId: string;
