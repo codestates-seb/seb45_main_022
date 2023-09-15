@@ -6,8 +6,6 @@ import ImageUploadModal from '../common/ImageUploadModal';
 import { validateNickname } from '../../utility/validation';
 import { ERROR_MSG, ErrorType } from '../../api/error';
 import axios from 'axios';
-import reaper from '../../assets/common/reaper.png';
-import Backdrop from '../common/Backdrop';
 import DeleteScreen from './DeleteScreen';
 interface Props {
   userInfo: UserInfo;
@@ -16,7 +14,7 @@ interface Props {
 const ProfileHeader = ({ userInfo }: Props) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [showNicknameInput, setShowNicknameInput] = useState(false);
-  const [showDeleteModal, setDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const queryClient = useQueryClient();
 
   const nicknameInputRef = useRef<HTMLInputElement>(null);
@@ -65,7 +63,7 @@ const ProfileHeader = ({ userInfo }: Props) => {
   };
 
   const DeleteModalpopup = () => {
-    setDeleteModal(true);
+    setShowDeleteModal(true);
   };
 
   return (
@@ -149,7 +147,12 @@ const ProfileHeader = ({ userInfo }: Props) => {
         />
       )}
 
-      {showDeleteModal && <DeleteScreen nickname={userInfo.nickname} />}
+      {showDeleteModal && (
+        <DeleteScreen
+          nickname={userInfo.nickname}
+          setShowDeleteModal={setShowDeleteModal}
+        />
+      )}
     </>
   );
 };

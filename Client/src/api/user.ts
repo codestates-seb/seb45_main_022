@@ -54,3 +54,7 @@ export const postAttendance = async (StatusCode: StatusCode) => {
   const res = await axios.post(`attendance/${StatusCode}`);
   return res.data;
 };
+
+export const deleteAccount = async () => {
+  return await axios.delete('/user/mypage/delete')
+}
