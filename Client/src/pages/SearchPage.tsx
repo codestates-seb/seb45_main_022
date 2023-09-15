@@ -1,9 +1,6 @@
 import Backdrop from '../components/common/Backdrop';
 import Header from '../components/feed/Header';
 import { Outlet, useParams } from 'react-router';
-import { BackButton } from '../components/common/BackButton';
-import { FrontButton } from '../components/common/BackButton';
-import { CATEGORY_STATUS_MAP } from '../utility/category';
 import SearchResult from '../components/feed/SearchResult';
 
 const SearchPage = () => {
@@ -21,12 +18,6 @@ const SearchPage = () => {
               searchType={searchType || ''}
               keyword={keyword || ''}
             />
-          </div>
-          <div className="flex gap-[900px]">
-            {categoryCode !== 1 && <BackButton categoryCode={categoryCode} />}
-            {categoryCode !== Object.keys(CATEGORY_STATUS_MAP).length && (
-              <FrontButton categoryCode={categoryCode} />
-            )}
           </div>
         </div>
       </Backdrop>

@@ -12,7 +12,7 @@ interface Props {
   detailURL: string;
 }
 
-const LatestFeedItem = ({ feed, categoryCode, detailURL }: Props) => {
+const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
   const {
     nickname,
     profileImage,
@@ -97,4 +97,4 @@ const LatestFeedItem = ({ feed, categoryCode, detailURL }: Props) => {
   );
 };
 
-export default LatestFeedItem;
+export default FeedItem;
