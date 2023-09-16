@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -43,7 +42,7 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public Feed findEntity(long feedId) {
-        return feedCommand.findVerifiedFeed(feedId);
+        return feedCommand.findVerifiedFeedWithUserStatusesAndCategoryStat(feedId);
     }
 
     @Override
@@ -57,21 +56,18 @@ public class FeedServiceImpl implements FeedService {
         if(principal == null){
             return Collections.emptySet();
         }
-        Set<Long> likedFeedIds = feedRepository
-                .findFeedsLikedByUserInList(principal.getId(), feeds)
-                .stream()
-                .map(Feed::getFeedId)
-                .collect(Collectors.toSet());
-        return likedFeedIds;
+        return feedRepository
+                .findFeedsLikedByUserInList(principal.getId(), feeds);
     }
 
     //카테고리 내 피드리스트 조회
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> findAllFeedByCategory(long categoryId, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(categoryId, pageable);
+        return feedRepository.findAllByDeletedIsFalseAndCategoryCategoryId(
+                categoryId,
+                getPageable(page, size)
+        );
     }
 
     //일주일 안에 작성된 피드를 좋아요 순으로 정렬해서 조회
@@ -88,45 +84,49 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByCategoryCategoryIdAndBodyContainingAndDeletedIsFalse(categoryId, text, pageable);
+        return feedRepository.findAllByCategoryCategoryIdAndBodyContainingAndDeletedIsFalse(
+                categoryId, text,
+                getPageable(page, size)
+        );
     }
 
     //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 유저가 쓴 피드목록 조회
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> findFeedByUserAndCategory(long categoryId, String text, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByUserAndDeleted(categoryId, text, pageable);
+        return feedRepository.findByUserAndDeleted(
+                categoryId, text,
+                getPageable(page, size)
+        );
     }
 
     //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> findFeedByHashTagAndCategory(long categoryId, long hashTagId, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCategoryCategoryIdAndFeedHashTagsHashTagHashTagId(categoryId, hashTagId, pageable);
+        return feedRepository.findByCategoryCategoryIdAndFeedHashTagsHashTagHashTagId(
+                categoryId, hashTagId,
+                getPageable(page, size)
+        );
     }
 
     // hashTag Body 로 feed 조회
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> findFeedByHashTagBody(long categoryId, String body, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findByCategoryCategoryIdAndDeletedIsFalseAndFeedHashTagsHashTagBodyContaining(categoryId, body, pageable);
+        return feedRepository.findByCategoryCategoryIdAndDeletedIsFalseAndFeedHashTagsHashTagBodyContaining(
+                categoryId, body,
+                getPageable(page, size)
+        );
     }
 
     //삭제되지않은 피드목록 조회
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> findAllFeedByDeleted(int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByDeletedIsFalse(pageable);
+        return feedRepository.findAllByDeletedIsFalse(
+                getPageable(page, size)
+        );
     }
 
     //관리자 용 모든 피드 조회
@@ -142,7 +142,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void updateEntity(Feed feed, long userId) {
-        Feed findFeed = feedCommand.findVerifiedFeed(feed.getFeedId());
+        Feed findFeed = feedCommand.findVerifiedFeedWithUser(feed.getFeedId());
         CheckUser.isCreator(findFeed.getUser().getUserId(), userId);
 
         Optional.ofNullable(feed.getBody())
@@ -157,20 +157,26 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional(readOnly = true)
     public Page<Feed> myPost(long userId, int page, int size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); //최신순 정렬
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return feedRepository.findAllByUserUserIdAndDeletedIsFalse(userId, pageable);
+        return feedRepository.findAllByUserUserIdAndDeletedIsFalse(
+                userId,
+                getPageable(page, size)
+        );
     }
 
     //db에서 완전 삭제가 아닌 deleted=true 로 수정
     @Override
     public void deleteEntity(long feedId, long userId) {
-        Feed findFeed = feedCommand.findVerifiedFeed(feedId);
+        Feed findFeed = feedCommand.findVerifiedFeedWithUser(feedId);
         CheckUser.isCreator(findFeed.getUser().getUserId(), userId);
         findFeed.setDeleted(true);
         feedRepository.save(findFeed);
 
         commentCommand.deleteCommentAll(findFeed.getComments());
         feedHashTagCommand.deleteFeedHashtagAll(findFeed.getFeedHashTags());
+    }
+
+    private Pageable getPageable(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        return PageRequest.of(page, size, sort);
     }
 }
