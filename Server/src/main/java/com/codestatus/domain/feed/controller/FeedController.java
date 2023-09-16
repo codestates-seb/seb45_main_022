@@ -1,17 +1,17 @@
 package com.codestatus.domain.feed.controller;
 
 import com.codestatus.domain.feed.service.FeedService;
+import com.codestatus.domain.hashTag.entity.FeedHashTag;
 import com.codestatus.domain.hashTag.service.HashTagService;
+import com.codestatus.domain.like.service.LikeService;
 import com.codestatus.domain.user.mapper.UserMapper;
 import com.codestatus.global.auth.dto.PrincipalDto;
 import com.codestatus.domain.category.mapper.CategoryMapper;
 import com.codestatus.global.dto.MultiResponseDto;
 import com.codestatus.domain.feed.dto.FeedPatchDto;
 import com.codestatus.domain.feed.dto.FeedPostDto;
-import com.codestatus.domain.feed.dto.FeedResponseDto;
 import com.codestatus.domain.feed.entity.Feed;
 import com.codestatus.domain.feed.mapper.FeedMapper;
-import com.codestatus.domain.feed.service.FeedServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,6 +34,8 @@ public class FeedController {
 
     private final FeedService feedService;
     private final HashTagService hashTagService;
+    private final LikeService likeService;
+
     private final FeedMapper feedMapper;
     private final CategoryMapper categoryMapper;
     private final UserMapper userMapper;
@@ -55,15 +57,15 @@ public class FeedController {
 
     //피드 상세 조회
     @GetMapping("/{feedId}")
-    public ResponseEntity getFeedByCategory(@PathVariable("feedId") long feedId,
+    public ResponseEntity getFeed(@PathVariable("feedId") long feedId,
                                             @AuthenticationPrincipal PrincipalDto principalDto) {
         Feed feed = feedService.findEntity(feedId);
+        List<FeedHashTag> feedHashTags = hashTagService.getFeedHashTagsByFeedId(feedId);
+        long likeCount = likeService.feedLikeCount(feedId);
         boolean isLike = feedService.isLikeUser(feedId, principalDto.getId());
 
-        FeedResponseDto feedResponseDto =
-                feedMapper.feedToFeedResponseDto(feed, isLike);
-
-        return new ResponseEntity<>(feedResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(
+                feedMapper.feedToFeedResponseDto(feed, isLike, feedHashTags, likeCount), HttpStatus.OK);
     }
 
     //선택한 카테고리 내의 피드 전체 조회
