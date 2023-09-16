@@ -3,16 +3,16 @@ package com.codestatus.domain.comment.service;
 import com.codestatus.domain.comment.entity.Comment;
 import com.codestatus.domain.comment.repository.CommentRepository;
 import com.codestatus.domain.feed.command.FeedCommand;
-import com.codestatus.domain.feed.service.FeedService;
 import com.codestatus.global.exception.BusinessLogicException;
 import com.codestatus.global.exception.ExceptionCode;
 import com.codestatus.global.utils.CheckUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -26,6 +26,12 @@ public class CommentServiceImpl implements CommentService {
     public void createEntity(Comment comment) {
         feedCommand.findVerifiedFeed(comment.getFeed().getFeedId());
         commentRepository.save(comment);
+    }
+
+    @Override
+    public Page<Comment> getEntitys(long feedId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return commentRepository.findAllByFeed(feedId, pageable);
     }
 
     // comment가 존재하는지, 요청한 유저와 리소스의 주인이 일치하는지 검사하고,

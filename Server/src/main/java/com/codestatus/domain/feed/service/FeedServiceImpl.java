@@ -137,6 +137,11 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.findAll(pageRequest);
     }
 
+    @Override
+    public int getStatId(long feedId) {
+        return feedCommand.findVerifiedFeedWithFeedCategoryStat(feedId).getCategory().getStat().getStatId().intValue();
+    }
+
     // feed가 존재하는지, 요청한 유저와 리소스의 주인이 일치하는지 검사하고,
     // body값의 null 판별을 통해 수정
     @Override

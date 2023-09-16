@@ -25,6 +25,9 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     @Query("select f from Feed f join fetch f.user u join fetch u.statuses join fetch f.category c join fetch c.stat where f.feedId=:feedId")
     Optional<Feed> findByFeedIdWithUserStatusesAndCategoryStat(long feedId);
 
+    @Query("select f from Feed f join fetch f.category c join fetch c.stat where f.feedId=:feedId")
+    Optional<Feed> findByFeedIdWithFeedCategoryStat(long feedId);
+
     @Query("SELECT f FROM Feed f WHERE f.category.categoryId = :categoryId AND f.user.nickname LIKE %:user% AND f.deleted = false ")
     Page<Feed> findByUserAndDeleted(@Param("categoryId")long categoryId, @Param("user") String user,  Pageable pageable);
 

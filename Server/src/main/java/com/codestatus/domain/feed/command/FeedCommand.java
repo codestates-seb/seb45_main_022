@@ -34,6 +34,11 @@ public class FeedCommand {
         return checkFeed(feedRepository.findByFeedIdWithUserStatusesAndCategoryStat(feedId));
     }
 
+    @Transactional(readOnly = true)
+    public Feed findVerifiedFeedWithFeedCategoryStat(long feedId){
+        return checkFeed(feedRepository.findByFeedIdWithFeedCategoryStat(feedId));
+    }
+
     public void deleteFeedAll(long userId) {
         List<Feed> feedList = feedRepository.findAllByUserUserIdAndDeletedIsFalse(userId);
         feedList.forEach(feed -> feed.setDeleted(true));
