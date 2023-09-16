@@ -19,7 +19,7 @@ public class Image {
     @Column
     private boolean deleted = false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id", updatable = false)
     private Feed feed;
 

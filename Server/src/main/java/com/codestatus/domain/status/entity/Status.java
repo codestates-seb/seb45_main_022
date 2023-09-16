@@ -22,7 +22,7 @@ public class Status {
     @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stat_id")
     private Stat stat;
 

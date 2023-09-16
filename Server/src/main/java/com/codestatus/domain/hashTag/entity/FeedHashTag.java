@@ -19,11 +19,11 @@ public class FeedHashTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long feedHashTagId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
     private HashTag hashTag;
 
