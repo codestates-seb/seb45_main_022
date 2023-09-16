@@ -31,7 +31,7 @@ public class LikeServiceImpl implements LikeService {
     public void feedLikeOrDisLike(long feedId, long userId){
         // user, feed 유효성 검사
         User user = userCommand.findVerifiedUser(userId);
-        Feed feed = feedCommand.findVerifiedFeed(feedId);
+        Feed feed = feedCommand.findVerifiedFeedWithUser(feedId);
         // 자추 불가
         if (feed.getUser().getUserId() == userId) throw new BusinessLogicException(ExceptionCode.LIKE_BAD_REQUEST);
 
@@ -50,5 +50,10 @@ public class LikeServiceImpl implements LikeService {
             levelCommand.gainExp(feed.getUser(), likeExp, feed.getCategory().getStat().getStatId().intValue());
         }
         likeRepository.save(like);
+    }
+
+    @Override
+    public long feedLikeCount(long feedId) {
+        return likeRepository.countAllByFeedFeedIdAndDeletedIsFalse(feedId);
     }
 }
