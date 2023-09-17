@@ -6,6 +6,7 @@ const useCheckInQuery = () => {
     staleTime: Infinity,
     cacheTime: Infinity,
     meta: {
+      successMessage: 'Successfully checked in',
       errorMessage: 'Failed to get check in status',
     },
   });

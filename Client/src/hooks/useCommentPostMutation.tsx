@@ -8,6 +8,7 @@ interface Params {
 function useCommentPostMutation({ feedId }: Params) {
   return useMutation((body: string) => addCommentData({ feedId, body }), {
     meta: {
+      successMessage: 'Successfully posted comment',
       errorMessage: 'Failed to post comment',
     },
   });

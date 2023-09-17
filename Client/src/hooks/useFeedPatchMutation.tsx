@@ -11,6 +11,7 @@ function useFeedPatchMutation({ feedId }: Params) {
       patchFeed({ ...patchFeedData, feedId }),
     {
       meta: {
+        successMessage: 'Successfully patch feed',
         errorMessage: 'Failed to patch feed',
       },
     },

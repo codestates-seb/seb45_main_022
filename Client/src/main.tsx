@@ -44,6 +44,10 @@ const queryClient = new QueryClient({
     },
   }),
   mutationCache: new MutationCache({
+    onSuccess: (data, v, c, mutation) => {
+      console.log(data, v, c);
+      console.log(mutation.meta?.successMessage || 'Successfully requested');
+    },
     onError: (err, v, c, mutation) => {
       console.log(v, c);
       if (isAxiosError<ErrorType>(err) && err.response) {
