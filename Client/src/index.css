@@ -52,3 +52,23 @@ body {
     'Malgun Gothic',
     sans-serif;
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #fe986c #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #fe986c;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+}

@@ -63,19 +63,19 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
 
           {/* 오른쪽 구간 (전체 너비 2/3) */}
           <div className="w-[175px] h-full flex flex-col justify-between items-start">
-            <div className="w-full h-[50px] pr-[5px] font-[Pretendard] overflow-hidden text-ellipsis whitespace-nowrap">
+            <div className="w-full h-[20px] pr-[5px] font-[Pretendard] overflow-hidden text-ellipsis whitespace-nowrap">
               <Link className="hover:underline" to={detailURL}>
                 {body}
               </Link>
             </div>
-            <div className="w-[150px] h-[60px] flex flex-row justify-start items-center gap-[5px] overflow-x-auto pb-[10px]">
+            <div className="w-[170px] h-[30px] flex flex-row flex-wrap justify-start items-center gap-[5px] overflow-y-auto">
               {feed.feedHashTags.map((hashtag) => {
                 return (
                   <Link
                     to={`/feed/${categoryCode}/search/hashTag/${hashtag.body}`}
                     type="button"
                     key={hashtag.hashTagId}
-                    className="w-full h-full bg-[#f8d8ae] text-[.5rem] font-[Pretendard] font-bold rounded-[6px] flex justify-center items-center p-[5px] hover:brightness-110 duration-300 cursor-pointer whitespace-nowrap"
+                    className="w-fit h-[20px] bg-[#d4c692] text-[.5rem] font-[Pretendard] font-bold rounded-[6px] flex justify-center items-center p-[5px] hover:brightness-110 duration-300 cursor-pointer whitespace-nowrap"
                   >
                     # {hashtag.body}
                   </Link>
