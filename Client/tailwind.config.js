@@ -16,6 +16,7 @@ export default {
         searchBar: "url('/src/assets/feed/searchBar.png')",
         clickedSearchBar: "url('/src/assets/feed/clickedSearchBar.png')",
         notFoundFeed: "url('/src/assets/feed/notFound.gif')",
+        notFoundPage: "url('/src/assets/bg/404.gif')",
       },
     },
     fontFamily: {
