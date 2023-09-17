@@ -29,6 +29,8 @@ const StatusChart = ({ status }: Props) => {
   const [statusNames, setStatusNames] = useState<string[]>([]);
   const [statusLevels, setStatusLevels] = useState<number[]>([]);
 
+  const n = Math.ceil(Math.max(...statusLevels) / 5);
+
   useEffect(() => {
     const statusNameArray = status.map((stat) => STATUS_NAME[stat.statId]);
     const statusLevelArray = status.map((stat) => stat.statLevel);
@@ -44,7 +46,7 @@ const StatusChart = ({ status }: Props) => {
             display: false,
           },
           tooltip: {
-            enabled: false,
+            enabled: true,
           },
         },
         scales: {
@@ -57,7 +59,15 @@ const StatusChart = ({ status }: Props) => {
             },
             ticks: {
               display: false,
+              showLabelBackdrop: false,
+              count: 6,
             },
+            grid: {
+              z: 1,
+            },
+            beginAtZero: true,
+            min: 0,
+            max: n * 5,
           },
         },
       }}
