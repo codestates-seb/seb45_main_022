@@ -17,7 +17,7 @@ public class Ranking {
     private long rankingId;
     @Column
     private int ranks;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }

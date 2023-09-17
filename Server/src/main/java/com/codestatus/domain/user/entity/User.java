@@ -48,7 +48,7 @@ public class User extends Auditable {
     @Column(nullable = false)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<String> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

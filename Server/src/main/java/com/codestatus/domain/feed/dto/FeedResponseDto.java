@@ -24,8 +24,6 @@ public class FeedResponseDto {
 
     private int level;
 
-    // private String body;
-
     private String data;
 
     private List<HashTagResponseDto> feedHashTags;
@@ -34,9 +32,7 @@ public class FeedResponseDto {
 
     private int likeCount;
 
-//    private String feedImages;
-
-    private List<CommentResponseDto> comments;
+//    private List<CommentResponseDto> comments;
 
     private LocalDateTime createdAt;
 

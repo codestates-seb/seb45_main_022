@@ -41,6 +41,12 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<FeedHashTag> getFeedHashTagsByFeedId(long feedId) {
+        return feedHashTagCommand.getFeedHasTags(feedId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<HashTag> findHashTagByBody(String text, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.ASC, "body"); //바디를 가나다순 정렬
         Pageable pageable = PageRequest.of(page, size, sort);

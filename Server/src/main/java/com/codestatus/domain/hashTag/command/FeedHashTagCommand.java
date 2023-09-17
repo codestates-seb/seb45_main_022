@@ -19,6 +19,11 @@ public class FeedHashTagCommand {
         feedHashTagRepository.saveAll(feedHashTags);
     }
 
+    @Transactional(readOnly = true)
+    public List<FeedHashTag> getFeedHasTags(long feedId) {
+        return feedHashTagRepository.findAllByFeedId(feedId);
+    }
+
     public void deleteFeedHashtagAll(long userId) {
         List<FeedHashTag> feedHashTagList = feedHashTagRepository.findAllByFeed_User_UserId(userId);
         deleteFeedHashtagAll(feedHashTagList);

@@ -20,19 +20,37 @@ public class FeedCommand {
 
     @Transactional(readOnly = true)
     public Feed findVerifiedFeed(long feedId){
-        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        return checkFeed(feedRepository.findById(feedId));
 
-        Feed feed = optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
-        if (feed.isDeleted() || !feed.getUser().getUserStatus().equals(User.UserStatus.USER_ACTIVE)) {
-            throw new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND);
-        }
+    }
 
-        return feed;
+    @Transactional(readOnly = true)
+    public Feed findVerifiedFeedWithUser(long feedId) {
+        return checkFeed(feedRepository.findByFeedIdWithUser(feedId));
+    }
+
+    @Transactional(readOnly = true)
+    public Feed findVerifiedFeedWithUserStatusesAndCategoryStat(long feedId) {
+        return checkFeed(feedRepository.findByFeedIdWithUserStatusesAndCategoryStat(feedId));
+    }
+
+    @Transactional(readOnly = true)
+    public Feed findVerifiedFeedWithFeedCategoryStat(long feedId){
+        return checkFeed(feedRepository.findByFeedIdWithFeedCategoryStat(feedId));
     }
 
     public void deleteFeedAll(long userId) {
         List<Feed> feedList = feedRepository.findAllByUserUserIdAndDeletedIsFalse(userId);
         feedList.forEach(feed -> feed.setDeleted(true));
         feedRepository.saveAll(feedList);
+    }
+
+    private Feed checkFeed(Optional<Feed> optionalFeed) {
+        Feed feed = optionalFeed.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND));
+        if (feed.isDeleted()) {
+            throw new BusinessLogicException(ExceptionCode.FEED_NOT_FOUND);
+        }
+
+        return feed;
     }
 }

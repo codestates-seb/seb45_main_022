@@ -23,4 +23,5 @@ public interface FeedService {
     boolean isLikeUser(long feedId, long userId);
     Set<Long> isLikeFeedIds(List<Feed> feeds, PrincipalDto principal);
     Page<Feed> findAllEntity(int page, int size);
+    int getStatId(long feedId);
 }
