@@ -6,7 +6,7 @@ import ImageUploadModal from '../common/ImageUploadModal';
 import { validateNickname } from '../../utility/validation';
 import { ERROR_MSG, ErrorType } from '../../api/error';
 import axios from 'axios';
-
+import DeleteScreen from './DeleteScreen';
 interface Props {
   userInfo: UserInfo;
 }
@@ -14,6 +14,7 @@ interface Props {
 const ProfileHeader = ({ userInfo }: Props) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [showNicknameInput, setShowNicknameInput] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const queryClient = useQueryClient();
 
   const nicknameInputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +60,10 @@ const ProfileHeader = ({ userInfo }: Props) => {
         alert(ERROR_MSG[errorCode]);
       }
     }
+  };
+
+  const DeleteModalpopup = () => {
+    setShowDeleteModal(true);
   };
 
   return (
@@ -122,6 +127,15 @@ const ProfileHeader = ({ userInfo }: Props) => {
               {userInfo.email}
             </span>
           </h1>
+          {/* delete acc */}
+          <div className="flex ">
+            <button
+              onClick={DeleteModalpopup}
+              className="font-bold text-[.6rem] text-center text-red-700 hover:text-red-600"
+            >
+              Delete my account
+            </button>
+          </div>
         </div>
       </div>
       {showImageModal && (
@@ -130,6 +144,13 @@ const ProfileHeader = ({ userInfo }: Props) => {
             setShowImageModal(false);
           }}
           onConfirmBtnClick={changeProfileImage}
+        />
+      )}
+
+      {showDeleteModal && (
+        <DeleteScreen
+          nickname={userInfo.nickname}
+          setShowDeleteModal={setShowDeleteModal}
         />
       )}
     </>
