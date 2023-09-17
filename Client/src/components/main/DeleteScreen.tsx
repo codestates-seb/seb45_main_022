@@ -29,7 +29,6 @@ const DeleteScreen = ({ nickname, setShowDeleteModal }: Props) => {
   if (isSuccess) {
     localStorage.removeItem('token');
     queryClient.removeQueries();
-    alert(`${nickname}, your account has been deleted.`);
     return <Navigate to="/" />;
   }
 

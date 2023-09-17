@@ -31,7 +31,11 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: postLike, isSuccess } = useLikeMutation({
+  const {
+    mutate: postLike,
+    isSuccess,
+    reset,
+  } = useLikeMutation({
     feedId,
     categoryCode,
   });
@@ -41,10 +45,9 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
   };
 
   if (isSuccess) {
-    if (isSuccess) {
-      queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
-      queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
-    }
+    queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    reset();
   }
 
   return (

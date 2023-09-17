@@ -19,7 +19,11 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: postComment } = useCommentPostMutation({ feedId });
+  const {
+    mutate: postComment,
+    isSuccess,
+    reset,
+  } = useCommentPostMutation({ feedId });
   const { data, isFetching, isLoading, hasNextPage, fetchNextPage } =
     useCommentListQuery({ feedId });
 
@@ -36,8 +40,15 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
     const comment = inputRef.current?.value;
     if (!comment) return;
     postComment(comment);
-    queryClient.invalidateQueries(['CommentList', feedId]);
   };
+
+  if (isSuccess) {
+    console.log('success');
+    queryClient.invalidateQueries(['commentList', feedId]);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    reset();
+  }
 
   return (
     <div className="bg-[#ffedd5] flex flex-col w-[500px] h-[600px]">

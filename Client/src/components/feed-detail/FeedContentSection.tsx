@@ -27,7 +27,11 @@ const FeedContentSection = ({
   const queryClient = useQueryClient();
 
   const { data: userInfo } = useUserInfoQuery();
-  const { mutate: postLike, isSuccess } = useLikeMutation({
+  const {
+    mutate: postLike,
+    isSuccess,
+    reset,
+  } = useLikeMutation({
     feedId,
     categoryCode,
   });
@@ -54,6 +58,7 @@ const FeedContentSection = ({
     queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
     queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
     queryClient.invalidateQueries(['feedDetail', feedId]);
+    reset();
   }
 
   return (
