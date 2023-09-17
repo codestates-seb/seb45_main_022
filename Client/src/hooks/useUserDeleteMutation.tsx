@@ -9,7 +9,7 @@ interface Params {
   onError: () => void;
 }
 
-export default function useDeleteUserMutation({ onSuccess, onError }: Params) {
+export default function useUserDeleteMutation({ onSuccess, onError }: Params) {
   return useMutation(deleteAccount, {
     onSuccess: onSuccess,
     onError: onError,

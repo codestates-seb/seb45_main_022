@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FeedEditor from '../feed/FeedEditor';
 // import TagEditor from '../feed/TagEditor';
 import { FeedDetail } from '../../api/feed';
-import usePatchFeedMutation from '../../hooks/usePatchFeedMutation';
+import useFeedPatchMutation from '../../hooks/useFeedPatchMutation';
 import { CategoryCode } from '../../api/category';
 
 interface Props {
@@ -24,7 +24,7 @@ const FeedContentEditSection = ({
   //   setTags(feedDetail.feedHashTags.map((tag) => tag.body));
   // }, [feedDetail]);
 
-  const { mutate: patchFeed } = usePatchFeedMutation({
+  const { mutate: patchFeed } = useFeedPatchMutation({
     categoryCode,
     feedId: feedDetail.feedId,
     onPatchFeedSuccess: finishEditing,

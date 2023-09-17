@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import FeedEditor from './FeedEditor';
 import { useState } from 'react';
 import TagEditor from './TagEditor';
-import usePostFeedMutation from '../../hooks/usePostFeedMutation';
+import useFeedPostMutation from '../../hooks/useFeedPostMutation';
 import LoadingBar from '../common/LoadingBar';
 
 const PostScreen = () => {
@@ -15,7 +15,7 @@ const PostScreen = () => {
   const { categoryCodeParam } = useParams();
   const categoryCode = Number(categoryCodeParam);
 
-  const { mutate: postFeed, isLoading } = usePostFeedMutation(categoryCode);
+  const { mutate: postFeed, isLoading } = useFeedPostMutation(categoryCode);
 
   const handlePost = () => {
     if (body === '' || data === '') {

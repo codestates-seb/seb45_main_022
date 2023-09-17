@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import { ERROR_MSG, ErrorType } from '../api/error';
 import { PostFeedData, postFeed } from '../api/feed';
 
-function usePostFeedMutation(categoryCode: CategoryCode) {
+function useFeedPostMutation(categoryCode: CategoryCode) {
   const nav = useNavigate();
   const queryClient = useQueryClient();
 
@@ -27,4 +27,4 @@ function usePostFeedMutation(categoryCode: CategoryCode) {
   });
 }
 
-export default usePostFeedMutation;
+export default useFeedPostMutation;

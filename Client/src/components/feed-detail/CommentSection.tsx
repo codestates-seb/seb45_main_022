@@ -2,7 +2,7 @@ import { FaCommentDots } from 'react-icons/fa';
 import { CategoryCode } from '../../api/category';
 import CommentItem from './CommentItem';
 import { FormEventHandler, useRef } from 'react';
-import usePostCommentMutation from '../../hooks/usePostCommentMutation';
+import useCommentPostMutation from '../../hooks/useCommentPostMutation';
 import useCommentListQuery from '../../hooks/useCommentListQuery';
 import LoadingBar from '../common/LoadingBar';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
@@ -16,7 +16,7 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
-  const { mutate: postComment } = usePostCommentMutation({ feedId });
+  const { mutate: postComment } = useCommentPostMutation({ feedId });
   const { data, isFetching, isLoading, hasNextPage, fetchNextPage } =
     useCommentListQuery({ feedId });
 

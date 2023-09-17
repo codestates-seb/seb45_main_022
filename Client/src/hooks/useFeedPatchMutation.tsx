@@ -10,7 +10,7 @@ interface Params {
   onPatchFeedSuccess: () => void;
 }
 
-function usePatchFeedMutation({
+function useFeedPatchMutation({
   categoryCode,
   feedId,
   onPatchFeedSuccess,
@@ -39,4 +39,4 @@ function usePatchFeedMutation({
   );
 }
 
-export default usePatchFeedMutation;
+export default useFeedPatchMutation;

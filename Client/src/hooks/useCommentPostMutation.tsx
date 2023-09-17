@@ -5,7 +5,7 @@ interface Params {
   feedId: number;
 }
 
-function usePostCommentMutation({ feedId }: Params) {
+function useCommentPostMutation({ feedId }: Params) {
   const queryClient = useQueryClient();
   return useMutation((body: string) => addCommentData({ feedId, body }), {
     onSuccess: () => {
@@ -17,4 +17,4 @@ function usePostCommentMutation({ feedId }: Params) {
   });
 }
 
-export default usePostCommentMutation;
+export default useCommentPostMutation;

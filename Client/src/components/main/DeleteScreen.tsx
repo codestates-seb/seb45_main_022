@@ -1,6 +1,6 @@
 import Backdrop from '../common/Backdrop';
 import reaper from '../../assets/common/reaper.png';
-import useDeleteUserMutation from '../../hooks/useDeleteUserMutation';
+import useUserDeleteMutation from '../../hooks/useUserDeleteMutation';
 import LoadingBar from '../common/LoadingBar';
 import { useNavigate } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
@@ -32,7 +32,7 @@ const DeleteScreen = ({ nickname, setShowDeleteModal }: Props) => {
     isLoading,
     isError,
     mutate: deleteUser,
-  } = useDeleteUserMutation({
+  } = useUserDeleteMutation({
     onSuccess: onDeleteSuccess,
     onError: onDeleteError,
   });
