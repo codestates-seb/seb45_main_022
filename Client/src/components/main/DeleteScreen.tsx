@@ -1,10 +1,8 @@
 import Backdrop from '../common/Backdrop';
 import reaper from '../../assets/common/reaper.png';
 import useUserDeleteMutation from '../../hooks/useUserDeleteMutation';
-import LoadingBar from '../common/LoadingBar';
-import { useNavigate } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { Navigate } from 'react-router';
 
 interface Props {
   nickname: string;
@@ -12,30 +10,9 @@ interface Props {
 }
 
 const DeleteScreen = ({ nickname, setShowDeleteModal }: Props) => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const onDeleteSuccess = (data: AxiosResponse) => {
-    if (data.status === 204) {
-      localStorage.removeItem('token');
-      queryClient.removeQueries();
-      navigate('/auth/login');
-      alert(`${nickname}님, 회원탈퇴 하셨습니다. 로그인 창으로 이동합니다.`);
-    }
-  };
-
-  const onDeleteError = () => {
-    alert('회원탈퇴 실패!');
-  };
-
-  const {
-    isLoading,
-    isError,
-    mutate: deleteUser,
-  } = useUserDeleteMutation({
-    onSuccess: onDeleteSuccess,
-    onError: onDeleteError,
-  });
+  const { isLoading, isSuccess, mutate: deleteUser } = useUserDeleteMutation();
 
   const handleDeleteAccount = () => {
     deleteUser();
@@ -46,12 +23,16 @@ const DeleteScreen = ({ nickname, setShowDeleteModal }: Props) => {
   };
 
   if (isLoading) {
-    return <LoadingBar />;
+    return null;
   }
 
-  if (isError) {
-    return <p>Error</p>;
+  if (isSuccess) {
+    localStorage.removeItem('token');
+    queryClient.removeQueries();
+    alert(`${nickname}, your account has been deleted.`);
+    return <Navigate to="/" />;
   }
+
   return (
     <Backdrop>
       <div className="relative  bottom-10 left-0 right-0 m-auto w-[44rem] flex flex-col items-center  ">

@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import ModalFrame from '../common/ModalFrame';
 import { StatusCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { postAttendance } from '../../api/user';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { ERROR_MSG, ErrorType } from '../../api/error';
-import useCheckInQuery from '../../hooks/useCheckInQuery';
 
 const CheckInScreen = () => {
   const [step, setStep] = useState<'select' | 'confirm'>('select');
@@ -17,7 +16,6 @@ const CheckInScreen = () => {
     useState<StatusCode | null>(null);
 
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const statusCodes = [
     StatusCode.STR,
@@ -26,14 +24,6 @@ const CheckInScreen = () => {
     StatusCode.CHARM,
     StatusCode.LIVING,
   ];
-
-  const { data: isCheckedIn } = useCheckInQuery();
-
-  useEffect(() => {
-    if (isCheckedIn === true) {
-      navigate('/main');
-    }
-  }, [isCheckedIn, navigate]);
 
   return (
     <Backdrop>

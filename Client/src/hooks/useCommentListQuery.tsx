@@ -16,6 +16,9 @@ const useCommentListQuery = ({ feedId }: Params) => {
           : undefined;
       },
       refetchOnWindowFocus: false,
+      meta: {
+        errorMessage: 'Failed to get comment list',
+      },
     },
   );
 };

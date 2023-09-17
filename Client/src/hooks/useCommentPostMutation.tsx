@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { addCommentData } from '../api/comment';
 
 interface Params {
@@ -6,13 +6,9 @@ interface Params {
 }
 
 function useCommentPostMutation({ feedId }: Params) {
-  const queryClient = useQueryClient();
   return useMutation((body: string) => addCommentData({ feedId, body }), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['CommentList', feedId]);
-    },
-    onError: (error) => {
-      console.error('댓글 생성 오류:', error);
+    meta: {
+      errorMessage: 'Failed to post comment',
     },
   });
 }

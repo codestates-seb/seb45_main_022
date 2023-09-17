@@ -8,6 +8,7 @@ import { Feed } from '../../api/feed';
 import { Link } from 'react-router-dom';
 import useLikeMutation from '../../hooks/useLikeMutation';
 import { FormEventHandler } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   feed: Feed;
@@ -28,11 +29,23 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
     createdAt,
   } = feed;
 
-  const { mutate: postLike } = useLikeMutation({ feedId, categoryCode });
+  const queryClient = useQueryClient();
 
-  const handlePost: FormEventHandler = () => {
+  const { mutate: postLike, isSuccess } = useLikeMutation({
+    feedId,
+    categoryCode,
+  });
+
+  const handleLikeBtnClick: FormEventHandler = () => {
     postLike();
   };
+
+  if (isSuccess) {
+    if (isSuccess) {
+      queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+      queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    }
+  }
 
   return (
     <>
@@ -93,7 +106,7 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
                 })}
               </div>
               <button
-                onClick={handlePost}
+                onClick={handleLikeBtnClick}
                 className="flex gap-[4px] text-[0.625rem] mr-[4px]"
               >
                 <img

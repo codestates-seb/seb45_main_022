@@ -4,33 +4,27 @@ import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
 import Button from '../common/Button';
 import LoadingBar from '../common/LoadingBar';
-import { useNavigate } from 'react-router';
-import { AxiosError } from 'axios';
+import { Navigate, useNavigate } from 'react-router';
 import useLoginMutation from '../../hooks/useLoginMutation';
+import { isAxiosError } from 'axios';
 import { ErrorType } from '../../api/error';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showLoginErrMsg, setShowLoginErrMsg] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   const navigate = useNavigate();
 
-  const onLoginError = (err: AxiosError<ErrorType>) => {
-    console.log('Login fail', err);
-    localStorage.removeItem('token');
-    if (err.response?.status === 401) {
-      setShowLoginErrMsg(true);
-      return;
-    }
-    alert('User authentication error');
-  };
-
-  const { isLoading, mutate: login } = useLoginMutation({
-    onError: onLoginError,
-  });
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    data,
+    mutate: login,
+  } = useLoginMutation();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,17 +33,25 @@ const Login = () => {
 
   if (isLoading) return <LoadingBar />;
 
+  if (isSuccess) {
+    const token = data.token;
+    localStorage.setItem('token', token);
+    return <Navigate to="/main" />;
+  }
+
   return (
     <ModalFrame height={550} width={780}>
       <form
         onSubmit={handleLogin}
         className="flex flex-col items-center justify-center w-[500px] p-[12px]"
       >
-        {showLoginErrMsg && (
-          <p className="text-[0.625rem] my-[4px] text-red-500">
-            Please check email or password
-          </p>
-        )}
+        {isError &&
+          isAxiosError<ErrorType>(error) &&
+          error.response?.data.errorCode && (
+            <p className="text-[0.625rem] my-[4px] text-red-500">
+              Please check email or password
+            </p>
+          )}
         <h1 className="my-[16px] text-2xl">Login</h1>
         <div className="flex items-center relative">
           {isEmailFocused && (

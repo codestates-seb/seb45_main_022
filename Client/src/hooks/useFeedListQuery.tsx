@@ -19,6 +19,9 @@ const useFeedListQuery = ({ categoryCode, type, keyword }: Params) => {
           : undefined;
       },
       refetchOnWindowFocus: false,
+      meta: {
+        errorMessage: 'Failed to get feed list',
+      },
     },
   );
 };

@@ -1,21 +1,24 @@
 import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import FeedEditor from './FeedEditor';
 import { useState } from 'react';
 import TagEditor from './TagEditor';
 import useFeedPostMutation from '../../hooks/useFeedPostMutation';
 import LoadingBar from '../common/LoadingBar';
+import { useQueryClient } from '@tanstack/react-query';
 
 const PostScreen = () => {
   const [body, setBody] = useState('');
   const [data, setData] = useState('');
   const [tags, setTags] = useState<string[]>([]);
 
+  const queryClient = useQueryClient();
+
   const { categoryCodeParam } = useParams();
   const categoryCode = Number(categoryCodeParam);
 
-  const { mutate: postFeed, isLoading } = useFeedPostMutation(categoryCode);
+  const { mutate: postFeed, isLoading, isSuccess } = useFeedPostMutation();
 
   const handlePost = () => {
     if (body === '' || data === '') {
@@ -24,6 +27,12 @@ const PostScreen = () => {
     }
     postFeed({ body, data, tags, categoryCode });
   };
+
+  if (isSuccess) {
+    queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    return <Navigate to={`/feed/${categoryCode}`} />;
+  }
 
   return (
     <Backdrop>

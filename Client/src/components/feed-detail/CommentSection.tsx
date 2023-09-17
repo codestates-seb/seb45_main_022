@@ -6,6 +6,7 @@ import useCommentPostMutation from '../../hooks/useCommentPostMutation';
 import useCommentListQuery from '../../hooks/useCommentListQuery';
 import LoadingBar from '../common/LoadingBar';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -15,6 +16,8 @@ interface Props {
 const CommentSection = ({ categoryCode, feedId }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
+
+  const queryClient = useQueryClient();
 
   const { mutate: postComment } = useCommentPostMutation({ feedId });
   const { data, isFetching, isLoading, hasNextPage, fetchNextPage } =
@@ -33,6 +36,7 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
     const comment = inputRef.current?.value;
     if (!comment) return;
     postComment(comment);
+    queryClient.invalidateQueries(['CommentList', feedId]);
   };
 
   return (

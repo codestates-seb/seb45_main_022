@@ -1,11 +1,12 @@
 import { FeedDetail, deleteFeed } from '../../api/feed';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 import useLikeMutation from '../../hooks/useLikeMutation';
-import { useEffect, useState, FormEventHandler } from 'react';
+import { FormEventHandler } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CategoryCode } from '../../api/category';
 import likeButton from '../../assets/feed/likeButton.png';
 import clickedLikeButton from '../../assets/feed/clickedLikeButton.png';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   feedDetail: FeedDetail;
@@ -21,17 +22,17 @@ const FeedContentSection = ({
   console.log(feedDetail);
 
   const { feedId, nickname, data, feedHashTags, like, likeCount } = feedDetail;
-  const [isMyFeed, setIsMyFeed] = useState(false);
   const navigate = useNavigate();
 
-  const { data: userInfo } = useUserInfoQuery();
-  const { mutate: postLike } = useLikeMutation({ feedId, categoryCode });
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (userInfo?.nickname === nickname) {
-      setIsMyFeed(true);
-    }
-  }, [userInfo, feedDetail, nickname]);
+  const { data: userInfo } = useUserInfoQuery();
+  const { mutate: postLike, isSuccess } = useLikeMutation({
+    feedId,
+    categoryCode,
+  });
+
+  const isMyFeed = userInfo?.nickname === nickname;
 
   const handleDeleteBtnClick = async () => {
     if (window.confirm('정말로 삭제하시겠습니까?')) {
@@ -45,9 +46,15 @@ const FeedContentSection = ({
     }
   };
 
-  const handlePost: FormEventHandler = () => {
+  const handleLikeBtnClick: FormEventHandler = () => {
     postLike();
   };
+
+  if (isSuccess) {
+    queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    queryClient.invalidateQueries(['feedDetail', feedId]);
+  }
 
   return (
     <div className="w-[500px] h-[600px] bg-[#f1d4ae] flex flex-col justify-between">
@@ -85,7 +92,7 @@ const FeedContentSection = ({
         <button
           className="w-[180px] h-[50px] flex flex-row justify-center items-center bg-[#fee1b8] rounded-xl hover:brightness-125 duration-300"
           type="button"
-          onClick={handlePost}
+          onClick={handleLikeBtnClick}
         >
           <img src={like ? clickedLikeButton : likeButton} alt="likeButton" />
           <span className="ml-2 text-gray-500 font-semibold">

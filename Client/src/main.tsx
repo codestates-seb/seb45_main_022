@@ -6,7 +6,12 @@ import {
   Navigate,
   RouterProvider,
 } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+  MutationCache,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import TitlePage from './pages/TitlePage';
 import FeedPage from './pages/FeedPage';
@@ -17,13 +22,41 @@ import AuthPage from './pages/AuthPage';
 import LoginSection from './components/auth/LoginSection';
 import RegisterSection from './components/auth/RegisterSection';
 import MainPage from './pages/MainPage';
-import CheckInScreen from './components/main/CheckInScreen';
 import ProfileScreen from './components/main/ProfileScreen';
 import StatusScreen from './components/main/StatusScreen';
 import PrivateRoute from './pages/PrivateRoute';
 import FeedDetailModal from './components/feed-detail/FeedDetailModal';
+import { isAxiosError } from 'axios';
+import { ERROR_MSG, ErrorType } from './api/error';
+import CheckInPage from './pages/CheckInPage';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (err, query) => {
+      if (isAxiosError<ErrorType>(err) && err.response) {
+        const { errorCode } = err.response.data;
+        if (ERROR_MSG[errorCode]) {
+          console.log(ERROR_MSG[errorCode]);
+          return;
+        }
+      }
+      console.log(query.meta?.errorMessage || 'Failed to request');
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError: (err, v, c, mutation) => {
+      console.log(v, c);
+      if (isAxiosError<ErrorType>(err) && err.response) {
+        const { errorCode } = err.response.data;
+        if (ERROR_MSG[errorCode]) {
+          console.log(ERROR_MSG[errorCode]);
+          return;
+        }
+      }
+      console.log(mutation.meta?.errorMessage || 'Failed to request');
+    },
+  }),
+});
 
 const router = createBrowserRouter([
   {
@@ -52,10 +85,6 @@ const router = createBrowserRouter([
         element: <MainPage />,
         children: [
           {
-            path: 'checkin',
-            element: <CheckInScreen />,
-          },
-          {
             path: 'profile',
             element: <ProfileScreen />,
           },
@@ -65,7 +94,10 @@ const router = createBrowserRouter([
           },
         ],
       },
-
+      {
+        path: 'checkin',
+        element: <CheckInPage />,
+      },
       {
         path: '/map/:statusCodeParam',
         element: <MapPage />,
