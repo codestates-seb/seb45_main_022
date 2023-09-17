@@ -1,20 +1,32 @@
 import { FaCommentDots } from 'react-icons/fa';
 import { CategoryCode } from '../../api/category';
-import { Comment } from '../../api/feed';
 import CommentItem from './CommentItem';
 import { FormEventHandler, useRef } from 'react';
 import usePostCommentMutation from '../../hooks/usePostCommentMutation';
+import useCommentListQuery from '../../hooks/useCommentListQuery';
+import LoadingBar from '../common/LoadingBar';
+import useInfinteScroll from '../../hooks/useInfiniteScroll';
 
 interface Props {
-  comments: Comment[];
   categoryCode: CategoryCode;
   feedId: number;
 }
 
-const CommentSection = ({ comments, categoryCode, feedId }: Props) => {
+const CommentSection = ({ categoryCode, feedId }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   const { mutate: postComment } = usePostCommentMutation({ feedId });
+  const { data, isFetching, isLoading, hasNextPage, fetchNextPage } =
+    useCommentListQuery({ feedId });
+
+  useInfinteScroll({
+    targetEl: triggerRef.current,
+    hasMore: hasNextPage || false,
+    onIntersect: fetchNextPage,
+  });
+
+  const comments = data?.pages.flatMap((page) => page.data) ?? [];
 
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -37,6 +49,8 @@ const CommentSection = ({ comments, categoryCode, feedId }: Props) => {
             feedId={feedId}
           />
         ))}
+        {(isLoading || isFetching) && <LoadingBar />}
+        <div ref={triggerRef}></div>
       </div>
       <div className="h-[70px] flex flex-row justify-between items-center p-[20px]">
         <div className="flex flex-row justify-center items-center gap-[5px]">
