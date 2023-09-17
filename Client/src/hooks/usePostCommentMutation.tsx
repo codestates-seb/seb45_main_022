@@ -9,7 +9,7 @@ function usePostCommentMutation({ feedId }: Params) {
   const queryClient = useQueryClient();
   return useMutation((body: string) => addCommentData({ feedId, body }), {
     onSuccess: () => {
-      queryClient.invalidateQueries(['feedDetail', feedId]);
+      queryClient.invalidateQueries(['CommentList', feedId]);
     },
     onError: (error) => {
       console.error('댓글 생성 오류:', error);

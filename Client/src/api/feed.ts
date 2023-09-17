@@ -70,18 +70,8 @@ export interface FeedDetail {
   feedHashTags: HashTag[];
   like: boolean;
   likeCount: number;
-  comments: Comment[];
   createdAt: string;
   modifiedAt: string;
-}
-
-export interface Comment {
-  commentId: number;
-  nickname: string;
-  profileImage: string;
-  level: number;
-  body: string;
-  createDate: string;
 }
 
 export const getFeedDetail = async (feedId: Feed['feedId']) => {

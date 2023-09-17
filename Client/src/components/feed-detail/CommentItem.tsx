@@ -1,20 +1,13 @@
 import { CategoryCode } from '../../api/category';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { STATUS_ICON } from '../../utility/status';
-import { editCommentData, deleteCommentData } from '../../api/comment';
+import { editCommentData, deleteCommentData, Comment } from '../../api/comment';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
 
 interface CommentProps {
-  comment: {
-    commentId: number;
-    nickname: string;
-    profileImage: string;
-    level: number;
-    body: string;
-    createDate: string;
-  };
+  comment: Comment;
   categoryCode: CategoryCode;
   feedId: number;
 }
@@ -43,7 +36,7 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
     try {
       await deleteCommentData({ commentId });
       console.log(feedId);
-      queryClient.invalidateQueries(['feedDetail', feedId]);
+      queryClient.invalidateQueries(['CommentList', feedId]);
       alert('댓글 삭제완료');
     } catch (error) {
       alert('삭제 실패');
@@ -58,7 +51,7 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
       });
       setCommentText(commentText);
       setIsEdited(false);
-      queryClient.invalidateQueries(['feedDetail', feedId]);
+      queryClient.invalidateQueries(['CommentList', feedId]);
       alert('댓글 수정완료');
     } catch {
       alert('수정 실패');
