@@ -53,11 +53,7 @@ const UserFeedsTab = () => {
             key={feed.feedId}
           >
             <div className="cursor-pointer font-[Pretendard]  flex flex-col justify-between  text-[10px] w-[90%] h-[3.25rem]  rounded-lg p-2 mx-auto mb-4 border border-black  bg-[#ffc98f]">
-              <p className="text-[12px] font-bold">
-                {feed.body.length > 25
-                  ? feed.body.slice(0, 25) + '...'
-                  : feed.body}
-              </p>
+              <p className="text-[12px] font-bold line-clamp-1">{feed.body}</p>
               <div className="flex items-center justify-between">
                 <span>{feed.commentCount} comments</span>
                 <span>{feed.createdAt.slice(0, 10)}</span>
