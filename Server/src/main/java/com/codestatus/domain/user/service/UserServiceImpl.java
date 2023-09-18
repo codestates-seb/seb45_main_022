@@ -3,6 +3,7 @@ package com.codestatus.domain.user.service;
 import com.codestatus.domain.comment.command.CommentCommand;
 import com.codestatus.domain.feed.command.FeedCommand;
 import com.codestatus.domain.hashTag.command.FeedHashTagCommand;
+import com.codestatus.domain.status.command.StatusCommand;
 import com.codestatus.domain.user.command.UserCommand;
 import com.codestatus.global.auth.utils.CustomAuthorityUtils;
 import com.codestatus.global.aws.FileStorageService;
@@ -35,8 +36,7 @@ public class UserServiceImpl implements UserService {
     private final FeedCommand feedCommand;
     private final FeedHashTagCommand feedHashTagCommand;
     private final CommentCommand commentCommand;
-
-    private final StatusRepository statusRepository;
+    private final StatusCommand statusCommand;
 
     private final CustomAuthorityUtils customAuthorityUtils;
     private final PasswordEncoder passwordEncoder;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         repository.save(user); // 유저 저장
 
         // 유저 생성 시 기본 status 생성
-        createStatus(user);
+        statusCommand.createStatus(user);
     }
 
     // 유저 조회
@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService {
         feedCommand.deleteFeedAll(findUser.getUserId());
         feedHashTagCommand.deleteFeedHashtagAll(findUser.getUserId());
         commentCommand.deleteCommentAll(findUser.getUserId());
+        statusCommand.resetStatus(findUser.getUserId());
 
         repository.save(findUser);
     }
@@ -145,23 +146,5 @@ public class UserServiceImpl implements UserService {
         OptionalUser.ifPresent(user -> {
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS_NICKNAME); // 닉네임이 이미 존재한다면 예외 발생
         });
-    }
-
-    // status 생성
-    private void createStatus(User user) {
-        List<Status> statusList = new ArrayList<>();
-        for(int i=1; i<=5 ; i++) {
-            Stat stat = new Stat();
-            stat.setStatId((long) i);
-
-            Status status = new Status();
-            status.setUser(user);
-            status.setStat(stat);
-            status.setStatLevel(1);
-            status.setStatExp(0);
-            status.setRequiredExp(100); // level1 -> level2 초기 필요 경험치
-            statusList.add(status);
-        }
-        statusRepository.saveAll(statusList);
     }
 }
