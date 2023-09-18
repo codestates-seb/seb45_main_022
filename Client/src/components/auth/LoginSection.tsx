@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import useLoginMutation from '../../hooks/useLoginMutation';
 import { ErrorType } from '../../api/error';
+import { kakaoAuth } from '../../api/auth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -102,7 +103,10 @@ const Login = () => {
         <Button>Login</Button>
       </form>
       <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
-        <button className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
+        <button
+          onClick={kakaoAuth}
+          className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black "
+        >
           Kakao Login
         </button>
         <button className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">

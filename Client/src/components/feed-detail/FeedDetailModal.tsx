@@ -63,7 +63,7 @@ const FeedDetailModal = ({ isFromSearchResult }: Props) => {
             />
           )}
           <CommentSection
-            comments={feedDetail.comments}
+            // comments={feedDetail.comments}
             categoryCode={categoryCode}
             feedId={feedId}
           />
