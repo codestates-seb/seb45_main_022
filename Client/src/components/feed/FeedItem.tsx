@@ -61,7 +61,7 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
             </div>
             <div
               className={`w-full flex justify-center items-center ${
-                nickname.length > 3 ? 'text-xs' : 'text-sm'
+                nickname.length > 3 ? 'text-[0.625rem]' : 'text-sm'
               }`}
             >
               {nickname}
