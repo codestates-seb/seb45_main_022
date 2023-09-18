@@ -2,7 +2,6 @@ package com.codestatus.domain.user.entity;
 
 import com.codestatus.global.audit.Auditable;
 import com.codestatus.domain.feed.entity.Feed;
-import com.codestatus.domain.ranking.entity.Ranking;
 import com.codestatus.domain.status.entity.Status;
 import com.codestatus.domain.like.entity.Like;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,9 +36,6 @@ public class User extends Auditable {
 
     @OneToMany(mappedBy = "user")
     private List<Feed> feeds = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Ranking> rankings = new ArrayList<>();
 
     @Column(nullable = false)
     private String profileImage;
