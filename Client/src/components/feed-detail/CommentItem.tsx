@@ -64,8 +64,13 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
       className="  p-2  my-2 flex flex-col rounded-lg bg-white shadow-md "
     >
       <div className="flex  items-center   ">
-        <div className="flex flex-col items-center w-[7.5rem]  ">
-          <img src={comment.profileImage} alt="profile image" width={45} />
+        <div className="flex flex-col items-center w-[7.5rem]">
+          <img
+            src={comment.profileImage}
+            alt="profile image"
+            width={45}
+            className="rounded-[4px]"
+          />
 
           <span className="font-[Pretendard] font-semibold">
             {comment.nickname}
@@ -86,31 +91,20 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
           )}
         </div>
       </div>
-      <div className="flex items-center justify-evenly">
-        <div className="flex mt-1 items-center justify-between ">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <img
             src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
             alt="muscle icon"
             width={16}
+            className="-mt-[3px] ml-[31px]"
           />
-          <span className="font-[Pretendard] text-sm ml-[0.5rem]">
+          <span className="font-[Pretendard] text-sm ml-[6px]">
             Lv. {comment.level}
           </span>
         </div>
-        <div className=" text-center">
-          <span className="font-[Pretendard] text-sm text-gray-500 ">
-            {new Date(comment.createDate).toLocaleTimeString('ko-KR', {
-              year: '2-digit',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true,
-            })}
-          </span>
-        </div>
         {isNicknameMatched && (
-          <>
+          <div className="w-[80px] flex justify-between items-center">
             {isEdited ? (
               <button
                 onClick={() => handleEditComment(comment.commentId)}
@@ -132,8 +126,20 @@ const CommentItem = ({ comment, categoryCode, feedId }: CommentProps) => {
             >
               삭제
             </button>
-          </>
+          </div>
         )}
+        <div className=" text-center">
+          <span className="font-[Pretendard] text-sm text-gray-500 ">
+            {new Date(comment.createDate).toLocaleTimeString('ko-KR', {
+              year: '2-digit',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            })}
+          </span>
+        </div>
       </div>
     </div>
   );

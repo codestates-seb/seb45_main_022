@@ -21,7 +21,7 @@ const UserInfoSection = ({ feedDetail, categoryCode }: Props) => {
         <span className="font-[Pretendard] font-semibold text-[20px] ">
           {feedDetail.nickname}
         </span>
-        <div className="flex mt-1 items-center ">
+        <div className="flex mt-1 items-center -ml-2">
           <img
             src={STATUS_ICON[CATEGORY_STATUS_MAP[categoryCode]]}
             alt="stat icon"

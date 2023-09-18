@@ -60,3 +60,19 @@ export const CATEGORY_STATUS_MAP: Record<CategoryCode, StatusCode> = {
   [CategoryCode.TRAVEL]: StatusCode.LIVING,
   [CategoryCode.COOKING]: StatusCode.LIVING,
 };
+
+export const CATEGORY_FEED_MAP: Record<CategoryCode, string> = {
+  [CategoryCode.WEIGHT]: 'bg-strFeed',
+  [CategoryCode.CLIMBING]: 'bg-strFeed',
+  [CategoryCode.BALLGAME]: 'bg-dexFeed',
+  [CategoryCode.ESPORTS]: 'bg-dexFeed',
+  [CategoryCode.JOGGING]: 'bg-dexFeed',
+  [CategoryCode.READING]: 'bg-intFeed',
+  [CategoryCode.STUDY]: 'bg-intFeed',
+  [CategoryCode.IT]: 'bg-intFeed',
+  [CategoryCode.BEAUTY]: 'bg-charmFeed',
+  [CategoryCode.MUSIC]: 'bg-charmFeed',
+  [CategoryCode.INTERIOR]: 'bg-livingFeed',
+  [CategoryCode.TRAVEL]: 'bg-livingFeed',
+  [CategoryCode.COOKING]: 'bg-livingFeed',
+};
