@@ -1,21 +1,15 @@
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const NotFoundPage = () => {
-  const [displayText, setDisplayText] = useState('can.. you see me..?');
-
-  const handleClick = () => {
-    setDisplayText(displayText + ' go.. away..');
-  };
-
   return (
-    <div className="w-screen h-screen bg-notFoundPage bg-cover flex justify-center cursor-pointer">
-      <div
-        className="flex items-end text-red-800 text-[1.5rem]"
-        onClick={handleClick}
-      >
-        {displayText}
+    <Link to="/">
+      <div className="w-screen h-screen bg-notFoundPage bg-cover bg-center bg-no-repeat flex justify-center items-end cursor-pointer text-white">
+        <div className="flex flex-col justify-center items-center mb-[15px]">
+          <span>How.. did you get there..?</span>
+          <span>Click anywhere & come back home.</span>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
