@@ -47,6 +47,9 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
   if (isSuccess) {
     queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
     queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'content']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'hashTag']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'user']);
     reset();
   }
 
