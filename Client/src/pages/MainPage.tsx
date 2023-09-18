@@ -43,7 +43,7 @@ const MainPage = () => {
           </div>
         </Link>
         {/* 문 - 로그아웃 */}
-        <Link to="/title" onClick={handleLogout}>
+        <Link to="/" onClick={handleLogout}>
           <div className="absolute left-[562px] top-[540px] flex flex-col justify-between items-center gap-[16px]">
             <p className="text-[.8rem] text-white drop-shadow-[0_0_2px_#000]">
               Logout
