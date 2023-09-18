@@ -23,11 +23,12 @@ import StatusScreen from './components/main/StatusScreen';
 import PrivateRoute from './pages/PrivateRoute';
 import FeedDetailModal from './components/feed-detail/FeedDetailModal';
 import CheckInPage from './pages/CheckInPage';
+import OtherUserProfileScreen from './components/main/OtherUserProfileScreen';
+import NotFoundPage from './pages/NotFoundPage';
 import { isAxiosError } from 'axios';
 import { ERROR_MSG, ErrorType } from './api/error';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NotFoundPage from './pages/NotFoundPage';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -120,6 +121,10 @@ const router = createBrowserRouter([
             element: <ProfileScreen />,
           },
           {
+            path: 'profile/:nickname',
+            element: <OtherUserProfileScreen />,
+          },
+          {
             path: 'status',
             element: <StatusScreen />,
           },
@@ -137,6 +142,10 @@ const router = createBrowserRouter([
         path: '/feed/:categoryCodeParam/search/:searchType/:keyword',
         element: <SearchPage />,
         children: [
+          {
+            path: 'profile/:nickname',
+            element: <OtherUserProfileScreen />,
+          },
           {
             path: 'detail/:feedIdParam',
             element: <FeedDetailModal isFromSearchResult />,

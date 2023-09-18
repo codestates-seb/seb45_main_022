@@ -5,7 +5,7 @@ import { CategoryCode } from '../../api/category';
 import { STATUS_ICON } from '../../utility/status';
 import { CATEGORY_STATUS_MAP } from '../../utility/category';
 import { Feed } from '../../api/feed';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useLikeMutation from '../../hooks/useLikeMutation';
 import { FormEventHandler } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,6 +17,8 @@ interface Props {
 }
 
 const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
+  const nav = useNavigate();
+
   const {
     nickname,
     profileImage,
@@ -53,18 +55,25 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
     reset();
   }
 
+  console.log(feed);
+
   return (
     <>
       <div className="w-[300px] h-[140px] bg-cover bg-center bg-feedBox">
         <div className="w-full h-full p-[28px] flex flex-row justify-between">
           {/* 왼쪽 구간 (전체 너비 1/3) */}
-          <div className="w-[60px] h-full flex flex-col justify-between items-center">
+          <div
+            className="w-[60px] h-full flex flex-col justify-between items-center cursor-pointer"
+            onClick={() => nav(`profile/${feed.nickname}`)}
+          >
             <div className="bg-[url('/src/assets/common/profile-frame.png')] bg-cover bg-no-repeat w-[50px] h-[50px] p-[5px]">
               <img src={profileImage} alt="profile" />
             </div>
             <div
               className={`w-full flex justify-center items-center ${
-                nickname.length > 3 ? 'text-[0.625rem]' : 'text-sm'
+                nickname.length > 3
+                  ? 'text-[0.625rem] mb-[5px] mt-[3px]'
+                  : 'text-sm mb-[3px]'
               }`}
             >
               {nickname}

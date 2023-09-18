@@ -1,6 +1,10 @@
 import axios from '../utility/axios';
 import { CategoryCode } from './category';
 
+export interface CategoryCodeParams {
+  categoryCode: CategoryCode;
+}
+
 export interface HashTag {
   hashTagId: number;
   body: string;
@@ -58,6 +62,14 @@ export const getFeedList = async ({
 
   const response = await axios.get<FeedApiData>(API_URL[type]);
   return response.data;
+};
+
+export const getOtherUserFeedList = async ({
+  categoryCode,
+}: CategoryCodeParams) => {
+  const response = await axios.get(`feed/get/${categoryCode}?page=1&size=10`);
+
+  return response.data.data;
 };
 
 export interface FeedDetail {
