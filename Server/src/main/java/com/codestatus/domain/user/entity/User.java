@@ -51,9 +51,6 @@ public class User extends Auditable {
     @JsonIgnore
     private List<Status> statuses = new ArrayList<>();
 
-    // 피드 매핑해야 함
-    // 코멘트 매핑해야 함
-
     public User(String email) {
         this.email = email;
     }
