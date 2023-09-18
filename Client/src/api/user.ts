@@ -56,5 +56,5 @@ export const postAttendance = async (StatusCode: StatusCode) => {
 };
 
 export const deleteAccount = async () => {
-  return await axios.delete('user/mypage/delete')
-}
+  return await axios.delete('user/mypage/delete');
+};

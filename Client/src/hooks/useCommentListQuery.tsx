@@ -7,7 +7,7 @@ interface Params {
 
 const useCommentListQuery = ({ feedId }: Params) => {
   return useInfiniteQuery(
-    ['CommentList', feedId],
+    ['commentList', feedId],
     ({ pageParam = 1 }) => getCommentData({ feedId, page: pageParam }),
     {
       getNextPageParam: (lastPage) => {
@@ -16,6 +16,9 @@ const useCommentListQuery = ({ feedId }: Params) => {
           : undefined;
       },
       refetchOnWindowFocus: false,
+      meta: {
+        errorMessage: 'Failed to get comment list',
+      },
     },
   );
 };

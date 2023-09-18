@@ -62,11 +62,7 @@ const FeedDetailModal = ({ isFromSearchResult }: Props) => {
               onEditBtnClick={() => setIsEditing(true)}
             />
           )}
-          <CommentSection
-            comments={feedDetail.comments}
-            categoryCode={categoryCode}
-            feedId={feedId}
-          />
+          <CommentSection categoryCode={categoryCode} feedId={feedId} />
         </div>
         <Link to="..">
           <Button>Close</Button>

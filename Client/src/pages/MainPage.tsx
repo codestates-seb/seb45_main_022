@@ -1,12 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Outlet, Link } from 'react-router-dom';
 import useCheckInQuery from '../hooks/useCheckInQuery';
-import { useNavigate } from 'react-router';
-import { useEffect } from 'react';
+import { Navigate } from 'react-router';
 
 const MainPage = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -14,14 +12,11 @@ const MainPage = () => {
     alert('로그아웃 되었습니다.');
   };
 
-  const { data: isCheckedIn, isLoading, isFetching } = useCheckInQuery();
+  const { data: isCheckedIn, isSuccess } = useCheckInQuery();
 
-  useEffect(() => {
-    if (!isLoading && !isFetching && isCheckedIn === false) {
-      console.log(isCheckedIn);
-      navigate('/main/checkin');
-    }
-  }, [isLoading, isFetching, isCheckedIn, navigate]);
+  if (isSuccess && isCheckedIn === false) {
+    return <Navigate to="/checkin" />;
+  }
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] z-10">

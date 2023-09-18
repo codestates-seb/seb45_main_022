@@ -2,8 +2,9 @@ import { useState } from 'react';
 import FeedEditor from '../feed/FeedEditor';
 // import TagEditor from '../feed/TagEditor';
 import { FeedDetail } from '../../api/feed';
-import usePatchFeedMutation from '../../hooks/usePatchFeedMutation';
+import useFeedPatchMutation from '../../hooks/useFeedPatchMutation';
 import { CategoryCode } from '../../api/category';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -12,22 +13,17 @@ interface Props {
 }
 
 const FeedContentEditSection = ({
-  categoryCode,
   feedDetail,
   finishEditing,
+  categoryCode,
 }: Props) => {
   const [body, setBody] = useState('');
   const [data, setData] = useState('');
-  // const [tags, setTags] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   setTags(feedDetail.feedHashTags.map((tag) => tag.body));
-  // }, [feedDetail]);
+  const queryClient = useQueryClient();
 
-  const { mutate: patchFeed } = usePatchFeedMutation({
-    categoryCode,
+  const { mutate: patchFeed, isSuccess } = useFeedPatchMutation({
     feedId: feedDetail.feedId,
-    onPatchFeedSuccess: finishEditing,
   });
 
   const handleSaveBtnClick = async () => {
@@ -41,6 +37,13 @@ const FeedContentEditSection = ({
     }
     patchFeed({ body, data });
   };
+
+  if (isSuccess) {
+    queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    queryClient.invalidateQueries(['feedDetail', feedDetail.feedId]);
+    finishEditing();
+  }
 
   return (
     <div className="w-[500px] h-[600px] bg-[#f1d4ae] flex flex-col justify-evenly items-center">

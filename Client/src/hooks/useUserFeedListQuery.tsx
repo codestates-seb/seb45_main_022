@@ -12,6 +12,9 @@ const useUserFeedListQuery = () => {
           : undefined;
       },
       refetchOnWindowFocus: false,
+      meta: {
+        errorMessage: 'Failed to get user feed list.',
+      },
     },
   );
 };

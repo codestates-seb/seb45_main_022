@@ -2,10 +2,11 @@ import { FaCommentDots } from 'react-icons/fa';
 import { CategoryCode } from '../../api/category';
 import CommentItem from './CommentItem';
 import { FormEventHandler, useRef } from 'react';
-import usePostCommentMutation from '../../hooks/usePostCommentMutation';
+import useCommentPostMutation from '../../hooks/useCommentPostMutation';
 import useCommentListQuery from '../../hooks/useCommentListQuery';
 import LoadingBar from '../common/LoadingBar';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
@@ -16,7 +17,13 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
-  const { mutate: postComment } = usePostCommentMutation({ feedId });
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: postComment,
+    isSuccess,
+    reset,
+  } = useCommentPostMutation({ feedId });
   const { data, isFetching, isLoading, hasNextPage, fetchNextPage } =
     useCommentListQuery({ feedId });
 
@@ -34,6 +41,14 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
     if (!comment) return;
     postComment(comment);
   };
+
+  if (isSuccess) {
+    console.log('success');
+    queryClient.invalidateQueries(['commentList', feedId]);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
+    queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
+    reset();
+  }
 
   return (
     <div className="bg-[#ffedd5] flex flex-col w-[500px] h-[600px]">

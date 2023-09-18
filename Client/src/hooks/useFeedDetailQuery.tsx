@@ -8,6 +8,9 @@ function useFeedDetailQuery(feedId: Feed['feedId']) {
     enabled: !!feedId,
     refetchOnWindowFocus: false,
     retry: 2,
+    meta: {
+      errorMessage: 'Failed to get feed detail',
+    },
   });
 }
 

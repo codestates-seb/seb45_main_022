@@ -3,14 +3,14 @@ import Button from '../common/Button';
 import hide from '../../assets/icons/hide.png';
 import view from '../../assets/icons/view.png';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import {
   validateEmail,
   validateNickname,
   validatePassword,
 } from '../../utility/validation';
 import LoadingBar from '../common/LoadingBar';
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import useRegisterMutation from '../../hooks/useRegisterMutation';
 import Backdrop from '../common/Backdrop';
 import { ERROR_MSG, ErrorType } from '../../api/error';
@@ -27,17 +27,13 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const onRegisterError = (err: AxiosError<ErrorType>) => {
-    console.log(err, 'onError Catched');
-    if (err.response) {
-      const { errorCode } = err.response.data;
-      setErrMsg(ERROR_MSG[errorCode]);
-    }
-  };
-
-  const { isLoading, mutate: register } = useRegisterMutation({
-    onError: onRegisterError,
-  });
+  const {
+    isLoading,
+    mutate: register,
+    error,
+    isError,
+    isSuccess,
+  } = useRegisterMutation();
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,6 +54,11 @@ const Register = () => {
     register({ email, nickname, password });
   };
 
+  if (isSuccess) {
+    alert('Register success');
+    return <Navigate to="/auth/login" />;
+  }
+
   return (
     <ModalFrame height={550} width={780}>
       <form
@@ -69,9 +70,14 @@ const Register = () => {
       >
         <h1 className="text-2xl">Register</h1>
         <div className="h-[120px] mt-[15px] flex justify-center items-center">
-          {errMsg !== '' && (
-            <p className="text-[0.625rem] text-red-500">{errMsg}</p>
-          )}
+          <p className="text-[0.625rem] text-red-500">
+            {errMsg}
+            {(isError &&
+              isAxiosError<ErrorType>(error) &&
+              error.response?.data.errorCode &&
+              ERROR_MSG[error.response?.data.errorCode]) ||
+              ''}
+          </p>
         </div>
         <div className="flex items-center">
           <input
