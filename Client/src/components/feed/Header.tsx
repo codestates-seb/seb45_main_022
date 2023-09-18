@@ -34,8 +34,8 @@ const Header = ({ categoryCode }: Props) => {
         {/* 닉네임 */}
 
         <Link to={`/feed/${categoryCode}/profile`}>
-          <p className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]">
-            ⚔️ {userInfo.nickname}_님
+          <p className="w-[144px] text-[1.2rem] font-bold mt-[100px] cursor-pointer font-[Pretendard]">
+            ⚔️ {userInfo.nickname} 님
           </p>
         </Link>
 
