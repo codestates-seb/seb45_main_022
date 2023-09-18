@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         findUser.setUserStatus(User.UserStatus.USER_ACTIVE); // user status 를 ACTIVE 로 변경
         findUser.setPassword(passwordEncoder.encode(password)); // 비밀번호 암호화
         if (findUser.getNickname().equals(nickname)) { // DB 의 닉네임과 재가입시 입력한 닉네임이 같다면
-            findUser.setNickname(nickname); // 중복검사를 하지 않고 닉네임 set
+            return;
         } else { // DB 의 닉네임과 재가입시 입력한 닉네임이 다르다면
             verifyExistsNickname(nickname); // 다른 유저와의 닉네임 중복검사
             findUser.setNickname(nickname); // 중복검사 통과시 닉네임 set
