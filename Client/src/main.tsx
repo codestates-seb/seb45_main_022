@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import TitlePage from './pages/TitlePage';
@@ -22,6 +18,7 @@ import ProfileScreen from './components/main/ProfileScreen';
 import StatusScreen from './components/main/StatusScreen';
 import PrivateRoute from './pages/PrivateRoute';
 import FeedDetailModal from './components/feed-detail/FeedDetailModal';
+import NotFoundPage from './pages/NotFoundPage';
 
 const queryClient = new QueryClient();
 
@@ -106,7 +103,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Navigate to="/" />,
+    element: <NotFoundPage />,
   },
 ]);
 
