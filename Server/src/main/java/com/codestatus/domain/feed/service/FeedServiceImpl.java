@@ -100,6 +100,16 @@ public class FeedServiceImpl implements FeedService {
         );
     }
 
+    //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 유저가 쓴 피드목록 조회
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Feed> findFeedByUserIdAndCategory(long categoryId, long userId, int page, int size) {
+        return feedRepository.findAllByUserUserIdAndCategoryCategoryIdAndDeletedIsFalse(
+                categoryId, userId,
+                getPageable(page, size)
+        );
+    }
+
     //(검색기능)텍스트 받아서 해당 카테고리 내에서 해당하는 해쉬태그 가지고 있는 피드목록 조회
     @Override
     @Transactional(readOnly = true)
@@ -161,7 +171,7 @@ public class FeedServiceImpl implements FeedService {
     // 로그인한 유저가 작성한 피드 조회
     @Override
     @Transactional(readOnly = true)
-    public Page<Feed> myPost(long userId, int page, int size) {
+    public Page<Feed> userPost(long userId, int page, int size) {
         return feedRepository.findAllByUserUserIdAndDeletedIsFalse(
                 userId,
                 getPageable(page, size)
