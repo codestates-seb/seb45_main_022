@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET,"/user/mypage/**").hasRole("USER") // mypage 는 USER 권한 필요
                         .antMatchers(HttpMethod.PATCH,"/user/mypage/edit/**").hasRole("USER") // mypage 는 USER 권한 필요
                         .antMatchers(HttpMethod.DELETE ,"/user/mypage/**").hasRole("USER") // mypage 는 USER 권한 필요
+                        .antMatchers(HttpMethod.GET, "/user/**").hasRole("USER") // 다른 유저 조회는 USER 권한 필요
 
                         // feed 권한 부여
                         .antMatchers(HttpMethod.POST, "/feed/**").hasRole("USER") // feed 작성은 USER 권한 필요

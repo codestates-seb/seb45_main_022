@@ -31,11 +31,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("signup success"); // 가입 성공 메시지 반환
     }
 
-    // 유저 조회 컨트롤러
+    // 로그인한 유저 조회 컨트롤러
     @GetMapping("/mypage")
     public ResponseEntity<UserDto.Response> getUser(@AuthenticationPrincipal PrincipalDto principal) {
         User user = service.findEntity(principal.getId()); // 유저 조회 메서드 호출
         UserDto.Response responseBody = userMapper.userToUserResponse(user); // Entity -> ResponseDto
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody); // 유저 정보 반환
+    }
+
+    // 다른 유저 정보 조회 컨트롤러
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto.AnotherUserResponse> getAnotherUser(@PathVariable long userId) {
+        User user = service.findEntity(userId); // 유저 조회 메서드 호출
+        UserDto.AnotherUserResponse responseBody = userMapper.anotherUserToResponseDto(user); // Entity -> ResponseDto
         return ResponseEntity.status(HttpStatus.OK).body(responseBody); // 유저 정보 반환
     }
 

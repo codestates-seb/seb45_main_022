@@ -59,4 +59,14 @@ public class UserDto {
         private String createDate;
         private String modifiedDate;
     }
+
+    @Getter
+    @Builder
+    public static class AnotherUserResponse {
+        private Long id;
+        private String nickname;
+        private String profileImage;
+        private List<StatusResponse> statuses;
+        private String createDate;
+    }
 }

@@ -42,6 +42,32 @@ public class UserMapper {
 
     // Entity -> Dto
     public UserDto.Response userToUserResponse(User user) {
+        List<StatusResponse> statusResponses = getStatusResponses(user);
+
+        return UserDto.Response.builder()
+                .id(user.getUserId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .statuses(statusResponses)
+                .createDate(String.valueOf(user.getCreatedAt()))
+                .modifiedDate(String.valueOf(user.getModifiedAt()))
+                .build();
+    }
+
+    public UserDto.AnotherUserResponse anotherUserToResponseDto(User user) {
+        List<StatusResponse> statusResponses = getStatusResponses(user);
+
+        return UserDto.AnotherUserResponse.builder()
+                .id(user.getUserId())
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .createDate(String.valueOf(user.getCreatedAt()))
+                .statuses(statusResponses)
+                .build();
+    }
+
+    private static List<StatusResponse> getStatusResponses(User user) {
         List<StatusResponse> statusResponses = new ArrayList<>();
 
         for (Status status : user.getStatuses()) {
@@ -57,15 +83,6 @@ public class UserMapper {
             statusResponse.setRequiredExp(status.getRequiredExp());
             statusResponses.add(statusResponse);
         }
-
-        return UserDto.Response.builder()
-                .id(user.getUserId())
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .profileImage(user.getProfileImage())
-                .statuses(statusResponses)
-                .createDate(String.valueOf(user.getCreatedAt()))
-                .modifiedDate(String.valueOf(user.getModifiedAt()))
-                .build();
+        return statusResponses;
     }
 }
