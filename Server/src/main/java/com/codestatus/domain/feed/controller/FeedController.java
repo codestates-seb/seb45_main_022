@@ -70,7 +70,7 @@ public class FeedController {
 
     //userId로 피드 리스트
     @GetMapping("/get/{userId}")
-    public ResponseEntity getFeedsByUserAndCategory(@PathVariable("userId") long userId,
+    public ResponseEntity getFeedsByUser(@PathVariable("userId") long userId,
                                                     @RequestParam int page,
                                                     @RequestParam int size,
                                                     @AuthenticationPrincipal PrincipalDto principal) {

@@ -14,7 +14,6 @@ public interface FeedService {
     Page<Feed> findWeeklyBestFeeds(long categoryId, int page, int size);
     Page<Feed> findFeedByBodyAndCategory(long categoryId, String text, int page, int size);
     Page<Feed> findFeedByUserAndCategory(long categoryId, String text, int page, int size);
-    Page<Feed> findFeedByUserIdAndCategory(long categoryId, long userId, int page, int size);
     Page<Feed> findFeedByHashTagAndCategory(long categoryId, long hashTagId, int page, int size);
     Page<Feed> findFeedByHashTagBody(long categoryId, String body, int page, int size);
     Page<Feed> findAllFeedByDeleted(int page, int size);
