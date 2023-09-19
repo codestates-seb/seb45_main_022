@@ -55,7 +55,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserDto.AnotherUserResponse AnotherUserToResponseDto(User user) {
+    public UserDto.AnotherUserResponse anotherUserToResponseDto(User user) {
         List<StatusResponse> statusResponses = getStatusResponses(user);
 
         return UserDto.AnotherUserResponse.builder()
