@@ -10,4 +10,5 @@ public interface UserService {
     void updatePassword(User user, long loginUserId);
     void deleteEntity(long loginUserId);
     void uploadProfileImage(MultipartFile imageFile, long loginUserId);
+    void resetProfileImage(long loginUserId);
 }

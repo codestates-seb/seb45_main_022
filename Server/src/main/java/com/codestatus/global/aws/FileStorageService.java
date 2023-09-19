@@ -2,6 +2,7 @@ package com.codestatus.global.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.codestatus.global.exception.BusinessLogicException;
@@ -60,5 +61,12 @@ public class FileStorageService {
         String fileUrl = amazonS3.getUrl(bucketName, fileName).toString();
 
         return fileUrl;
+    }
+
+    public void deleteFile(String url) {
+        String splitStr = ".com/";
+        String fileName = url.substring(url.lastIndexOf(splitStr) + splitStr.length());
+
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
     }
 }

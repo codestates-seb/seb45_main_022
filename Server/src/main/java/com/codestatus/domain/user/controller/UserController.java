@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("password patch success"); // 비밀번호 수정 성공 메시지 반환
     }
 
-    // 프로필 이미지 업로드
+    // 프로필 이미지 업로드 컨트롤러
     @PostMapping("/mypage/edit/image")
     public ResponseEntity uploadProfileImage(@RequestParam("imageFile") MultipartFile imageFile,
                                              @AuthenticationPrincipal PrincipalDto principal) {
@@ -73,7 +73,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("profile image upload success"); // 프로필 이미지 업로드 성공 메시지 반환
     }
 
-    // 유저 탈퇴
+    // 프로필 이미지 초기화 컨트롤러
+    @PatchMapping("/mypage/reset/image")
+    public ResponseEntity resetProfileImage(@AuthenticationPrincipal PrincipalDto principal) {
+        service.resetProfileImage(principal.getId());
+        return ResponseEntity.status(HttpStatus.OK).body("profile image reset success");
+    }
+
+    // 유저 탈퇴 컨트롤러
     @DeleteMapping("/mypage/delete")
     public ResponseEntity deleteUser(@AuthenticationPrincipal PrincipalDto principal) {
         service.deleteEntity(principal.getId()); // 유저 탈퇴 메서드 호출
