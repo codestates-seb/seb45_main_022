@@ -4,7 +4,7 @@ import useUserInfoQuery from '../hooks/useUserInfoQuery';
 import LoadingBar from '../components/common/LoadingBar';
 
 const AuthPage = () => {
-  const { data: userInfo, isLoading } = useUserInfoQuery();
+  const { data: userInfo, isLoading } = useUserInfoQuery({ hideToast: true });
   if (userInfo) {
     return <Navigate to="/main" />;
   }

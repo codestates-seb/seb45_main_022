@@ -32,6 +32,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (err, query) => {
+      if (query.meta?.hideToast) return;
       if (isAxiosError<ErrorType>(err) && err.response) {
         const { errorCode } = err.response.data;
         if (ERROR_MSG[errorCode]) {
@@ -46,12 +47,14 @@ const queryClient = new QueryClient({
   }),
   mutationCache: new MutationCache({
     onSuccess: (data, v, c, mutation) => {
+      if (mutation.meta?.hideToast) return;
       console.log(data, v, c);
       toast.success(
         <>{mutation.meta?.successMessage || 'Successfully requested'}</>,
       );
     },
     onError: (err, v, c, mutation) => {
+      if (mutation.meta?.hideToast) return;
       console.log(v, c);
       if (isAxiosError<ErrorType>(err) && err.response) {
         const { errorCode } = err.response.data;
