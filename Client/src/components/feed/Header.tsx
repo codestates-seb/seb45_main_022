@@ -32,7 +32,6 @@ const Header = ({ categoryCode }: Props) => {
     return (
       <div className={`w-full h-[60px] flex justify-between items-center`}>
         {/* 닉네임 */}
-
         <Link to={`/feed/${categoryCode}/profile`}>
           <p className="w-[144px] text-[1.5rem] font-bold mt-[100px] cursor-pointer font-[Pretendard] whitespace-nowrap">
             ⚔️ {userInfo.nickname}_님
