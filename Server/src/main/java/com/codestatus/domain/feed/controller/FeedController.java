@@ -68,6 +68,21 @@ public class FeedController {
                 feedMapper.feedToFeedResponseDto(feed, isLike, feedHashTags, likeCount), HttpStatus.OK);
     }
 
+    //userId로 피드 리스트
+    @GetMapping("/get/{userId}")
+    public ResponseEntity getFeedsByUser(@PathVariable("userId") long userId,
+                                                    @RequestParam int page,
+                                                    @RequestParam int size,
+                                                    @AuthenticationPrincipal PrincipalDto principal) {
+        Page<Feed> pageFeeds = feedService.userPost(userId, page-1, size);
+        List<Feed> feeds = pageFeeds.getContent();
+        Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(
+                        feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
+    }
+
     //선택한 카테고리 내의 피드 전체 조회
     @GetMapping("/get/{categoryId}")
     public ResponseEntity getFeedsByCategory(@PathVariable @Min(0) @Max(13) long categoryId, @RequestParam int page, @RequestParam int size,
@@ -138,7 +153,7 @@ public class FeedController {
                 new MultiResponseDto<>(
                         feedMapper.feedsToFeedResponseDtos(feeds, feedIds), pageFeeds), HttpStatus.OK);
     }
-  
+
     //HashTagID로 검색
     @GetMapping("/find/hashTagId/{categoryId}")
     public ResponseEntity getFeedsByHashTagAndCategory(@PathVariable("categoryId") @Min(0) @Max(13) long categoryId,
@@ -187,7 +202,7 @@ public class FeedController {
     public ResponseEntity myPost(@AuthenticationPrincipal PrincipalDto principal,
                                  @RequestParam int page,
                                  @RequestParam int size) {
-        Page<Feed> pageFeeds = feedService.myPost(principal.getId(), page - 1, size);
+        Page<Feed> pageFeeds = feedService.userPost(principal.getId(), page - 1, size);
         List<Feed> feeds = pageFeeds.getContent();
         Set<Long> feedIds = feedService.isLikeFeedIds(feeds, principal);
 

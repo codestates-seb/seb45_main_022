@@ -18,7 +18,7 @@ public interface FeedService {
     Page<Feed> findFeedByHashTagBody(long categoryId, String body, int page, int size);
     Page<Feed> findAllFeedByDeleted(int page, int size);
     void updateEntity(Feed feed, long userId);
-    Page<Feed> myPost(long userId, int page, int size);
+    Page<Feed> userPost(long userId, int page, int size);
     void deleteEntity(long feedId, long userId);
     boolean isLikeUser(long feedId, long userId);
     Set<Long> isLikeFeedIds(List<Feed> feeds, PrincipalDto principal);

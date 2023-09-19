@@ -161,7 +161,7 @@ public class FeedServiceImpl implements FeedService {
     // 로그인한 유저가 작성한 피드 조회
     @Override
     @Transactional(readOnly = true)
-    public Page<Feed> myPost(long userId, int page, int size) {
+    public Page<Feed> userPost(long userId, int page, int size) {
         return feedRepository.findAllByUserUserIdAndDeletedIsFalse(
                 userId,
                 getPageable(page, size)
