@@ -52,7 +52,7 @@ const MainPage = () => {
             }}
             to="/main/status"
           >
-            <div className="w-[60px] h-[60px] bg-[url('/src/assets/objects/note.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"></div>
+            <div className="w-[60px] h-[60px] bg-[url('/src/assets/objects/note.png')] bg-cover bg-no-repeat bg-center animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"></div>
           </Link>
         </div>
         {/* 종이 - 프로필 */}
@@ -66,7 +66,7 @@ const MainPage = () => {
             }}
             to="/main/profile"
           >
-            <div className="w-[50px] h-[60px] bg-[url('/src/assets/objects/paper.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"></div>
+            <div className="w-[50px] h-[60px] bg-[url('/src/assets/objects/paper.png')] bg-cover bg-no-repeat bg-center animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"></div>
           </Link>
         </div>
         {/* 문 - 로그아웃 */}
@@ -75,7 +75,7 @@ const MainPage = () => {
             Logout
           </p>
           <Link onClick={handleLogout} to="/">
-            <div className="w-[63px] h-[99px] bg-[url('/src/assets/objects/door.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"></div>
+            <div className="w-[63px] h-[99px] bg-[url('/src/assets/objects/door.png')] bg-cover bg-no-repeat bg-center animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"></div>
           </Link>
         </div>
         {/* 가이드 버튼 */}
