@@ -38,6 +38,12 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
 
+    private final List<String> defaultImage = Arrays.asList( // 기본 프로필 이미지
+            "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
+            "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
+            "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image3.png",
+            "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image4.png");
+
     // 유저 생성
     @Override
     public void createEntity(User user) {
@@ -72,13 +78,12 @@ public class UserServiceImpl implements UserService {
     private void rejoinUser(User findUser, String password, String nickname) {
         findUser.setUserStatus(User.UserStatus.USER_ACTIVE); // user status 를 ACTIVE 로 변경
         findUser.setPassword(passwordEncoder.encode(password)); // 비밀번호 암호화
-        if (findUser.getNickname().equals(nickname)) { // DB 의 닉네임과 재가입시 입력한 닉네임이 같다면
-            return;
-        } else { // DB 의 닉네임과 재가입시 입력한 닉네임이 다르다면
+
+        if (!findUser.getNickname().equals(nickname)) { // DB 의 닉네임과 재가입시 입력한 닉네임이 다르다면
             verifyExistsNickname(nickname); // 다른 유저와의 닉네임 중복검사
-            findUser.setNickname(nickname); // 중복검사 통과시 닉네임 set
+            findUser.setNickname(nickname); // 닉네임 set
         }
-        resetProfileImage(findUser.getUserId()); // 탈퇴 전 프로필 이미지를 제거하고 기본 프로필 이미지 배정
+
         repository.save(findUser); // 유저 저장
     }
 
@@ -125,13 +130,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteEntity(long loginUserId) {
         User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증 메서드(유저가 존재하지 않으면 예외처리)
-
+        String fileUrl = findUser.getProfileImage();
         findUser.setUserStatus(User.UserStatus.USER_DELETE); // 유저 상태를 탈퇴 상태로 변경
 
         feedCommand.deleteFeedAll(findUser.getUserId()); // 유저가 작성한 feed 삭제
         feedHashTagCommand.deleteFeedHashtagAll(findUser.getUserId()); // 유저가 작성한 hashtag 삭제
         commentCommand.deleteCommentAll(findUser.getUserId()); // 유저가 작성한 comment 삭제
         statusCommand.resetStatus(findUser.getUserId()); // 유저가 가진 status 정보 초기화
+
+        if (!defaultImage.contains(fileUrl)) { // 기본 프로필 이미지 리스트에 현재 fileUrl 이 포함되지 않는다면
+            fileStorageService.deleteFile(fileUrl); // 해당 이미지 삭제
+            defaultProfileImageSet(findUser); // 기본 프로필 이미지 배정
+        }
 
         repository.save(findUser); // 유저 저장
     }
@@ -150,19 +160,18 @@ public class UserServiceImpl implements UserService {
     public void resetProfileImage(long loginUserId) {
         User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증
         String fileUrl = findUser.getProfileImage(); // 현재 프로필 이미지 url
+
+        if(defaultImage.contains(fileUrl)) { // 기본 프로필 이미지 리스트에 현재 fileUrl 이 포함된다면
+            throw new BusinessLogicException(ExceptionCode.ALREADY_DEFAULT_IMAGE); // 예외 발생
+        }
+
         fileStorageService.deleteFile(fileUrl); // url 을 이용해 s3 에서 이미지 삭제
         defaultProfileImageSet(findUser); // 기본 프로필 이미지 배정
     }
 
     // 기본 프로필 이미지 배정
     private void defaultProfileImageSet(User user) {
-        List<String> defaultImage = Arrays.asList( // 기본 프로필 이미지
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image3.png",
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image4.png");
-        int randomNum = (int)(Math.random() * defaultImage.size()); // 기본 프로필 이미지 list 의 사이즈만큼 랜덤 숫자 생성
-
+        int randomNum = (int)(Math.random() * defaultImage.size()); // 기본 프로필 이미지 list 의 사이즈 만큼 랜덤 숫자 생성
         user.setProfileImage(defaultImage.get(randomNum)); // 생성된 랜덤 숫자로 프로필 이미지 배정
     }
 

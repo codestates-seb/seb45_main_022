@@ -25,6 +25,7 @@ public enum ExceptionCode {
 
     IMAGE_URL_ERROR(404, "이미지 URL을 찾을 수 없습니다.", "I000"),
     INVALID_FILE_TYPE(400, "이미지 파일만 업로드 가능합니다.", "I001"),
+    ALREADY_DEFAULT_IMAGE(400, "이미 기본 프로필 이미지를 사용 중 입니다.", "I002"),
 
     FILE_NOT_FOUND(404, "파일을 찾을 수 없습니다.", "f000"),
     FILE_TOO_LARGE(400, "파일 크기는 5MB를 넘을 수 없습니다.", "f001"),
