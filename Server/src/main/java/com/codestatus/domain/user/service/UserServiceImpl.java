@@ -63,14 +63,7 @@ public class UserServiceImpl implements UserService {
         List<String> roles = customAuthorityUtils.createRoles(user.getEmail()); // 권한 생성
         user.setRoles(roles); // 권한 저장
 
-        List<String> defaultImage = Arrays.asList( // 기본 프로필 이미지
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image3.png",
-                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image4.png");
-        int randomNum = (int)(Math.random() * defaultImage.size()); // 기본 프로필 이미지 list 의 사이즈만큼 랜덤 숫자 생성
-
-        user.setProfileImage(defaultImage.get(randomNum)); // 생성된 랜덤 숫자로 프로필 이미지 배정
+        defaultProfileImageSet(user); // 기본 프로필 이미지 배정
         repository.save(user); // 유저 저장
         statusCommand.createStatus(user); // status 생성
     }
@@ -85,13 +78,14 @@ public class UserServiceImpl implements UserService {
             verifyExistsNickname(nickname); // 다른 유저와의 닉네임 중복검사
             findUser.setNickname(nickname); // 중복검사 통과시 닉네임 set
         }
+        resetProfileImage(findUser.getUserId()); // 탈퇴 전 프로필 이미지를 제거하고 기본 프로필 이미지 배정
         repository.save(findUser); // 유저 저장
     }
 
     // 유저 조회
     @Override
     public User findEntity(long userId) {
-        User user = userCommand.findVerifiedUser(userId); // 유저 정보를 가져옴
+        User user = userCommand.findVerifiedUser(userId); // 유저 검증
         if (user.getUserStatus() == User.UserStatus.USER_ACTIVE) { // 유저가 활성화 상태라면 유저 정보 반환
             return user;
         } else if (user.getUserStatus() == User.UserStatus.USER_DELETE) { // 유저가 탈퇴 상태라면 예외 발생
@@ -104,12 +98,12 @@ public class UserServiceImpl implements UserService {
     // 유저 닉네임 수정
     @Override
     public void updateUserNickname(User user, long loginUserId) {
-        User findUser = userCommand.findVerifiedUser(loginUserId);
+        User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증
 
         if (!findUser.getNickname().equals(user.getNickname())) { // 유저 닉네임이 수정되었다면
             verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
             findUser.setNickname(user.getNickname());
-            repository.save(findUser);// 유저 닉네임 수정
+            repository.save(findUser); // 유저 저장
         }
     }
 
@@ -123,8 +117,8 @@ public class UserServiceImpl implements UserService {
             throw new BusinessLogicException(ExceptionCode.USER_SAME_PASSWORD);
         }
 
-        findUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        repository.save(findUser);
+        findUser.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
+        repository.save(findUser); // 유저 저장
     }
 
     // 유저 탈퇴
@@ -149,6 +143,27 @@ public class UserServiceImpl implements UserService {
         String fileUrl = fileStorageService.storeFile(imageFile); // 파일 업로드
         findUser.setProfileImage(fileUrl); // 유저 프로필 이미지 경로 저장
         repository.save(findUser); // 유저 저장
+    }
+
+    // 프로필 이미지 초기화
+    @Override
+    public void resetProfileImage(long loginUserId) {
+        User findUser = userCommand.findVerifiedUser(loginUserId); // 유저 검증
+        String fileUrl = findUser.getProfileImage(); // 현재 프로필 이미지 url
+        fileStorageService.deleteFile(fileUrl); // url 을 이용해 s3 에서 이미지 삭제
+        defaultProfileImageSet(findUser); // 기본 프로필 이미지 배정
+    }
+
+    // 기본 프로필 이미지 배정
+    private void defaultProfileImageSet(User user) {
+        List<String> defaultImage = Arrays.asList( // 기본 프로필 이미지
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image3.png",
+                "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image4.png");
+        int randomNum = (int)(Math.random() * defaultImage.size()); // 기본 프로필 이미지 list 의 사이즈만큼 랜덤 숫자 생성
+
+        user.setProfileImage(defaultImage.get(randomNum)); // 생성된 랜덤 숫자로 프로필 이미지 배정
     }
 
     // 이메일 중복 검사
