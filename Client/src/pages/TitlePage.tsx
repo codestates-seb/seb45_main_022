@@ -9,27 +9,6 @@ const TitlePage = () => {
         bg-no-repeat bg-center"
         >
           <TitleScreen />
-          {/* {screen === Screen.CHECKIN && (
-            <CheckInScreen
-              closeScreen={() => {
-                setScreen(Screen.DEFAULT);
-              }}
-            />
-          )}
-          {screen === Screen.STATUS && (
-            <StatusScreen
-              closeScreen={() => {
-                setScreen(Screen.DEFAULT);
-              }}
-            />
-          )}
-          {screen === Screen.PROFILE && (
-            <ProfileScreen
-              closeScreen={() => {
-                setScreen(Screen.DEFAULT);
-              }}
-            />
-          )} */}
         </div>
       </div>
     </>
