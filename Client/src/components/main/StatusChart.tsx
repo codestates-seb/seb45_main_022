@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Status } from '../../api/user';
-import { STATUS_NAME } from '../../utility/status';
+import { STATUS_NAME } from '../../utils/status';
 
 ChartJS.register(
   RadialLinearScale,

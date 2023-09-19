@@ -2,7 +2,7 @@ import Backdrop from '../components/common/Backdrop';
 import Header from '../components/feed/Header';
 import { Outlet, useParams } from 'react-router';
 import SearchResult from '../components/feed/SearchResult';
-import { CATEGORY_FEED_MAP } from '../utility/category';
+import { CATEGORY_FEED_MAP } from '../utils/category';
 import { CategoryCode } from '../api/category';
 
 const SearchPage = () => {

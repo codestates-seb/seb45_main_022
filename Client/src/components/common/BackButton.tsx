@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import { CategoryCode } from '../../api/category';
 import backButton from '../../assets/common/back-button.png';
-import { CATEGORY_STATUS_MAP } from '../../utility/category';
+import { CATEGORY_STATUS_MAP } from '../../utils/category';
 
 interface Props {
   categoryCode: CategoryCode;

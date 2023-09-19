@@ -1,5 +1,5 @@
-import axios from '../utility/axios';
-import { convertEncodedImageToFile } from '../utility/image';
+import axios from '../utils/axios';
+import { convertEncodedImageToFile } from '../utils/image';
 import { StatusCode } from './category';
 
 export interface Status {

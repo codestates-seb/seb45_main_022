@@ -1,6 +1,6 @@
 import { CategoryCode } from '../../api/category';
-import { CATEGORY_STATUS_MAP } from '../../utility/category';
-import { STATUS_ICON } from '../../utility/status';
+import { CATEGORY_STATUS_MAP } from '../../utils/category';
+import { STATUS_ICON } from '../../utils/status';
 import { editCommentData, deleteCommentData, Comment } from '../../api/comment';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';

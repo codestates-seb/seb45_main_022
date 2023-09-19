@@ -3,7 +3,7 @@ import { UserInfo, postNickname, postProfileImage } from '../../api/user';
 import { FormEvent, useRef, useState } from 'react';
 import Button from '../common/Button';
 import ImageUploadModal from '../common/ImageUploadModal';
-import { validateNickname } from '../../utility/validation';
+import { validateNickname } from '../../utils/validation';
 import { ERROR_MSG, ErrorType } from '../../api/error';
 import axios from 'axios';
 import DeleteScreen from './DeleteScreen';

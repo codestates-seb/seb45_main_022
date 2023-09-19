@@ -1,4 +1,4 @@
-import axios from '../utility/axios';
+import axios from '../utils/axios';
 import { CategoryCode } from './category';
 
 export interface HashTag {

@@ -1,7 +1,7 @@
 import { CategoryCode } from '../../api/category';
 import { FeedDetail } from '../../api/feed';
-import { CATEGORY_STATUS_MAP } from '../../utility/category';
-import { STATUS_ICON } from '../../utility/status';
+import { CATEGORY_STATUS_MAP } from '../../utils/category';
+import { STATUS_ICON } from '../../utils/status';
 
 interface Props {
   feedDetail: FeedDetail;

@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import Backdrop from '../components/common/Backdrop';
 import ModalFrame from '../components/common/ModalFrame';
 import ServerList from '../components/map/ServerList';
-import { STATUS_CATEGORY_MAP } from '../utility/status';
+import { STATUS_CATEGORY_MAP } from '../utils/status';
 import { StatusCode, CategoryCode } from '../api/category';
 import { ReturnToMainButton } from '../components/common/BackButton';
 

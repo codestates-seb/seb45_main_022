@@ -8,7 +8,7 @@ import {
   validateEmail,
   validateNickname,
   validatePassword,
-} from '../../utility/validation';
+} from '../../utils/validation';
 import LoadingBar from '../common/LoadingBar';
 import { isAxiosError } from 'axios';
 import useRegisterMutation from '../../hooks/useRegisterMutation';

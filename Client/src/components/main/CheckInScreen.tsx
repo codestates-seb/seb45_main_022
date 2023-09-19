@@ -3,7 +3,7 @@ import Backdrop from '../common/Backdrop';
 import Button from '../common/Button';
 import ModalFrame from '../common/ModalFrame';
 import { StatusCode } from '../../api/category';
-import { STATUS_ICON } from '../../utility/status';
+import { STATUS_ICON } from '../../utils/status';
 import { Link } from 'react-router-dom';
 import { postAttendance } from '../../api/user';
 import { useQueryClient } from '@tanstack/react-query';

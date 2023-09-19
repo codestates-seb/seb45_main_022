@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import Button from '../common/Button';
-import { validatePassword } from '../../utility/validation';
+import { validatePassword } from '../../utils/validation';
 import { changePassword } from '../../api/user';
 import axios from 'axios';
 

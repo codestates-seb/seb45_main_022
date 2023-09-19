@@ -1,4 +1,4 @@
-import axios from '../utility/axios';
+import axios from '../utils/axios';
 
 export interface Comment {
   commentId: number;

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Status } from '../../api/user';
-import { STATUS_ICON, STATUS_NAME } from '../../utility/status';
+import { STATUS_ICON, STATUS_NAME } from '../../utils/status';
 
 interface Props {
   status: Status;

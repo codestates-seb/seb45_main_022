@@ -1,9 +1,9 @@
-import { STATUS_ICON } from '../../utility/status';
+import { STATUS_ICON } from '../../utils/status';
 import {
   CATEGORY_ICON,
   CATEGORY_NAME,
   CATEGORY_STATUS_MAP,
-} from '../../utility/category';
+} from '../../utils/category';
 import { useNavigate, Link } from 'react-router-dom';
 import { CategoryCode } from '../../api/category';
 import useUserInfoQuery from '../../hooks/useUserInfoQuery';
