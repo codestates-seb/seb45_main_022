@@ -5,6 +5,7 @@ import useCheckInQuery from '../hooks/useCheckInQuery';
 import { Navigate } from 'react-router';
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
+import GuideButton from '../components/common/GuideButton';
 
 const MainPage = () => {
   const queryClient = useQueryClient();
@@ -82,10 +83,7 @@ const MainPage = () => {
           <p className="text-[.8rem] text-white drop-shadow-[0_0_2px_#000] pointer-events-none">
             Guide
           </p>
-          <div
-            onClick={() => setStepsEnabled(true)}
-            className="w-[50px] h-[50px] bg-[url('/src/assets/common/guide-button.png')] bg-cover bg-no-repeat bg-cneter animate-[scale_1s_linear_alternate_infinite] duration-[.3s] hover:animate-none hover:brightness-125 hover:scale-105 cursor-pointer"
-          ></div>
+          <GuideButton onClick={() => setStepsEnabled(true)} />
         </div>
         <Outlet />
       </div>
