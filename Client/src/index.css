@@ -72,3 +72,8 @@ body {
   border-radius: 10px;
   border: 1px solid #ffffff;
 }
+
+.introjs-tooltiptext {
+  font-size: 0.8rem;
+  word-break: keep-all;
+}
