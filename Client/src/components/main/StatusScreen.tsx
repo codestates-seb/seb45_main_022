@@ -47,25 +47,25 @@ const StatusScreen = () => {
             <h1 className="text-[2rem] ml-5">YOUR STATUS</h1>
             <StatusChart status={statusData} />
           </div>
-          <div className="w-[500px] h-[600px] px-[20px] pb-[40px] flex flex-col justify-center items-center gap-[8px] status-list">
+          <div className="relative w-[500px] h-[600px] px-[20px] pb-[40px] flex flex-col justify-center items-center gap-[8px] status-list">
             {statusData.map((status, i) => (
               <StatusListItem key={i} status={status} />
             ))}
+            {!stepsEnabled && (
+              <GuideButton
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '20px',
+                }}
+                onClick={() => setStepsEnabled(true)}
+              />
+            )}
           </div>
         </div>
         <Link to="..">
           <Button>Close</Button>
         </Link>
-        {!stepsEnabled && (
-          <GuideButton
-            style={{
-              position: 'absolute',
-              top: '160px',
-              right: '250px',
-            }}
-            onClick={() => setStepsEnabled(true)}
-          />
-        )}
         <Steps
           enabled={stepsEnabled}
           steps={steps}
