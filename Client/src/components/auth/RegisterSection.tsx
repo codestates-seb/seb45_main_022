@@ -55,7 +55,6 @@ const Register = () => {
   };
 
   if (isSuccess) {
-    alert('Register success');
     return <Navigate to="/auth/login" />;
   }
 
