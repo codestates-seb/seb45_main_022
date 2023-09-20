@@ -38,6 +38,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final FileStorageService fileStorageService;
 
+    private final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private final String number = "0123456789";
+
     private final List<String> defaultImage = Arrays.asList( // 기본 프로필 이미지
             "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image1.png",
             "https://codestatus.s3.ap-northeast-2.amazonaws.com/default_profile_image2.png",
@@ -46,45 +49,26 @@ public class UserServiceImpl implements UserService {
 
     // 유저 생성
     @Override
-    public void createEntity(User user) {
+    public User createEntity(User user) {
         Optional<User> optionalUser = repository.findByEmail(user.getEmail()); // 가입 요청이 온 email 로 user table 검색
 
         if (optionalUser.isPresent()) { // optional 객체의 값이 있는 경우
             User findUser = optionalUser.get(); // optional 객체의 값을 get
             if (findUser.getUserStatus().equals(User.UserStatus.USER_DELETE)) { // user status 값이 DELETE 라면
-                rejoinUser(findUser, user.getPassword(), user.getNickname()); // 재가입 메서드 실행
+                return rejoinUser(findUser, user.getPassword(), user.getNickname()); // 재가입 메서드 실행
             } else { // user status 의 값이 DELETE 가 아니라면
                 throw new BusinessLogicException(ExceptionCode.USER_EXISTS_EMAIL); // 중복 email 예외 발생
             }
         } else { // optional 객체의 값이 없는 경우
-            joinNewUser(user); // 새로운 유저 생성 메서드 실행
+            return joinNewUser(user); // 새로운 유저 생성 메서드 실행
         }
     }
-
-    // 새로운 유저 생성 메서드
-    private void joinNewUser(User user) {
-        verifyExistsEmail(user.getEmail()); // 이메일 중복 검사
-        verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
-        List<String> roles = customAuthorityUtils.createRoles(user.getEmail()); // 권한 생성
-        user.setRoles(roles); // 권한 저장
-
-        defaultProfileImageSet(user); // 기본 프로필 이미지 배정
-        repository.save(user); // 유저 저장
-        statusCommand.createStatus(user); // status 생성
-    }
-
-    // 재가입 유저 메서드
-    private void rejoinUser(User findUser, String password, String nickname) {
-        findUser.setUserStatus(User.UserStatus.USER_ACTIVE); // user status 를 ACTIVE 로 변경
-        findUser.setPassword(passwordEncoder.encode(password)); // 비밀번호 암호화
-
-        if (!findUser.getNickname().equals(nickname)) { // DB 의 닉네임과 재가입시 입력한 닉네임이 다르다면
-            verifyExistsNickname(nickname); // 다른 유저와의 닉네임 중복검사
-            findUser.setNickname(nickname); // 닉네임 set
-        }
-
-        repository.save(findUser); // 유저 저장
+    public User createOauthUser(String email) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(generatePwd());
+        user.setNickname(generateNickname(email));
+        return createEntity(user);
     }
 
     // 유저 조회
@@ -187,11 +171,56 @@ public class UserServiceImpl implements UserService {
 
     // 닉네임 중복 검사
     private void verifyExistsNickname(String nickname) {
-        Optional<User> OptionalUser =
-                repository.findByNickname(nickname);
+        if(repository.existsByNickname(nickname)) {
+            throw new BusinessLogicException(ExceptionCode.USER_EXISTS_NICKNAME);
+        }
+    }
+    private String generatePwd() {
+        int pwdLength = (int) (Math.random()*10) + 7;
+        StringBuilder newPwd = new StringBuilder();
+        while(pwdLength-->3) {
+            int index = (int) (Math.random()*alphabet.length());
+            newPwd.append(alphabet.charAt(index));
+        }
+        while (pwdLength-->0) {
+            int index = (int) (Math.random()*number.length());
+            newPwd.append(number.charAt(index));
+        }
+        return newPwd.toString();
+    }
 
-        OptionalUser.ifPresent(user -> {
-            throw new BusinessLogicException(ExceptionCode.USER_EXISTS_NICKNAME); // 닉네임이 이미 존재한다면 예외 발생
-        });
+    private String generateNickname(String email) {
+        String nickname = email.split("@")[0];
+        int i = 1;
+        long count = repository.countAllByNicknameContains(nickname);
+        if (count==0) return nickname;
+        return nickname+1;
+    }
+
+    // 새로운 유저 생성 메서드
+    private User joinNewUser(User user) {
+        verifyExistsEmail(user.getEmail()); // 이메일 중복 검사
+        verifyExistsNickname(user.getNickname()); // 닉네임 중복 검사
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
+        List<String> roles = customAuthorityUtils.createRoles(user.getEmail()); // 권한 생성
+        user.setRoles(roles); // 권한 저장
+
+        defaultProfileImageSet(user); // 기본 프로필 이미지 배정
+        User savedUser = repository.save(user); // 유저 저장
+        statusCommand.createStatus(savedUser); // status 생성
+        return savedUser;
+    }
+
+    // 재가입 유저 메서드
+    private User rejoinUser(User findUser, String password, String nickname) {
+        findUser.setUserStatus(User.UserStatus.USER_ACTIVE); // user status 를 ACTIVE 로 변경
+        findUser.setPassword(passwordEncoder.encode(password)); // 비밀번호 암호화
+
+        if (!findUser.getNickname().equals(nickname)) { // DB 의 닉네임과 재가입시 입력한 닉네임이 다르다면
+            verifyExistsNickname(nickname); // 다른 유저와의 닉네임 중복검사
+            findUser.setNickname(nickname); // 닉네임 set
+        }
+
+        return repository.save(findUser); // 유저 저장
     }
 }

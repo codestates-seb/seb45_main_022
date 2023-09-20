@@ -4,7 +4,8 @@ import com.codestatus.domain.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-    void createEntity(User user);
+    User createEntity(User user);
+    User createOauthUser(String email);
     User findEntity(long userId);
     void updateUserNickname(User user, long loginUserId);
     void updatePassword(User user, long loginUserId);
