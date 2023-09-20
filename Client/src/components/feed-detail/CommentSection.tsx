@@ -44,6 +44,7 @@ const CommentSection = ({ categoryCode, feedId }: Props) => {
 
   if (isSuccess) {
     console.log('success');
+    inputRef.current!.value = '';
     queryClient.invalidateQueries(['commentList', feedId]);
     queryClient.invalidateQueries(['feedList', categoryCode, 'latest']);
     queryClient.invalidateQueries(['feedList', categoryCode, 'weekly']);
