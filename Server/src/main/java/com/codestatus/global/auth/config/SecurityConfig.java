@@ -1,5 +1,6 @@
 package com.codestatus.global.auth.config;
 
+import com.codestatus.domain.user.service.UserService;
 import com.codestatus.global.auth.filter.JwtAuthenticationFilter;
 import com.codestatus.global.auth.filter.JwtVerificationFilter;
 import com.codestatus.global.auth.handler.*;
@@ -30,7 +31,8 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final UsersDetailService userService;
+    private final UsersDetailService usersDetailService;
+    private final UserService userService;
     private final JwtResponseUtil jwtResponseUtil;
     private String s3 = "http://statandus.s3-website.ap-northeast-2.amazonaws.com/"; // front 배포 완료되면 s3 주소 여기에 넣으면 됨
 
@@ -96,7 +98,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // 나머지 요청은 누구나 가능
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new OAuth2UserSuccessHandler(jwtTokenizer, userService)));
+                        .successHandler(new OAuth2UserSuccessHandler(jwtTokenizer, usersDetailService, userService)));
                 return http.build();
     }
 
@@ -131,7 +133,7 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, userService, jwtResponseUtil);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, usersDetailService, jwtResponseUtil);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
