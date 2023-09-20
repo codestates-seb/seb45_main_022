@@ -24,7 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenizer jwtTokenizer;
-    private final UsersDetailService usersDetailServiceService;
+    private final UsersDetailService usersDetailService;
     private final UserService userService;
 
     @Override
@@ -36,7 +36,7 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         User user;
         try {
-            user = usersDetailServiceService.loadUserByEmail(email);
+            user = usersDetailService.loadUserByEmail(email);
 
         } catch (UsernameNotFoundException e){
            user = userService.createOauthUser(email);
