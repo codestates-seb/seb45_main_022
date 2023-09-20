@@ -39,8 +39,8 @@ const MainPage = () => {
   }
 
   return (
-    <div className="w-full min-w-[1200px] h-screen flex justify-center items-center bg-[#3c0033] overflow-y-hidden">
-      <div className="relative bg-title w-[1200px] h-[720px] bg-cover bg-no-repeat bg-center">
+    <div className="w-full h-screen flex justify-center items-center bg-[#3c0033] overflow-hidden">
+      <div className="relative bg-title w-[1200px] min-w-[1200px] h-[720px] bg-cover bg-no-repeat bg-center">
         {/* 책 - 스테이터스 */}
         <div className="absolute left-[410px] top-[360px] flex flex-col justify-between items-center gap-[16px] statIcon">
           <p className="text-[.8rem] text-white drop-shadow-[0_0_2px_#000] pointer-events-none">
