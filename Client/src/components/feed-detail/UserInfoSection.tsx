@@ -5,6 +5,8 @@ import { STATUS_ICON } from '../../utils/status';
 
 import { useNavigate } from 'react-router';
 
+import { useNavigate } from 'react-router';
+
 interface Props {
   feedDetail: FeedDetail;
   categoryCode: CategoryCode;
