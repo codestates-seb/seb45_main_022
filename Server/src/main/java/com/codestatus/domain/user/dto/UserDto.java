@@ -12,7 +12,7 @@ import java.util.List;
 public class UserDto {
     @Getter
     public static class signup {
-        @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
+        @NotBlank(message = "이메일은 공백이 아니어야 합니다.")
         @Pattern(regexp = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
                 message = "이메일 형식이 올바르지 않습니다.")
         private String email;
