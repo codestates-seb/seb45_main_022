@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "feedId": 18,
+      "nickName": "아카네",
+      "profileImage": "https://source.unsplash.com/random/50x50/?profile/18",
+      "statId": 4,
+      "level": 59,
+      "body": "제껍니다.",
+      "feedHashTags": [
+        {
+          "hashTagId": 21,
+          "body": "새로운태그"
+        },
+        {
+          "hashTagId": 22,
+          "body": "데이터변경"
+        }
+      ],
+      "likeCount": 22,
+      "commentCount": 8,
+      "createdAt": "2023-09-16T21:10:10.101010",
+      "modifiedAt": "2023-09-16T21:15:15.151515"
+    }
+  ],
+  "pageInfo": {
+    "page": 1,
+    "size": 10,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}

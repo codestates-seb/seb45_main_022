@@ -1,0 +1,41 @@
+{
+  "id": 1,
+  "email": "black@dragon.luv",
+  "nickName": "흑룡",
+  "profileImage": "https://codestatus.s3.ap-northeast-2.amazonaws.com/1693231015736_test.jpg",
+  "attendance": false,
+  "statuses": [
+    {
+      "statId": 1,
+      "statLevel": 3,
+      "statExp": 120,
+      "requiredExp": 3
+    },
+    {
+      "statId": 2,
+      "statLevel": 2,
+      "statExp": 70,
+      "requiredExp": 41
+    },
+    {
+      "statId": 3,
+      "statLevel": 2,
+      "statExp": 50,
+      "requiredExp": 61
+    },
+    {
+      "statId": 4,
+      "statLevel": 1,
+      "statExp": 40,
+      "requiredExp": 60
+    },
+    {
+      "statId": 5,
+      "statLevel": 1,
+      "statExp": 30,
+      "requiredExp": 70
+    }
+  ],
+  "createDate": "2023-08-28T20:29:17.611235",
+  "modifiedDate": "2023-09-04T19:43:23.545325"
+}
