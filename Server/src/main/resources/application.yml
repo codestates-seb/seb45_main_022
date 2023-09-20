@@ -1,4 +1,20 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    s3:
+      bucket: codestatus
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: 'false'
+
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -7,10 +23,49 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 1000
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${G_CLIENT_ID}
+            clientSecret: ${G_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          kakao:
+            clientId: ${KAKAO_CLIENT_ID}
+            clientSecret: ${KAKAO_SECRET}
+            redirectUri: http://localhost:8080/login/oauth2/code/kakao
+            clientAuthenticationMethod: POST
+            authorizationGrantType: authorization_code
+            clientName: Kakao
+            scope:
+              - account_email
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+          timeout: 5000
+
 logging:
   level:
     org:
@@ -22,11 +77,18 @@ server:
     encoding:
       force-response: true
 
-#mail:
-#  address:
-#    admin:
+mail:
+  address:
+    admin: admin@admin.com # 환경변수로 바꿔줘야됨
 
 jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 600
   refresh-token-expiration-minutes: 420
+
+exp:
+  attendance-exp: 10
+  like-exp: 10
+
+report:
+  feed-alarm-count: 5
