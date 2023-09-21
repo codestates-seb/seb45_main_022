@@ -32,7 +32,6 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
 
         String email = getEmail(oAuth2User);
-        String path = "";
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         User user;
         try {
@@ -44,7 +43,8 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 
         queryParams.add("access_token", jwtTokenizer.generateAccessToken(user));
         queryParams.add("refresh_token", jwtTokenizer.generateRefreshToken(user));
-        String uri = createURI(queryParams, path).toString();
+
+        String uri = createURI(queryParams, request.getServerName(), request.getServerPort()).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
     private String getEmail(OAuth2User oAuth2User) {
@@ -52,12 +52,12 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         return (String) kakaoAccount.get("email");
     }
-    private URI createURI(MultiValueMap<String, String> queryParams, String path) {
+    private URI createURI(MultiValueMap<String, String> queryParams, String host, int port) {
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("statandus.s3-website.ap-northeast-2.amazonaws.com")
-//                .port(80)
+                .host(host)
+                .port(port)
                 .path("auth/login")
                 .queryParams(queryParams)
                 .build()
