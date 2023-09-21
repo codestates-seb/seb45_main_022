@@ -41,7 +41,7 @@ spring:
           kakao:
             clientId: ${KAKAO_CLIENT_ID}
             clientSecret: ${KAKAO_SECRET}
-            redirectUri: http://ec2-3-34-91-214.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao
+            redirectUri: http://ec2-3-34-91-214.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/kakao
             clientAuthenticationMethod: POST
             authorizationGrantType: authorization_code
             clientName: Kakao
