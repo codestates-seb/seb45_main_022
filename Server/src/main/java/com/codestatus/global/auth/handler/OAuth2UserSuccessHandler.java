@@ -52,7 +52,7 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         return (String) kakaoAccount.get("email");
     }
     private URI createURI(MultiValueMap<String, String> queryParams, String host, int port) {
-        if (!host.contains("localhost") || !host.contains("127.0.0.1")){
+        if (!host.contains("localhost") && !host.contains("127.0.0.1")){
             host = "statandus.s3-website.ap-northeast-2.amazonaws.com";
             port = 80;
         }
