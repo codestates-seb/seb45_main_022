@@ -2,9 +2,6 @@ import { CategoryCode } from '../../api/category';
 import { FeedDetail } from '../../api/feed';
 import { CATEGORY_STATUS_MAP } from '../../utils/category';
 import { STATUS_ICON } from '../../utils/status';
-
-import { useNavigate } from 'react-router';
-
 import { useNavigate } from 'react-router';
 
 interface Props {
