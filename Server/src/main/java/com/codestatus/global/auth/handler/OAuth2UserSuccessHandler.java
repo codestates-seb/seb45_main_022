@@ -1,7 +1,6 @@
 package com.codestatus.global.auth.handler;
 
 import com.codestatus.domain.user.service.UserService;
-import com.codestatus.domain.user.service.UserServiceImpl;
 import com.codestatus.global.auth.jwt.JwtTokenizer;
 import com.codestatus.global.auth.userdetails.UsersDetailService;
 import com.codestatus.domain.user.entity.User;
@@ -53,6 +52,10 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         return (String) kakaoAccount.get("email");
     }
     private URI createURI(MultiValueMap<String, String> queryParams, String host, int port) {
+        if (!host.contains("localhost") || !host.contains("127.0.0.1")){
+            host = "statandus.s3-website.ap-northeast-2.amazonaws.com";
+            port = 80;
+        }
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
