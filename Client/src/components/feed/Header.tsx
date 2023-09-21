@@ -53,7 +53,7 @@ const Header = ({ categoryCode }: Props) => {
         </div>
 
         {/* 아이콘, 카테고리 이름 */}
-        <div className="w-[520px] h-[110px] flex flex-row justify-between ">
+        <div className="w-[520px] h-[110px] flex flex-row justify-between category_title">
           <div className="w-[35px] mt-[50px]">
             {categoryCode !== 1 && <BackButton categoryCode={categoryCode} />}
           </div>
@@ -84,7 +84,7 @@ const Header = ({ categoryCode }: Props) => {
           </div>
         </div>
         {/* 스탯 아이콘, 레벨, 경험치 바 */}
-        <div className="h-[110px] flex flex-col justify-center items-end gap-[8px] cursor-pointer pb-[5px]">
+        <div className="h-[110px] flex flex-col justify-center items-end gap-[8px] cursor-pointer pb-[5px] my_info">
           <Link to={`/feed/${categoryCode}/profile`}>
             <p className="w-[144px] h-[30px] flex flex-row justify-end text-[1.5rem] font-bold cursor-pointer font-[Pretendard] whitespace-nowrap">
               ⚔️ {userInfo.nickname} 님
