@@ -8,6 +8,7 @@ import { Navigate, useNavigate } from 'react-router';
 import useLoginMutation from '../../hooks/useLoginMutation';
 import { isAxiosError } from 'axios';
 import { ErrorType } from '../../api/error';
+import KakaoLoginButton from './KakaoLoginButton';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -103,14 +104,15 @@ const Login = () => {
         </div>
         <Button>Login</Button>
       </form>
-      {/* <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
-        <button className="w-[200px] h-[50px] bg-yellow-300 rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
-          Kakao Login
-        </button>
-        <button className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black ">
+      <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
+        <KakaoLoginButton />
+        <button
+          onClick={() => alert('In progress')}
+          className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black "
+        >
           Google Login
         </button>
-      </div> */}
+      </div>
       <div className="text-[0.625rem] flex items-center justify-evenly w-full my-[8px]">
         <span className="text-neutral-500">Don't have an account yet?</span>
         <span
