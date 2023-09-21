@@ -29,7 +29,6 @@ import { isAxiosError } from 'axios';
 import { ERROR_MSG, ErrorType } from './api/error';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import KakaoAuthPage from './pages/KakaoAuthPage';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -158,10 +157,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: 'login/kakao',
-    element: <KakaoAuthPage />,
-  },
+
   {
     path: '*',
     element: <NotFoundPage />,

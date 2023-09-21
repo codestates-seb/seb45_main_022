@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModalFrame from '../common/ModalFrame';
 import sword from '../../assets/common/sword.png';
 import shield from '../../assets/common/shield.png';
@@ -31,6 +31,25 @@ const Login = () => {
     e.preventDefault();
     login({ email, password });
   };
+
+  // 카카오 로그인
+  const currentURL = window.location.href;
+
+  function getQueryParam(name: string) {
+    const urlSearchParams = new URLSearchParams(new URL(currentURL).search);
+    return urlSearchParams.get(name);
+  }
+
+  const access_token = getQueryParam('access_token');
+
+  useEffect(() => {
+    if (access_token) {
+      localStorage.setItem('token', `Bearer ${access_token}`);
+      navigate('/main');
+    } else {
+      console.log('no access token in storage');
+    }
+  }, []);
 
   if (isLoading) return <LoadingBar />;
 
