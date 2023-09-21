@@ -36,7 +36,7 @@ const MapPage = () => {
             </div>
           </div>
           <div className="w-full h-px bg-gray-600"></div>
-          <div className="w-[800px] h-[480px] flex flex-col justify-around items-center p-[40px] gap-[16px]">
+          <div className="w-[800px] h-[480px] flex flex-col justify-around items-center p-[40px]">
             {categoryList.map((categoryCode, index) => (
               <ServerList key={index} categoryCode={categoryCode} />
             ))}

@@ -48,7 +48,7 @@ const SearchBar = ({ categoryCode }: Props) => {
             본문
           </option>
           <option value="user">작성자</option>
-          <option value="hashTag">#</option>
+          <option value="hashTag">태그</option>
         </select>
       </div>
     </form>

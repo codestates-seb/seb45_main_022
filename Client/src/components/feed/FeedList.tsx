@@ -42,7 +42,7 @@ const FeedList = ({ categoryCode }: Props) => {
   // }, [queryClient]);
 
   return (
-    <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
+    <div className="relative w-full h-[500px] flex flex-col justify-start items-center ml-[4px] ">
       <div className="w-full h-[50px] p-[10px] flex justify-between items-center bg-[#f8d8ae] shadow-[0_5px_5px_#f8d8ae]">
         <FilterButton type={type} setType={setType} />
         <SearchBar categoryCode={categoryCode} />
