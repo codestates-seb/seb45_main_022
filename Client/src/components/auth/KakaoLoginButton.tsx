@@ -1,6 +1,7 @@
 const KakaoLoginButton = () => {
-  const handleKakaoLogin = () => {
-    window.location.href = 'auth/login';
+  const handleKakaoLogin = async () => {
+    window.location.href =
+      'http://ec2-3-34-91-214.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao';
   };
 
   return (

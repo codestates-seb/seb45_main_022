@@ -9,6 +9,7 @@ import useLoginMutation from '../../hooks/useLoginMutation';
 import { isAxiosError } from 'axios';
 import { ErrorType } from '../../api/error';
 import KakaoLoginButton from './KakaoLoginButton';
+import GoogleLoginButton from './GoogleLoginButton';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -125,12 +126,7 @@ const Login = () => {
       </form>
       <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
         <KakaoLoginButton />
-        <button
-          onClick={() => alert('In progress')}
-          className=" w-[200px] h-[50px] bg-white rounded hover:brightness-110 duration-300 cursor-pointer text-sm border-solid border-black "
-        >
-          Google Login
-        </button>
+        <GoogleLoginButton />
       </div>
       <div className="text-[0.625rem] flex items-center justify-evenly w-full my-[8px]">
         <span className="text-neutral-500">Don't have an account yet?</span>
