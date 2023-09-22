@@ -124,10 +124,10 @@ const Login = () => {
         </div>
         <Button>Login</Button>
       </form>
-      <div className="flex items-center justify-around my-[16px] w-full h-[40px]">
-        <KakaoLoginButton />
-        <GoogleLoginButton />
-      </div>
+      {/* <div className="flex items-center justify-around my-[16px] w-full h-[40px]"> */}
+      {/* <KakaoLoginButton />
+        <GoogleLoginButton /> */}
+      {/* </div> */}
       <div className="text-[0.625rem] flex items-center justify-evenly w-full my-[8px]">
         <span className="text-neutral-500">Don't have an account yet?</span>
         <span
