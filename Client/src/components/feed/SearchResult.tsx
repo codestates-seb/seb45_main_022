@@ -66,6 +66,7 @@ const SearchResult = ({ categoryCode, searchType, keyword }: Props) => {
           feedList.map((feed, index) => {
             return (
               <FeedItem
+                first_item={false}
                 key={index}
                 categoryCode={categoryCode}
                 feed={feed}
