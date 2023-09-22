@@ -1,5 +1,6 @@
 package com.codestatus.global.auth.handler;
 
+import com.codestatus.domain.user.service.UserService;
 import com.codestatus.global.auth.jwt.JwtTokenizer;
 import com.codestatus.global.auth.userdetails.UsersDetailService;
 import com.codestatus.domain.user.entity.User;
@@ -17,31 +18,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenizer jwtTokenizer;
-    private final UsersDetailService userService;
+    private final UsersDetailService usersDetailService;
+    private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
 
         String email = getEmail(oAuth2User);
-        String path = "";
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        User user;
         try {
-            User user = userService.loadUserByEmail(email);
-            queryParams.add("access_token", jwtTokenizer.generateAccessToken(user));
-            queryParams.add("refresh_token", jwtTokenizer.generateRefreshToken(user));
+            user = usersDetailService.loadUserByEmail(email);
+
         } catch (UsernameNotFoundException e){
-            path = "/oauth";
+           user = userService.createOauthUser(email);
         }
-        String uri = createURI(queryParams, path).toString();
+
+        queryParams.add("access_token", jwtTokenizer.generateAccessToken(user));
+        queryParams.add("refresh_token", jwtTokenizer.generateRefreshToken(user));
+
+        String uri = createURI(queryParams, request.getServerName(), request.getServerPort()).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
     private String getEmail(OAuth2User oAuth2User) {
@@ -49,14 +51,17 @@ public class OAuth2UserSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         return (String) kakaoAccount.get("email");
     }
-
-    private URI createURI(MultiValueMap<String, String> queryParams, String path) {
+    private URI createURI(MultiValueMap<String, String> queryParams, String host, int port) {
+        if (!host.contains("localhost") && !host.contains("127.0.0.1")){
+            host = "statandus.s3-website.ap-northeast-2.amazonaws.com";
+            port = 80;
+        }
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-//                .port(80)
-                .path(path)
+                .host(host)
+                .port(port)
+                .path("auth/login")
                 .queryParams(queryParams)
                 .build()
                 .toUri();

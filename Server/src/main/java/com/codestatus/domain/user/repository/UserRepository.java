@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     // @Query(value = "SELECT * FROM users u WHERE u.email = :email", nativeQuery = true)
+    @Query(value = "select u from users u join fetch u.roles where u.email=:email")
     Optional<User> findByEmail(String email); // @Param("email")
-
-    // @Query(value = "SELECT * FROM users u WHERE u.nick_name = :nickname", nativeQuery = true)
-    Optional<User> findByNickname(String nickName); // @Param("nickname")
+    long countAllByNicknameContains(String nickname);
+    boolean existsByNickname(String nickName);
 }
 
 /*
