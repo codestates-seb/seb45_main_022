@@ -7,13 +7,15 @@ import { Link } from 'react-router-dom';
 import FeedItem from './FeedItem';
 import useFeedListQuery from '../../hooks/useFeedListQuery';
 import useInfinteScroll from '../../hooks/useInfiniteScroll';
+import GuideButton from '../common/GuideButton';
 // import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   categoryCode: CategoryCode;
+  setStepsEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FeedList = ({ categoryCode }: Props) => {
+const FeedList = ({ categoryCode, setStepsEnabled }: Props) => {
   const [type, setType] = useState<FeedFilterType>('latest');
   const { isLoading, isFetching, data, fetchNextPage, hasNextPage } =
     useFeedListQuery({
@@ -42,7 +44,7 @@ const FeedList = ({ categoryCode }: Props) => {
   // }, [queryClient]);
 
   return (
-    <div className="relative w-full h-[500px] flex flex-col justify-start items-center mt-[55px] ml-[4px] ">
+    <div className="relative w-full h-[500px] flex flex-col justify-start items-center ml-[4px] ">
       <div className="w-full h-[50px] p-[10px] flex justify-between items-center bg-[#f8d8ae] shadow-[0_5px_5px_#f8d8ae]">
         <FilterButton type={type} setType={setType} />
         <SearchBar categoryCode={categoryCode} />
@@ -59,6 +61,7 @@ const FeedList = ({ categoryCode }: Props) => {
                 categoryCode={categoryCode}
                 feed={feed}
                 detailURL={`/feed/${categoryCode}/detail/${feed.feedId}`}
+                first_item={index === 0}
               />
             );
           })}
@@ -70,8 +73,16 @@ const FeedList = ({ categoryCode }: Props) => {
         ></div>
         {isLoading || (isFetching && <p>Loading...</p>)}
       </div>
+      <GuideButton
+        style={{
+          position: 'absolute',
+          bottom: '80px',
+          right: '20px',
+        }}
+        onClick={() => setStepsEnabled(true)}
+      />
       <Link to={`/feed/${categoryCode}/post`}>
-        <button className="absolute bottom-[20px] right-[20px] w-[50px] h-[50px] bg-[#f8d8ae] bg-[url('/src/assets/icons/btn-pencil.png')] bg-no-repeat bg-cover rounded-full p-[8px] duration-300 shadow-[0_0_5px_#e1772d] hover:brightness-110 hover:scale-110" />
+        <button className="absolute bottom-[20px] right-[20px] w-[50px] h-[50px] bg-[#f8d8ae] bg-[url('/src/assets/icons/btn-pencil.png')] bg-no-repeat bg-cover rounded-full p-[8px] duration-300 shadow-[0_0_5px_#e1772d] hover:brightness-110 hover:scale-110 post_btn" />
       </Link>
     </div>
   );

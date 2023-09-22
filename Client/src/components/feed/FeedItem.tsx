@@ -14,9 +14,10 @@ interface Props {
   feed: Feed;
   categoryCode: CategoryCode;
   detailURL: string;
+  first_item: boolean;
 }
 
-const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
+const FeedItem = ({ feed, categoryCode, detailURL, first_item }: Props) => {
   const nav = useNavigate();
 
   const {
@@ -55,11 +56,13 @@ const FeedItem = ({ feed, categoryCode, detailURL }: Props) => {
     reset();
   }
 
-  console.log(feed);
-
   return (
     <>
-      <div className="w-[300px] h-[140px] bg-cover bg-center bg-feedBox">
+      <div
+        className={`w-[300px] h-[140px] bg-cover bg-center bg-feedBox ${
+          first_item ? 'feed_item' : ''
+        }`}
+      >
         <div className="w-full h-full p-[28px] flex flex-row justify-between">
           {/* 왼쪽 구간 (전체 너비 1/3) */}
           <div
