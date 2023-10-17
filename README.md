@@ -58,6 +58,12 @@
 
 <br>
 
+## 🏛️ Architecture
+
+![Stat Us 아키텍처](https://github.com/widrns15/seb45_main_022/assets/85780501/b9467e8e-1a89-47f6-81cd-d4c8e40065a8)
+
+<br>
+
 ## ✨ Commit Convention
 
 ```
